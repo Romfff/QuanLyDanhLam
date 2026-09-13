@@ -1,0 +1,62 @@
+/* frontend/src/assets/tokens.css */
+
+/* 1. Chủ đề sáng (Default Light Theme) */
+:root {
+  --mau-nen: #ffffff;
+  --mau-nen-phu: #f8fafc;
+  --mau-chu: #0f172a;
+  --mau-chu-phu: #475569;
+  --mau-chinh: #2563eb;        /* Màu nhấn nút/link */
+  --mau-tich-cuc: #16a34a;     /* Xanh lá - Sắc thái Tích cực */
+  --mau-tieu-cuc: #dc2626;     /* Đỏ - Sắc thái Tiêu cực */
+  --mau-trung-tinh: #64748b;   /* Xám - Sắc thái Trung tính */
+  --duong-vien: #e2e8f0;
+  --khoang-cach-nho: 8px;
+  --khoang-cach-vua: 16px;
+  --khoang-cach-lon: 32px;
+  --bo-tron: 8px;
+}
+
+/* 2. Chủ đề tối (Dark Theme) */
+[data-theme="dark"] {
+  --mau-nen: #0f172a;
+  --mau-nen-phu: #1e293b;
+  --mau-chu: #f8fafc;
+  --mau-chu-phu: #94a3b8;
+  --mau-chinh: #3b82f6;
+  --mau-tich-cuc: #22c55e;
+  --mau-tieu-cuc: #ef4444;
+  --mau-trung-tinh: #94a3b8;
+  --duong-vien: #334155;
+}
+
+/* 3. Đưa các biến token áp dụng cho toàn bộ trang web */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+  background-color: var(--mau-nen);
+  color: var(--mau-chu);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+:root {
+  --mau-the: #f8fafc;            /* Nền thẻ */
+  --mau-vien: #d1d5db;           /* Đường viền */
+  --mau-chu-phu: #4b5563;        /* Chữ phụ */
+  --mau-chu-tren-chinh: #ffffff; /* Chữ trên nút màu chính */
+  --mau-nen-phu: rgba(0, 0, 0, 0.5);  /* Lớp mờ phía sau ngăn kéo */
+  --chieu-cao-cham: 44px;        /* Vùng chạm tối thiểu cho ngón tay */
+  --max-rong: 1200px;
+}
+
+[data-theme="dark"] {
+  --mau-the: #1f2937;
+  --mau-vien: #374151;
+  --mau-chu-phu: #d1d5db;
+  --mau-chu-tren-chinh: #0b1220; /* Chữ tối trên nền xanh sáng để đủ tương phản */
+}
