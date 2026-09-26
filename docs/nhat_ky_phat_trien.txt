@@ -1,0 +1,1 @@
+[2026-09-26 16:30:41 +0700] Nguyễn Việt Dũng: feat(backend): cau hinh Eloquent models va ket noi co so du lieu MySQL
