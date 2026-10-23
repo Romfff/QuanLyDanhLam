@@ -1,0 +1,178 @@
+{
+  "so_mau_huan_luyen": 140,
+  "so_mau_kiem_tra": 60,
+  "phan_bo_nhan_tap_kiem_tra": {
+    "tich_cuc": 0.8167,
+    "trung_tinh": 0.15,
+    "tieu_cuc": 0.0333
+  },
+  "phuong_phap": {
+    "tu_dien": {
+      "accuracy": 0.8,
+      "macro_f1": 0.4866,
+      "bao_cao": {
+        "tich_cuc": {
+          "precision": 0.8518518518518519,
+          "recall": 0.9387755102040817,
+          "f1-score": 0.8932038834951457,
+          "support": 49.0
+        },
+        "trung_tinh": {
+          "precision": 0.3333333333333333,
+          "recall": 0.1111111111111111,
+          "f1-score": 0.16666666666666666,
+          "support": 9.0
+        },
+        "tieu_cuc": {
+          "precision": 0.3333333333333333,
+          "recall": 0.5,
+          "f1-score": 0.4,
+          "support": 2.0
+        },
+        "accuracy": 0.8,
+        "macro avg": {
+          "precision": 0.5061728395061728,
+          "recall": 0.516628873771731,
+          "f1-score": 0.48662351672060417,
+          "support": 60.0
+        },
+        "weighted avg": {
+          "precision": 0.7567901234567901,
+          "recall": 0.8,
+          "f1-score": 0.7677831715210356,
+          "support": 60.0
+        }
+      },
+      "ma_tran_nham_lan": [
+        [
+          46,
+          2,
+          1
+        ],
+        [
+          7,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ]
+    },
+    "hoc_may": {
+      "accuracy": 0.7833,
+      "macro_f1": 0.2928,
+      "bao_cao": {
+        "tich_cuc": {
+          "precision": 0.8103448275862069,
+          "recall": 0.9591836734693877,
+          "f1-score": 0.8785046728971962,
+          "support": 49.0
+        },
+        "trung_tinh": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 9.0
+        },
+        "tieu_cuc": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 2.0
+        },
+        "accuracy": 0.7833333333333333,
+        "macro avg": {
+          "precision": 0.27011494252873564,
+          "recall": 0.31972789115646255,
+          "f1-score": 0.29283489096573206,
+          "support": 60.0
+        },
+        "weighted avg": {
+          "precision": 0.6617816091954023,
+          "recall": 0.7833333333333333,
+          "f1-score": 0.7174454828660436,
+          "support": 60.0
+        }
+      },
+      "ma_tran_nham_lan": [
+        [
+          47,
+          2,
+          0
+        ],
+        [
+          9,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    "diem_so_co_so": {
+      "accuracy": 0.85,
+      "macro_f1": 0.6386,
+      "bao_cao": {
+        "tich_cuc": {
+          "precision": 0.8448275862068966,
+          "recall": 1.0,
+          "f1-score": 0.9158878504672897,
+          "support": 49.0
+        },
+        "trung_tinh": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 9.0
+        },
+        "tieu_cuc": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 2.0
+        },
+        "accuracy": 0.85,
+        "macro avg": {
+          "precision": 0.6149425287356322,
+          "recall": 0.6666666666666666,
+          "f1-score": 0.6386292834890965,
+          "support": 60.0
+        },
+        "weighted avg": {
+          "precision": 0.7232758620689654,
+          "recall": 0.85,
+          "f1-score": 0.7813084112149532,
+          "support": 60.0
+        }
+      },
+      "ma_tran_nham_lan": [
+        [
+          49,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2
+        ]
+      ]
+    }
+  },
+  "hoc_may_cross_validation": {
+    "so_fold": 5,
+    "macro_f1_tb": 0.3309,
+    "do_lech_chuan": 0.0496
+  }
+}
