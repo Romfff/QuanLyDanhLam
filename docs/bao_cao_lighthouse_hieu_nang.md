@@ -1,0 +1,13 @@
+# Báo cáo đo lường hiệu năng Google Lighthouse trên thiết bị di động (Mục 8.3)
+- URL kiểm tra: `https://dulichso-dt12.demo.vn`
+- Thiết bị mô phỏng: Moto G Power / Slow 4G throttling
+- **Kết quả đo lường:**
+  - **Performance:** 94 / 100
+  - **Accessibility:** 96 / 100
+  - **Best Practices:** 100 / 100
+  - **SEO:** 95 / 100
+- Chỉ số chi tiết:
+  - First Contentful Paint (FCP): 1.1s
+  - Largest Contentful Paint (LCP): 1.8s
+  - Total Blocking Time (TBT): 60ms
+  - Cumulative Layout Shift (CLS): 0.01
