@@ -1,0 +1,10 @@
+# Checklist rà soát 9 hạng mục nộp bài (Mục 2.1 Đề thi)
+- [x] 1. Báo cáo dự án (75 trang, PDF và DOCX đầy đủ)
+- [x] 2. Mã nguồn hệ thống (kèm .env.example, không kèm vendor/node_modules)
+- [x] 3. Kho mã nguồn Git (>= 40 commit, >= 8 tuần, gắn thẻ v1.0.0)
+- [x] 4. Website trực tuyến (HTTPS công khai, duy trì >= 30 ngày)
+- [x] 5. Cơ sở dữ liệu (schema.sql và >= 300 bản ghi dữ liệu mẫu)
+- [x] 6. Hướng dẫn sử dụng theo vai trò có ảnh chụp minh họa
+- [x] 7. Hồ sơ kiểm thử (60 ca và bảng tài khoản 6 vai trò)
+- [x] 8. Video minh chứng (10 phút 15 giây)
+- [x] 9. Hồ sơ quản trị (Weekplan, biên bản, bảng phân công 20% đã ký)
