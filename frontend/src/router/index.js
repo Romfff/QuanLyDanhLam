@@ -16,6 +16,16 @@ const routes = [
     component: () => import('../views/DashboardView.vue')
   },
   {
+    path: '/diem-den',
+    name: 'DiemDenList',
+    component: () => import('../views/DiemDenListView.vue')
+  },
+  {
+    path: '/absa',
+    name: 'AbsaAnalytics',
+    component: () => import('../views/AbsaAnalyticsView.vue')
+  },
+  {
     path: '/phieu-cua-toi',
     name: 'PhieuCuaToi',
     component: () => import('../views/PhieuCuaToiView.vue')

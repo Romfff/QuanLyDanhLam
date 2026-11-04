@@ -45,8 +45,9 @@
           <div class="footer-nav-col">
             <h4 class="footer-col-title">Khám Phá Nhanh</h4>
             <ul class="footer-menu-list">
-              <li><router-link to="/dashboard">Kỳ quan &amp; Điểm đến nổi bật</router-link></li>
-              <li><a href="/dashboard#absa-section">Báo cáo phân tích 5 khía cạnh ABSA</a></li>
+              <li><router-link to="/dashboard">Khám phá tổng quan hệ thống</router-link></li>
+              <li><router-link to="/diem-den">Danh mục 7 điểm đến kiểm chứng</router-link></li>
+              <li><router-link to="/absa">Báo cáo phân tích 5 khía cạnh ABSA</router-link></li>
               <li><router-link to="/danh-sach-danh-gia">Trung tâm 874 đánh giá TripAdvisor</router-link></li>
               <li><router-link to="/phieu-cua-toi">Ví phiếu ưu đãi &amp; voucher của tôi</router-link></li>
               <li><router-link to="/dang-nhap">Cổng xác thực 5 vai trò hệ thống</router-link></li>

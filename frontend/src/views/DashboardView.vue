@@ -10,6 +10,7 @@
           src="https://cdn.prod.website-files.com/6a5f49f597e097761e089dbc/6a5f608a1795f7f89a8b565f_hero-girl.webp" 
           alt="Nevio Travel Hero" 
           class="hero-image"
+          @error="xuLyLoiHeroImg"
         />
         <div class="hero-overlay"></div>
       </div>
@@ -39,12 +40,12 @@
         </div>
 
         <div class="hero-action-col">
-          <a href="#how-it-works" class="nevio-btn-yellow">
-            <span class="button-text">Khám Phá Cách Hoạt Động</span>
+          <router-link to="/diem-den" class="nevio-btn-yellow">
+            <span class="button-text">Khám Phá Điểm Đến</span>
             <div class="btn-icon-circle">
               <ArrowRight :size="18" />
             </div>
-          </a>
+          </router-link>
         </div>
       </div>
 
@@ -283,7 +284,7 @@
           <article v-for="dest in diemDenHienThi" :key="dest.id" class="nevio-destination-card">
             <!-- Card Image Wrap with Overlays -->
             <div class="dest-image-wrap">
-              <img :src="dest.hinh_anh" :alt="dest.ten" class="dest-card-img" loading="lazy" />
+              <img :src="dest.hinh_anh" :alt="dest.ten" class="dest-card-img" loading="lazy" @error="xuLyLoiImg" />
               <div class="card-img-gradient"></div>
 
               <!-- Top Left: Location Tag with Lucide MapPin -->
@@ -372,6 +373,13 @@
           <h3>Không tìm thấy điểm đến nào phù hợp</h3>
           <p>Hãy thử tìm kiếm với từ khóa khác hoặc bấm nút bên dưới để xem lại toàn bộ 7 điểm đến.</p>
           <button @click="datLaiBoLoc" class="btn-reset-dark">Làm mới bộ lọc</button>
+        </div>
+
+        <div class="section-more-action">
+          <router-link to="/diem-den" class="btn-nevio-dark-cta">
+            <span>Khám phá toàn bộ 7 điểm đến &amp; bảng đối soát Wilson 95%</span>
+            <ArrowRight :size="16" />
+          </router-link>
         </div>
       </div>
     </section>
@@ -476,6 +484,13 @@
             </div>
           </div>
         </div>
+
+        <div class="section-more-action">
+          <router-link to="/absa" class="btn-nevio-dark-cta">
+            <span>Xem chi tiết báo cáo chuyên sâu 5 khía cạnh ABSA &amp; mô hình PhoBERT</span>
+            <ArrowRight :size="16" />
+          </router-link>
+        </div>
       </div>
     </section>
 
@@ -533,6 +548,13 @@
               </span>
             </div>
           </div>
+        </div>
+
+        <div class="section-more-action">
+          <router-link to="/absa" class="btn-nevio-dark-cta">
+            <span>Xem chi tiết báo cáo chuyên sâu 5 khía cạnh ABSA &amp; mô hình PhoBERT</span>
+            <ArrowRight :size="16" />
+          </router-link>
         </div>
       </div>
     </section>
@@ -639,6 +661,14 @@ async function nhanUuDaiNhanh(dest) {
   setTimeout(() => {
     thongBaoVoucher.value = ''
   }, 6000)
+}
+
+function xuLyLoiHeroImg(event) {
+  event.target.src = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=80'
+}
+
+function xuLyLoiImg(event) {
+  event.target.src = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80'
 }
 
 onMounted(async () => {
@@ -1753,6 +1783,44 @@ onMounted(async () => {
   font-size: 13px;
   font-weight: 600;
   margin-top: 14px;
+}
+
+.section-more-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.btn-nevio-dark-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--nevio-dark);
+  color: #ffffff !important;
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.btn-nevio-dark-cta:hover {
+  background: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  color: #fddd62 !important;
+}
+
+[data-theme="dark"] .btn-nevio-dark-cta {
+  background: #fddd62;
+  color: #303030 !important;
+}
+
+[data-theme="dark"] .btn-nevio-dark-cta:hover {
+  background: #fcd34d;
+  color: #000000 !important;
 }
 
 @media (max-width: 1024px) {

@@ -17,15 +17,14 @@
       <!-- 2. Centered Nav Links with Dot Indicator -->
       <nav class="nevio-nav-links" aria-label="Menu điều hướng chính">
         <router-link to="/dashboard" class="nevio-link">
-          <span class="link-dot">•</span>
           <span>Khám Phá</span>
         </router-link>
-        <a href="/dashboard#destinations-section" class="nevio-link">
+        <router-link to="/diem-den" class="nevio-link">
           <span>Điểm Đến</span>
-        </a>
-        <a href="/dashboard#absa-section" class="nevio-link">
+        </router-link>
+        <router-link to="/absa" class="nevio-link">
           <span>Phân Tích ABSA</span>
-        </a>
+        </router-link>
         <router-link to="/danh-sach-danh-gia" class="nevio-link">
           <span>874 Đánh Giá TripAdvisor</span>
         </router-link>
@@ -36,17 +35,6 @@
 
       <!-- 3. Right Header Actions -->
       <div class="nevio-nav-actions">
-        <!-- Quick Role Switcher Pill with Lucide Icon -->
-        <div class="role-pill-select" :title="'Vai trò kiểm thử: ' + vaiTroHienTai">
-          <component :is="iconVaiTro" :size="15" class="role-icon-svg" />
-          <select v-model="vaiTroHienTai" @change="doiVaiTro" class="role-select-box">
-            <option value="du_khach">Du khách</option>
-            <option value="admin">Admin</option>
-            <option value="nha_phan_tich">Analyst</option>
-            <option value="doi_tac">Partner</option>
-          </select>
-        </div>
-
         <!-- Theme Toggle Button -->
         <button 
           @click="toggleTheme" 
@@ -57,10 +45,14 @@
           <Moon v-else :size="16" />
         </button>
 
-        <!-- Auth Button (Nevio White Pill Style) -->
-        <div v-if="daDangNhap" class="user-pill-wrap">
-          <span class="user-avatar-char">{{ tenNguoiDung.charAt(0).toUpperCase() }}</span>
-          <button @click="dangXuat" class="btn-logout-text" title="Đăng xuất">
+        <!-- Auth Section: Role Badge + Logout when logged in, or Login Pill -->
+        <div v-if="daDangNhap" class="user-authenticated-box">
+          <div class="user-role-chip" :title="'Tài khoản: ' + tenNguoiDung">
+            <component :is="iconVaiTro" :size="14" class="role-icon-svg" />
+            <span class="role-text">{{ nhanVaiTro }}</span>
+          </div>
+          <span class="user-display-name">{{ tenNguoiDung }}</span>
+          <button @click="dangXuat" class="btn-logout-circle" title="Đăng xuất khỏi hệ thống">
             <LogOut :size="14" />
           </button>
         </div>
@@ -79,14 +71,14 @@
     <!-- Mobile Drawer -->
     <div v-if="moMenuMobile" class="nevio-mobile-dropdown">
       <router-link to="/dashboard" class="mobile-nav-item" @click="moMenuMobile = false">
-        Khám Phá Điểm Đến
+        Khám Phá
       </router-link>
-      <a href="/dashboard#destinations-section" class="mobile-nav-item" @click="moMenuMobile = false">
+      <router-link to="/diem-den" class="mobile-nav-item" @click="moMenuMobile = false">
         Danh Sách 7 Điểm Đến
-      </a>
-      <a href="/dashboard#absa-section" class="mobile-nav-item" @click="moMenuMobile = false">
+      </router-link>
+      <router-link to="/absa" class="mobile-nav-item" @click="moMenuMobile = false">
         Phân Tích 5 Khía Cạnh ABSA
-      </a>
+      </router-link>
       <router-link to="/danh-sach-danh-gia" class="mobile-nav-item" @click="moMenuMobile = false">
         874 Đánh Giá TripAdvisor
       </router-link>
@@ -94,9 +86,12 @@
         Ví Phiếu Của Tôi
       </router-link>
       <div class="mobile-divider"></div>
-      <router-link to="/dang-nhap" class="mobile-nav-item" @click="moMenuMobile = false">
-        Cổng Xác Thực 5 Vai Trò
+      <router-link v-if="!daDangNhap" to="/dang-nhap" class="mobile-nav-item" @click="moMenuMobile = false">
+        Đăng Nhập Hệ Thống
       </router-link>
+      <button v-else @click="dangXuat" class="mobile-nav-item mobile-logout-btn">
+        Đăng Xuất ({{ tenNguoiDung }})
+      </button>
     </div>
   </header>
 </template>
@@ -134,20 +129,21 @@ const iconVaiTro = computed(() => {
   }
 })
 
+const nhanVaiTro = computed(() => {
+  switch (vaiTroHienTai.value) {
+    case 'admin': return 'Quản trị viên'
+    case 'nha_phan_tich': return 'Nhà phân tích'
+    case 'doi_tac': return 'Đối tác du lịch'
+    case 'kiem_duyet': return 'Kiểm duyệt'
+    default: return 'Du khách'
+  }
+})
+
 function toggleTheme() {
   isDark.value = !isDark.value
   const mode = isDark.value ? 'dark' : 'light'
   document.documentElement.setAttribute('data-theme', mode)
   localStorage.setItem('dt12_theme', mode)
-}
-
-function doiVaiTro() {
-  localStorage.setItem('vai_tro', vaiTroHienTai.value)
-  if (!localStorage.getItem('token')) {
-    localStorage.setItem('token', 'demo_token_' + vaiTroHienTai.value)
-    daDangNhap.value = true
-  }
-  window.dispatchEvent(new Event('role-changed'))
 }
 
 function dangXuat() {
@@ -267,36 +263,60 @@ onMounted(() => {
   gap: 12px;
 }
 
-.role-pill-select {
+.user-authenticated-box {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 9999px;
   color: #ffffff;
 }
 
-.role-icon-svg {
-  color: #fddd62;
+.user-role-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #fddd62;
+  color: #303030;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
 }
 
-.role-select-box {
-  border: none;
-  background: transparent;
-  color: #ffffff;
+.role-icon-svg {
+  color: #303030;
+}
+
+.user-display-name {
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  outline: none;
-  font-family: inherit;
+  color: #ffffff;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.role-select-box option {
-  background: #303030;
+.btn-logout-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout-circle:hover {
+  background: #ef4444;
 }
 
 .btn-theme-pill {
@@ -395,6 +415,14 @@ onMounted(() => {
   font-weight: 600;
   padding: 6px 0;
   text-decoration: none;
+}
+
+.mobile-logout-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #f87171 !important;
 }
 
 .mobile-divider {

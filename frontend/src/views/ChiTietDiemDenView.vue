@@ -5,9 +5,9 @@
       <div class="banner-gradient-overlay"></div>
       <div class="nevio-container banner-content">
         <nav class="detail-breadcrumbs" aria-label="Đường dẫn điều hướng">
-          <router-link to="/dashboard" class="crumb-link">Khám Phá Điểm Đến</router-link>
+          <router-link to="/dashboard" class="crumb-link">Khám Phá</router-link>
           <span class="sep">/</span>
-          <span class="active">{{ diemDen.tinh_thanh }}</span>
+          <router-link to="/diem-den" class="crumb-link">Danh Mục Điểm Đến</router-link>
           <span class="sep">/</span>
           <span class="current">{{ diemDen.ten_rut_gon || diemDen.ten }}</span>
         </nav>
@@ -17,7 +17,7 @@
             <Sparkles v-if="diemDen.trang_thai_wilson === 'diem_sang'" :size="13" />
             <AlertTriangle v-else-if="diemDen.trang_thai_wilson === 'canh_bao'" :size="13" />
             <CheckCircle2 v-else :size="13" />
-            <span>{{ diemDen.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng du lịch (Wilson >= 0.70)' : diemDen.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý chất lượng' : 'Hoạt động ổn định' }}</span>
+            <span>{{ diemDen.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng du lịch đạt chuẩn Wilson' : diemDen.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý chất lượng' : 'Hoạt động ổn định' }}</span>
           </span>
           <span class="banner-category-tag">
             <MapPin :size="13" />
