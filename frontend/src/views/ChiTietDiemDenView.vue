@@ -154,17 +154,20 @@
           <section class="detail-card">
             <div class="card-head-flex">
               <div>
-                <span class="nevio-label">ĐÁNH GIÁ GỐC TRIPADVISOR</span>
-                <h2 class="card-section-title">Đánh Giá Của Du Khách Về Điểm Đến</h2>
+                <span class="nevio-label">TRIPADVISOR VERIFIED REVIEWS</span>
+                <h2 class="card-section-title">Đánh Giá Thực Tế ({{ danhGiaCuaDiemDen.length }} lượt)</h2>
+                <p class="section-review-subtitle">
+                  Đánh giá nguyên văn từ du khách TripAdvisor trải nghiệm tại {{ diemDen?.ten_rut_gon || diemDen?.ten }}.
+                </p>
               </div>
-              <router-link to="/danh-sach-danh-gia" class="link-all-reviews">
-                <span>Xem toàn bộ 874 đánh giá</span>
+              <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + (diemDen?.id || id)" class="link-all-reviews">
+                <span>Xem tất cả {{ danhGiaCuaDiemDen.length }} đánh giá của điểm đến này</span>
                 <ArrowRight :size="14" />
               </router-link>
             </div>
 
             <div class="dest-reviews-list">
-              <div v-for="rev in danhGiaCuaDiemDen" :key="rev.id" class="dest-review-item">
+              <div v-for="rev in danhGiaHienThi" :key="rev.id" class="dest-review-item">
                 <div class="rev-header">
                   <div class="rev-user">
                     <span class="rev-avatar">{{ rev.nguoi_danh_gia.charAt(0) }}</span>
@@ -189,6 +192,16 @@
                   </span>
                 </div>
               </div>
+            </div>
+
+            <!-- Load more or view in review center -->
+            <div v-if="danhGiaCuaDiemDen.length > soLuongHienThi" class="reviews-load-more-wrap">
+              <button @click="soLuongHienThi += 6" class="btn-load-more-reviews" type="button">
+                Tải thêm 6 đánh giá (còn {{ danhGiaCuaDiemDen.length - soLuongHienThi }} đánh giá)
+              </button>
+              <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + (diemDen?.id || id)" class="btn-see-all-target-reviews">
+                Tra cứu đầy đủ {{ danhGiaCuaDiemDen.length }} đánh giá tại Trung tâm dữ liệu →
+              </router-link>
             </div>
           </section>
         </div>
@@ -367,6 +380,11 @@ const conLai = ref(900)
 let timer = null
 
 const danhGiaCuaDiemDen = ref([])
+const soLuongHienThi = ref(6)
+
+const danhGiaHienThi = computed(() => {
+  return danhGiaCuaDiemDen.value.slice(0, soLuongHienThi.value)
+})
 
 const phut = computed(() => String(Math.floor(conLai.value / 60)).padStart(2, '0'))
 const giay = computed(() => String(conLai.value % 60).padStart(2, '0'))
@@ -410,11 +428,9 @@ onMounted(async () => {
   dangTai.value = true
   try {
     diemDen.value = await DataService.layChiTietDiemDen(id)
-    const filteredReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => 
-      r.diem_den_id == id || 
-      (diemDen.value && r.ten_diem_den.toLowerCase().includes(diemDen.value.ten.toLowerCase()))
-    )
-    danhGiaCuaDiemDen.value = filteredReviews.length > 0 ? filteredReviews : DANH_SACH_DANH_GIA_TRIPADVISOR.slice(0, 4)
+    const targetId = Number(id)
+    const filteredReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => r.diem_den_id === targetId)
+    danhGiaCuaDiemDen.value = filteredReviews
   } finally {
     dangTai.value = false
   }
@@ -796,6 +812,45 @@ onUnmounted(() => {
 .tag-tich_cuc { background: #ecfdf5; color: #047857; }
 .tag-trung_tinh { background: #f5f5f4; color: #57534e; }
 .tag-tieu_cuc { background: #fff1f2; color: #be123c; }
+
+.section-review-subtitle {
+  font-size: 13px;
+  color: var(--mau-chu-phu);
+  margin-top: 4px;
+}
+
+.reviews-load-more-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--nevio-border);
+}
+
+.btn-load-more-reviews {
+  padding: 10px 24px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-load-more-reviews:hover {
+  background: var(--nevio-border);
+}
+
+.btn-see-all-target-reviews {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d97706;
+  text-decoration: underline;
+}
 
 /* Sidebar */
 .detail-sidebar {

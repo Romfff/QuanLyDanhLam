@@ -137,7 +137,9 @@
               <div class="stat-divider"></div>
               <div class="stat-item">
                 <span class="stat-lbl">Đánh giá TripAdvisor</span>
-                <strong class="stat-num">{{ d.tong_luot_danh_gia }} lượt</strong>
+                <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + d.id" class="stat-num-link" :title="'Xem riêng ' + d.tong_luot_danh_gia + ' đánh giá của ' + (d.ten_rut_gon || d.ten)">
+                  <strong class="stat-num text-underline">{{ d.tong_luot_danh_gia }} lượt</strong>
+                </router-link>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
@@ -201,7 +203,11 @@
                   <div class="text-xs text-muted">{{ item.loai_hinh }}</div>
                 </td>
                 <td>{{ item.tinh_thanh }}</td>
-                <td>{{ item.tong_luot_danh_gia }} review</td>
+                <td>
+                  <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + item.id" class="table-link text-underline" :title="'Xem riêng ' + item.tong_luot_danh_gia + ' đánh giá của ' + (item.ten_rut_gon || item.ten)">
+                    {{ item.tong_luot_danh_gia }} review
+                  </router-link>
+                </td>
                 <td><strong class="text-emerald">{{ item.ty_le_tich_cuc }}%</strong></td>
                 <td><code class="code-wilson">{{ item.khoang_tin_cay_wilson }}</code></td>
                 <td>
@@ -705,6 +711,16 @@ onMounted(async () => {
 
 .text-yellow { color: #b45309; }
 .text-emerald { color: #059669; }
+
+.stat-num-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.text-underline {
+  text-decoration: underline;
+  text-decoration-color: #d97706;
+}
 
 /* Card Actions */
 .card-actions-row {

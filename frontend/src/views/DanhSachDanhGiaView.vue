@@ -4,10 +4,25 @@
       <!-- 1. Header Section -->
       <div class="page-header">
         <span class="nevio-label center">CƠ SỞ DỮ LIỆU ĐÁNH GIÁ KIỂM CHỨNG</span>
-        <h1 class="page-title">Trung Tâm Dữ Liệu 874 Đánh Giá TripAdvisor</h1>
+        <h1 class="page-title">
+          {{ tenDiemDenDangLoc ? 'Đánh Giá TripAdvisor: ' + tenDiemDenDangLoc : 'Trung Tâm Dữ Liệu 874 Đánh Giá TripAdvisor' }}
+        </h1>
         <p class="page-subtitle">
-          Toàn bộ đánh giá được thu thập khách quan từ TripAdvisor, phân tách và gán nhãn sắc thái theo 5 khía cạnh du lịch bằng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong>.
+          <span v-if="locDiemDenId">
+            Đang hiển thị <strong>{{ tongBanGhi }}</strong> đánh giá nguyên văn từ TripAdvisor thu thập riêng cho <strong>{{ tenDiemDenDangLoc }}</strong>, được mô hình trí tuệ nhân tạo PhoBERT tự động gán nhãn 5 khía cạnh dịch vụ.
+          </span>
+          <span v-else>
+            Toàn bộ 874 đánh giá được thu thập khách quan từ TripAdvisor tại 7 điểm đến trọng điểm, phân tách sắc thái theo 5 khía cạnh du lịch bằng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong>.
+          </span>
         </p>
+
+        <!-- Active Filter Pill if filtered by Destination -->
+        <div v-if="locDiemDenId" class="header-filter-active-pill">
+          <span>Đang lọc riêng theo: <strong>{{ tenDiemDenDangLoc }}</strong> ({{ tongBanGhi }} đánh giá)</span>
+          <button @click="datLaiDiemDen" class="btn-clear-active-dest" title="Xem tất cả 874 đánh giá toàn hệ thống">
+            ✕ Xem tất cả 874 đánh giá của 7 điểm đến
+          </button>
+        </div>
       </div>
 
       <!-- 2. Nevio Filter & Search Bar -->
@@ -33,9 +48,9 @@
           <div class="dropdown-group">
             <label>Điểm đến:</label>
             <select v-model="locDiemDenId" @change="thucHienLoc" class="filter-select">
-              <option value="">Tất cả 7 điểm đến</option>
+              <option value="">Tất cả 7 điểm đến (874 đánh giá toàn hệ thống)</option>
               <option v-for="d in dsDiemDen" :key="d.id" :value="d.id">
-                {{ d.ten_rut_gon || d.ten }}
+                {{ d.ten_rut_gon || d.ten }} ({{ d.tong_luot_danh_gia }} đánh giá)
               </option>
             </select>
           </div>
@@ -75,7 +90,12 @@
       <!-- 3. Stats & Filter Summary Ribbon -->
       <div class="filter-summary-ribbon">
         <div class="ribbon-count">
-          Hiển thị <strong>{{ tongBanGhi }}</strong> / 874 đánh giá TripAdvisor thực tế (Trang {{ trangHienTai }} / {{ tongTrang }})
+          <span v-if="locDiemDenId && tenDiemDenDangLoc">
+            Hiển thị <strong>{{ danhSachDanhGia.length }} / {{ tongBanGhi }}</strong> đánh giá thực tế của <strong>{{ tenDiemDenDangLoc }}</strong> (Trang {{ trangHienTai }} / {{ tongTrang }})
+          </span>
+          <span v-else>
+            Hiển thị <strong>{{ tongBanGhi }}</strong> / 874 đánh giá TripAdvisor thực tế toàn hệ thống (Trang {{ trangHienTai }} / {{ tongTrang }})
+          </span>
         </div>
         <div class="ribbon-sentiment-stats">
           <span class="ribbon-pill pill-pos">● 88.5% Khen ngợi</span>
@@ -189,7 +209,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { 
   Search, 
@@ -216,6 +236,12 @@ const locSacThai = ref(route.query.sac_thai || '')
 const trangHienTai = ref(Number(route.query.trang) || 1)
 const tongTrang = ref(1)
 const tongBanGhi = ref(874)
+
+const tenDiemDenDangLoc = computed(() => {
+  if (!locDiemDenId.value) return ''
+  const d = dsDiemDen.value.find(item => item.id == locDiemDenId.value)
+  return d ? (d.ten_rut_gon || d.ten) : ''
+})
 
 const danhSachTrangHienThi = computed(() => {
   const cur = trangHienTai.value
@@ -260,6 +286,13 @@ function thucHienLoc() {
   taiDanhGia()
 }
 
+function datLaiDiemDen() {
+  locDiemDenId.value = ''
+  trangHienTai.value = 1
+  capNhatUrl()
+  taiDanhGia()
+}
+
 function datLaiBoLoc() {
   tuKhoa.value = ''
   locDiemDenId.value = ''
@@ -287,6 +320,14 @@ function capNhatUrl() {
   if (trangHienTai.value > 1) query.trang = trangHienTai.value
   router.push({ query })
 }
+
+watch(() => route.query.diem_den_id, (newVal) => {
+  if (newVal !== locDiemDenId.value) {
+    locDiemDenId.value = newVal || ''
+    trangHienTai.value = 1
+    taiDanhGia()
+  }
+})
 
 onMounted(async () => {
   dsDiemDen.value = await DataService.layDanhSachDiemDen()
@@ -316,6 +357,36 @@ onMounted(async () => {
   font-size: 15px;
   line-height: 1.7;
   color: var(--mau-chu-phu);
+}
+
+.header-filter-active-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  margin-top: 16px;
+  font-size: 13px;
+  color: #854d0e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-clear-active-dest {
+  background: #854d0e;
+  color: #ffffff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-clear-active-dest:hover {
+  background: #713f12;
 }
 
 .reviews-filter-bar {
