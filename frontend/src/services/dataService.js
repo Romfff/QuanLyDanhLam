@@ -265,18 +265,35 @@ export const KHIA_CANH_ABSA = [
 
 // DỊCH VỤ DỮ LIỆU ĐỒNG BỘ GIỮA API VÀ FALLBACK
 export const DataService = {
-  // 1. Lấy danh sách điểm đến
+  // 1. Lấy danh sách điểm đến (Kết hợp Custom LocalStorage của Admin)
   async layDanhSachDiemDen(boLoc = {}) {
+    const dsCustom = JSON.parse(localStorage.getItem('dt12_custom_destinations') || '[]')
+    const deletedIds = JSON.parse(localStorage.getItem('dt12_deleted_destinations') || '[]')
+
+    let danhSach = [...DANH_SACH_DIEM_DEN_FALLBACK]
+
+    // Hợp nhất dữ liệu đã sửa hoặc thêm mới bởi Admin
+    dsCustom.forEach(c => {
+      const idx = danhSach.findIndex(d => Number(d.id) === Number(c.id))
+      if (idx !== -1) {
+        danhSach[idx] = { ...danhSach[idx], ...c }
+      } else {
+        danhSach.push(c)
+      }
+    })
+
+    // Lọc bỏ điểm đến đã bị Admin xóa
+    danhSach = danhSach.filter(d => !deletedIds.includes(Number(d.id)))
+
     try {
       const res = await api.get('/diem-den', { params: { so_dong: 100 } })
       if (res.data?.data && res.data.data.length > 0) {
-        // Hợp nhất dữ liệu API với thông tin hình ảnh/khía cạnh để giao diện luôn lộng lẫy
         const apiData = res.data.data
         return apiData.map((item, index) => {
-          const fallback = DANH_SACH_DIEM_DEN_FALLBACK.find(f => 
+          const fallback = danhSach.find(f => 
             f.ten.toLowerCase().includes(item.ten.toLowerCase()) || 
             item.ten.toLowerCase().includes(f.ten_rut_gon?.toLowerCase() || '')
-          ) || DANH_SACH_DIEM_DEN_FALLBACK[index % DANH_SACH_DIEM_DEN_FALLBACK.length]
+          ) || danhSach[index % danhSach.length]
 
           return {
             ...fallback,
@@ -296,13 +313,17 @@ export const DataService = {
         })
       }
     } catch (e) {
-      console.warn('API backend /diem-den chưa sẵn sàng, kích hoạt bộ nhớ đệm du lịch cao cấp.', e.message)
+      // API offline -> Dùng danh mục đã đồng bộ LocalStorage
     }
-    return DANH_SACH_DIEM_DEN_FALLBACK
+    return danhSach
   },
 
   // 2. Lấy chi tiết 1 điểm đến theo ID
   async layChiTietDiemDen(id) {
+    const ds = await this.layDanhSachDiemDen()
+    const found = ds.find(f => Number(f.id) === Number(id))
+    if (found) return found
+
     try {
       const res = await api.get(`/diem-den/${id}`)
       if (res.data?.data) {
@@ -316,9 +337,83 @@ export const DataService = {
         }
       }
     } catch (e) {
-      console.warn(`Lấy chi tiết điểm đến ID ${id} qua API thất bại, dùng fallback chi tiết.`, e.message)
+      // Dùng fallback
     }
     return DANH_SACH_DIEM_DEN_FALLBACK.find(f => f.id == id) || DANH_SACH_DIEM_DEN_FALLBACK[0]
+  },
+
+  // 2.1 Thêm điểm đến mới (Dành cho Admin)
+  async themDiemDen(duLieuMoi) {
+    const dsHienTai = await this.layDanhSachDiemDen()
+    const idMoi = dsHienTai.length > 0 ? Math.max(...dsHienTai.map(d => Number(d.id))) + 1 : 1
+    const diemMoi = {
+      id: idMoi,
+      ten: duLieuMoi.ten,
+      ten_rut_gon: duLieuMoi.ten_rut_gon || duLieuMoi.ten,
+      loai_hinh: duLieuMoi.loai_hinh || 'Điểm tham quan & Nghỉ dưỡng',
+      ma_dinh_danh: `DD_${idMoi}`,
+      tinh_thanh: duLieuMoi.tinh_thanh || 'Việt Nam',
+      dia_chi: duLieuMoi.dia_chi || duLieuMoi.tinh_thanh,
+      hinh_anh: duLieuMoi.hinh_anh || 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80',
+      hinh_anh_phu: [],
+      mo_ta: duLieuMoi.mo_ta || 'Điểm đến du lịch mới được bổ sung bởi Quản trị viên.',
+      diem_danh_tieng_tb: Number(duLieuMoi.diem_danh_tieng_tb || 4.5).toFixed(1),
+      tong_luot_danh_gia: 0,
+      trang_thai_wilson: 'binh_thuong',
+      nhan_trang_thai: 'Hoạt động ổn định',
+      ty_le_tich_cuc: 85.0,
+      khoang_tin_cay_wilson: '0.700 - 0.850',
+      khia_canh: {
+        canh_quan: { diem: 4.8, tich_cuc: 90, tieu_cuc: 2, trung_tinh: 8, mo_ta: 'Không gian trong lành' },
+        dich_vu: { diem: 4.5, tich_cuc: 85, tieu_cuc: 5, trung_tinh: 10, mo_ta: 'Dịch vụ chu đáo' },
+        am_thuc: { diem: 4.4, tich_cuc: 82, tieu_cuc: 6, trung_tinh: 12, mo_ta: 'Ẩm thực phong phú' },
+        ve_sinh: { diem: 4.6, tich_cuc: 88, tieu_cuc: 4, trung_tinh: 8, mo_ta: 'Vệ sinh sạch sẽ' },
+        gia_ca: { diem: 4.3, tich_cuc: 80, tieu_cuc: 8, trung_tinh: 12, mo_ta: 'Giá cả hợp lý' }
+      },
+      uu_dai: {
+        co_san: true,
+        tieu_de: `Voucher Ưu Đãi 10% tại ${duLieuMoi.ten}`,
+        ma_voucher: `DISCOUNT-${idMoi}`,
+        doi_tac: duLieuMoi.ten,
+        link_doi_tac: 'https://tripadvisor.com'
+      }
+    }
+
+    const dsCustom = JSON.parse(localStorage.getItem('dt12_custom_destinations') || '[]')
+    dsCustom.push(diemMoi)
+    localStorage.setItem('dt12_custom_destinations', JSON.stringify(dsCustom))
+    return diemMoi
+  },
+
+  // 2.2 Xóa điểm đến (Dành cho Admin)
+  async xoaDiemDen(id) {
+    let dsCustom = JSON.parse(localStorage.getItem('dt12_custom_destinations') || '[]')
+    dsCustom = dsCustom.filter(d => Number(d.id) !== Number(id))
+    localStorage.setItem('dt12_custom_destinations', JSON.stringify(dsCustom))
+
+    const deletedIds = JSON.parse(localStorage.getItem('dt12_deleted_destinations') || '[]')
+    if (!deletedIds.includes(Number(id))) {
+      deletedIds.push(Number(id))
+      localStorage.setItem('dt12_deleted_destinations', JSON.stringify(deletedIds))
+    }
+    return true
+  },
+
+  // 2.3 Cập nhật điểm đến (Dành cho Admin)
+  async capNhatDiemDen(id, data) {
+    let dsCustom = JSON.parse(localStorage.getItem('dt12_custom_destinations') || '[]')
+    const idx = dsCustom.findIndex(d => Number(d.id) === Number(id))
+    if (idx !== -1) {
+      dsCustom[idx] = { ...dsCustom[idx], ...data }
+      localStorage.setItem('dt12_custom_destinations', JSON.stringify(dsCustom))
+    } else {
+      const defaultDest = DANH_SACH_DIEM_DEN_FALLBACK.find(d => Number(d.id) === Number(id))
+      if (defaultDest) {
+        dsCustom.push({ ...defaultDest, ...data })
+        localStorage.setItem('dt12_custom_destinations', JSON.stringify(dsCustom))
+      }
+    }
+    return true
   },
 
   // 3. Lấy trạng thái định tuyến Wilson Score

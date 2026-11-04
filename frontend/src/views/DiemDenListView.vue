@@ -11,6 +11,13 @@
         <p class="page-subtitle">
           Danh mục định vị danh tiếng du lịch minh bạch. Mỗi điểm đến được đánh giá dựa trên khoảng tin cậy Wilson Score dưới chuẩn 95%, loại trừ hoàn toàn các đánh giá ảo để du khách an tâm lựa chọn.
         </p>
+
+        <!-- Admin Quick Notice Bar -->
+        <div v-if="laAdmin" class="admin-notice-bar">
+          <ShieldCheck :size="16" class="text-amber" />
+          <span>Bạn đang đăng nhập với quyền <strong>Quản trị viên (Admin)</strong>.</span>
+          <router-link to="/quan-tri" class="link-admin-panel">Vào trang Quản trị để Thêm / Sửa / Xóa địa điểm &amp; Chạy tính toán →</router-link>
+        </div>
       </div>
 
       <!-- 2. Search & Filter Bar -->
@@ -274,6 +281,7 @@ const tuKhoa = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
 const voucherToast = ref(null)
+const laAdmin = computed(() => localStorage.getItem('vai_tro') === 'admin')
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=80'
 
@@ -370,6 +378,35 @@ onMounted(async () => {
   font-size: 15.5px;
   line-height: 1.7;
   color: var(--mau-chu-phu);
+}
+
+.admin-notice-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+[data-theme="dark"] .admin-notice-bar {
+  background: #1e2434;
+  border-color: #fddd62;
+  color: #fddd62;
+}
+
+.link-admin-panel {
+  font-weight: 700;
+  text-decoration: underline;
+  color: #b45309;
+}
+
+[data-theme="dark"] .link-admin-panel {
+  color: #fddd62;
 }
 
 /* Filter Toolbar */

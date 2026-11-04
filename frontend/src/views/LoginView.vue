@@ -60,51 +60,38 @@
           </button>
         </form>
 
-        <!-- Quick 5 Role Test Buttons with Lucide Icons -->
+        <!-- Quick 2 Role Test Buttons -->
         <div class="quick-roles-section">
           <div class="quick-title">
-            <span>Kiểm thử nhanh 5 vai trò hệ thống:</span>
+            <span>Chọn nhanh 1 trong 2 vai trò hệ thống:</span>
           </div>
-          <div class="quick-grid">
+          <div class="quick-grid two-cols">
             <button 
               type="button" 
-              class="btn-quick-role" 
-              @click="dienTaiKhoan('admin@demo.test', 'Admin@123456', 'admin', 'Quản trị viên trưởng')"
+              :class="['btn-quick-role', { active: vaiTroChon === 'admin' }]" 
+              @click="dienTaiKhoan('admin@toursentiment.vn', 'Admin@123456', 'admin', 'Quản trị viên')"
             >
-              <ShieldCheck :size="15" class="role-icon-inline" />
-              <span>Quản trị viên (Admin)</span>
+              <div class="role-icon-box bg-gold">
+                <ShieldCheck :size="20" class="role-icon-inline" />
+              </div>
+              <div class="role-text-meta">
+                <strong>Quản trị viên (Admin)</strong>
+                <span>Thêm/Sửa/Xóa địa điểm, gom đánh giá &amp; tính Wilson</span>
+              </div>
             </button>
+
             <button 
               type="button" 
-              class="btn-quick-role" 
-              @click="dienTaiKhoan('analyst@demo.test', 'Analyst@123456', 'nha_phan_tich', 'Chuyên viên ABSA')"
+              :class="['btn-quick-role', { active: vaiTroChon === 'du_khach' }]" 
+              @click="dienTaiKhoan('khachhang@toursentiment.vn', 'Khach@123456', 'du_khach', 'Du khách trải nghiệm')"
             >
-              <BarChart3 :size="15" class="role-icon-inline" />
-              <span>Nhà phân tích (Analyst)</span>
-            </button>
-            <button 
-              type="button" 
-              class="btn-quick-role" 
-              @click="dienTaiKhoan('partner@demo.test', 'Partner@123456', 'doi_tac', 'Đối tác Du lịch')"
-            >
-              <Briefcase :size="15" class="role-icon-inline" />
-              <span>Đối tác điểm đến (Partner)</span>
-            </button>
-            <button 
-              type="button" 
-              class="btn-quick-role" 
-              @click="dienTaiKhoan('moderator@demo.test', 'Mod@123456', 'kiem_duyet', 'Kiểm duyệt viên')"
-            >
-              <UserCheck :size="15" class="role-icon-inline" />
-              <span>Kiểm duyệt viên (Mod)</span>
-            </button>
-            <button 
-              type="button" 
-              class="btn-quick-role" 
-              @click="dienTaiKhoan('tourist@demo.test', 'User@123456', 'du_khach', 'Nguyễn Trung Hiếu')"
-            >
-              <User :size="15" class="role-icon-inline" />
-              <span>Du khách trải nghiệm (Tourist)</span>
+              <div class="role-icon-box bg-sky">
+                <Compass :size="20" class="role-icon-inline" />
+              </div>
+              <div class="role-text-meta">
+                <strong>Du khách (Tourist)</strong>
+                <span>Tra cứu điểm đến, xem review thật, nhận voucher</span>
+              </div>
             </button>
           </div>
         </div>
@@ -137,10 +124,10 @@ import {
 import api from '../services/api'
 
 const router = useRouter()
-const email = ref('admin@demo.test')
+const email = ref('admin@toursentiment.vn')
 const matKhau = ref('Admin@123456')
 const vaiTroChon = ref('admin')
-const hoTenChon = ref('Quản trị viên trưởng')
+const hoTenChon = ref('Quản trị viên')
 
 const dangXuLy = ref(false)
 const thongBaoLoi = ref('')
@@ -166,11 +153,17 @@ async function dangNhap() {
     })
 
     if (res.data?.data?.token) {
+      const role = res.data.data.nguoi_dung?.vai_tro || vaiTroChon.value
       localStorage.setItem('token', res.data.data.token)
-      localStorage.setItem('vai_tro', res.data.data.nguoi_dung?.vai_tro || vaiTroChon.value)
+      localStorage.setItem('vai_tro', role)
       localStorage.setItem('ho_ten', res.data.data.nguoi_dung?.ho_ten || hoTenChon.value)
       localStorage.setItem('user_info', JSON.stringify(res.data.data.nguoi_dung))
-      router.push('/dashboard')
+      
+      if (role === 'admin') {
+        router.push('/quan-tri')
+      } else {
+        router.push('/dashboard')
+      }
       return
     }
   } catch (e) {
@@ -178,13 +171,18 @@ async function dangNhap() {
   }
 
   // Fallback mô phỏng khi offline
-  localStorage.setItem('token', 'demo_jwt_token_' + vaiTroChon.value)
-  localStorage.setItem('vai_tro', vaiTroChon.value)
+  const role = vaiTroChon.value
+  localStorage.setItem('token', 'demo_jwt_token_' + role)
+  localStorage.setItem('vai_tro', role)
   localStorage.setItem('ho_ten', hoTenChon.value)
   thongBaoThanhCong.value = `Đăng nhập thành công với vai trò: ${hoTenChon.value}`
 
   setTimeout(() => {
-    router.push('/dashboard')
+    if (role === 'admin') {
+      router.push('/quan-tri')
+    } else {
+      router.push('/dashboard')
+    }
   }, 400)
 }
 </script>
@@ -332,14 +330,13 @@ async function dangNhap() {
 .btn-quick-role {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   background: var(--nevio-light-grey);
   border: 1px solid var(--nevio-border);
   color: var(--mau-chu);
-  padding: 9px 14px;
-  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
   font-size: 13px;
-  font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s;
@@ -347,8 +344,55 @@ async function dangNhap() {
 
 .btn-quick-role:hover {
   background: var(--nevio-card-bg);
-  border-color: var(--nevio-orange);
-  color: var(--nevio-orange);
+  border-color: var(--nevio-yellow);
+  transform: translateY(-1px);
+}
+
+.btn-quick-role.active {
+  background: #fffbeb;
+  border-color: #f59e0b;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+}
+
+[data-theme="dark"] .btn-quick-role.active {
+  background: #1e2434;
+  border-color: #fddd62;
+}
+
+.role-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.role-icon-box.bg-gold {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.role-icon-box.bg-sky {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.role-text-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.role-text-meta strong {
+  font-size: 13.5px;
+  color: var(--mau-chu);
+}
+
+.role-text-meta span {
+  font-size: 11.5px;
+  color: var(--mau-chu-phu);
 }
 
 .role-icon-inline {

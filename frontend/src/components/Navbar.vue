@@ -31,6 +31,10 @@
         <router-link to="/phieu-cua-toi" class="nevio-link">
           <span>Ví Phiếu Của Tôi</span>
         </router-link>
+        <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="nevio-link admin-nav-link">
+          <ShieldCheck :size="15" />
+          <span>Quản Trị Admin</span>
+        </router-link>
       </nav>
 
       <!-- 3. Right Header Actions -->
@@ -85,6 +89,9 @@
       <router-link to="/phieu-cua-toi" class="mobile-nav-item" @click="moMenuMobile = false">
         Ví Phiếu Của Tôi
       </router-link>
+      <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="mobile-nav-item admin-mobile-item" @click="moMenuMobile = false">
+        👑 Quản Trị Hệ Thống Admin
+      </router-link>
       <div class="mobile-divider"></div>
       <router-link v-if="!daDangNhap" to="/dang-nhap" class="mobile-nav-item" @click="moMenuMobile = false">
         Đăng Nhập Hệ Thống
@@ -121,22 +128,11 @@ const vaiTroHienTai = ref(localStorage.getItem('vai_tro') || 'du_khach')
 const daDangNhap = ref(!!localStorage.getItem('token'))
 
 const iconVaiTro = computed(() => {
-  switch (vaiTroHienTai.value) {
-    case 'admin': return ShieldCheck
-    case 'nha_phan_tich': return BarChart2
-    case 'doi_tac': return Briefcase
-    default: return User
-  }
+  return vaiTroHienTai.value === 'admin' ? ShieldCheck : Compass
 })
 
 const nhanVaiTro = computed(() => {
-  switch (vaiTroHienTai.value) {
-    case 'admin': return 'Quản trị viên'
-    case 'nha_phan_tich': return 'Nhà phân tích'
-    case 'doi_tac': return 'Đối tác du lịch'
-    case 'kiem_duyet': return 'Kiểm duyệt'
-    default: return 'Du khách'
-  }
+  return vaiTroHienTai.value === 'admin' ? 'Quản trị viên (Admin)' : 'Du khách trải nghiệm'
 })
 
 function toggleTheme() {
@@ -248,6 +244,25 @@ onMounted(() => {
 
 .nevio-link:hover, .nevio-link.router-link-active {
   color: #fddd62;
+}
+
+.admin-nav-link {
+  color: #fddd62 !important;
+  font-weight: 700 !important;
+  background: rgba(253, 221, 98, 0.15);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(253, 221, 98, 0.3);
+}
+
+.admin-nav-link:hover {
+  background: rgba(253, 221, 98, 0.25);
+  box-shadow: 0 0 10px rgba(253, 221, 98, 0.4);
+}
+
+.admin-mobile-item {
+  color: #fddd62 !important;
+  font-weight: 700 !important;
 }
 
 .link-dot {

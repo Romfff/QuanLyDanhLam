@@ -41,10 +41,14 @@ const routes = [
     component: () => import('../views/ChiTietDiemDenView.vue')
   },
   {
-    path: '/quan-tri/diem-den',
-    name: 'QuanTriDiemDen',
-    component: () => import('../views/DashboardView.vue'),
+    path: '/quan-tri',
+    name: 'QuanTriAdmin',
+    component: () => import('../views/DashboardAdminView.vue'),
     meta: { canDangNhap: true, chiQuanTri: true }
+  },
+  {
+    path: '/quan-tri/diem-den',
+    redirect: '/quan-tri'
   },
   {
     path: '/khong-co-quyen',
@@ -73,7 +77,7 @@ router.beforeEach((to, from, next) => {
     return next('/dang-nhap')
   }
 
-  if (to.meta.chiQuanTri && !['admin', 'quan_ly_diem_den', 'nha_phan_tich'].includes(vaiTro)) {
+  if (to.meta.chiQuanTri && vaiTro !== 'admin') {
     return next('/khong-co-quyen')
   }
 
