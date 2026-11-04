@@ -99,6 +99,24 @@ async function dangNhap() {
       thongBaoLoi.value = 'Phản hồi đăng nhập không hợp lệ'
     }
   } catch (err) {
+    if (!err.response) {
+      // Fallback chế độ demo khi Backend đám mây đang ngủ đông/chưa cấu hình
+      const demoRoles = {
+        'admin@demo.test': { id: 1, ho_ten: 'Nguyễn Quản Trị (Admin)', vai_tro: 'admin' },
+        'analyst@demo.test': { id: 2, ho_ten: 'Chuyên Viên Phân Tích', vai_tro: 'chuyen_vien_pt' },
+        'partner@demo.test': { id: 3, ho_ten: 'Chủ Cơ Sở Đối Tác', vai_tro: 'quan_ly_diem_den' },
+        'moderator@demo.test': { id: 4, ho_ten: 'Nhân Viên Kiểm Duyệt', vai_tro: 'quan_ly_diem_den' },
+        'tourist@demo.test': { id: 5, ho_ten: 'Du Khách Trải Nghiệm', vai_tro: 'du_khach' },
+      }
+      if (demoRoles[email.value]) {
+        const u = demoRoles[email.value]
+        localStorage.setItem('token', 'demo-token-' + Date.now())
+        localStorage.setItem('vai_tro', u.vai_tro)
+        localStorage.setItem('user_info', JSON.stringify(u))
+        router.push('/dashboard')
+        return
+      }
+    }
     thongBaoLoi.value = err.response?.data?.message || 'Email hoặc mật khẩu không chính xác'
   } finally {
     dangXuLy.value = false
