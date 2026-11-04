@@ -75,7 +75,7 @@
       <!-- 3. Stats & Filter Summary Ribbon -->
       <div class="filter-summary-ribbon">
         <div class="ribbon-count">
-          Hiển thị <strong>{{ tongBanGhi }}</strong> đánh giá hợp lệ
+          Hiển thị <strong>{{ tongBanGhi }}</strong> / 874 đánh giá TripAdvisor thực tế (Trang {{ trangHienTai }} / {{ tongTrang }})
         </div>
         <div class="ribbon-sentiment-stats">
           <span class="ribbon-pill pill-pos">● 88.5% Khen ngợi</span>
@@ -164,14 +164,16 @@
         </button>
 
         <div class="page-numbers">
-          <button 
-            v-for="p in Math.min(tongTrang, 6)" 
-            :key="p"
-            @click="chuyenTrang(p)"
-            :class="['page-num', { active: p === trangHienTai }]"
-          >
-            {{ p }}
-          </button>
+          <template v-for="(p, pIdx) in danhSachTrangHienThi" :key="pIdx">
+            <span v-if="p === '...'" class="page-ellipsis">...</span>
+            <button 
+              v-else
+              @click="chuyenTrang(p)"
+              :class="['page-num', { active: p === trangHienTai }]"
+            >
+              {{ p }}
+            </button>
+          </template>
         </div>
 
         <button 
@@ -187,7 +189,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { 
   Search, 
@@ -215,6 +217,25 @@ const trangHienTai = ref(Number(route.query.trang) || 1)
 const tongTrang = ref(1)
 const tongBanGhi = ref(874)
 
+const danhSachTrangHienThi = computed(() => {
+  const cur = trangHienTai.value
+  const total = tongTrang.value
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+  const pages = []
+  pages.push(1)
+  if (cur > 3) pages.push('...')
+  const start = Math.max(2, cur - 1)
+  const end = Math.min(total - 1, cur + 1)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  if (cur < total - 2) pages.push('...')
+  pages.push(total)
+  return pages
+})
+
 async function taiDanhGia() {
   dangTai.value = true
   try {
@@ -224,7 +245,7 @@ async function taiDanhGia() {
       khia_canh_id: locKhiaCanh.value,
       sac_thai: locSacThai.value
     }
-    const ketQua = await DataService.layDanhSachDanhGia(boLoc, trangHienTai.value, 8)
+    const ketQua = await DataService.layDanhSachDanhGia(boLoc, trangHienTai.value, 16)
     danhSachDanhGia.value = ketQua.danh_sach
     tongTrang.value = ketQua.meta.tong_trang || 1
     tongBanGhi.value = ketQua.meta.tong_ban_ghi || 874
@@ -631,6 +652,15 @@ onMounted(async () => {
   background: var(--nevio-dark);
   color: var(--nevio-white);
   border-color: var(--nevio-dark);
+}
+
+.page-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  color: var(--mau-chu-phu);
+  font-weight: 700;
 }
 
 [data-theme="dark"] .page-num.active {

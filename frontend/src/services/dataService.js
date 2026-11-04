@@ -3,6 +3,7 @@
 // Đảm bảo giao diện luôn hiển thị đầy đủ, mượt mà dù backend đang chạy hay offline!
 
 import api from './api'
+import reviews874Data from '../assets/reviews874.json'
 
 // 7 ĐIỂM ĐẾN THỰC TẾ TỪ CƠ SỞ DỮ LIỆU & TRIPADVISOR
 export const DANH_SACH_DIEM_DEN_FALLBACK = [
@@ -250,204 +251,8 @@ export const DANH_SACH_DIEM_DEN_FALLBACK = [
   }
 ]
 
-// 25 ĐÁNH GIÁ TRIPADVISOR MẪU THỰC TẾ CÓ GẮN NHÃN ABSA
-export const DANH_SACH_DANH_GIA_TRIPADVISOR = [
-  {
-    id: 101,
-    diem_den_id: 1,
-    ten_diem_den: 'Ambassador Cruise - Halong Bay',
-    nguoi_danh_gia: 'Michael Jenkins',
-    quoc_gia: 'Australia 🇦🇺',
-    ngay_dang: '2026-03-12',
-    diem_so: 5,
-    tieu_de: 'Unforgettable cruise experience in Halong Bay!',
-    noi_dung: 'Trải nghiệm du thuyền Ambassador vượt xa mong đợi của chúng tôi. Boong tắm nắng cực kỳ rộng, ngắm hoàng hôn vịnh Hạ Long tuyệt đẹp. Bữa tiệc buffet tôm hùm rất tươi và phong phú. Đội ngũ nhân viên luôn niềm nở, hỗ trợ gia đình chúng tôi chu đáo.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Hoàng hôn Hạ Long tuyệt mỹ' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Nhân viên niềm nở, chu đáo' },
-      { khia_canh: 'Ẩm thực', sac_thai: 'tich_cuc', chi_tiet: 'Buffet tôm hùm tươi ngon' }
-    ]
-  },
-  {
-    id: 102,
-    diem_den_id: 3,
-    ten_diem_den: 'Halong Bay',
-    nguoi_danh_gia: 'Trần Thị Thu Hà',
-    quoc_gia: 'Hà Nội, Việt Nam 🇻🇳',
-    ngay_dang: '2026-03-10',
-    diem_so: 5,
-    tieu_de: 'Kỳ quan xứng đáng là niềm tự hào của Việt Nam',
-    noi_dung: 'Vịnh Hạ Long đẹp như một bức tranh thủy mặc khổng lồ. Nước biển màu xanh ngọc bích, các hòn đảo đá vôi tạo hình ấn tượng. Hang Sửng Sốt thạch nhũ lung linh kỳ ảo. Tour chèo kayak qua hang Luồn rất thích.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Bức tranh thủy mặc, hang Sửng Sốt lung linh' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Tour chèo thuyền kayak tổ chức bài bản' }
-    ]
-  },
-  {
-    id: 103,
-    diem_den_id: 5,
-    ten_diem_den: 'Trang An Grottoes',
-    nguoi_danh_gia: 'Nguyễn Văn Hùng',
-    quoc_gia: 'Hải Phòng, Việt Nam 🇻🇳',
-    ngay_dang: '2026-03-08',
-    diem_so: 5,
-    tieu_de: 'Chuyến đi Tràng An tuyệt vời, đò sạch sẽ nước trong',
-    noi_dung: 'Gia đình tôi đi tuyến 2 qua Hang Tối, Hang Sáng và phim trường Kong. Cô lái đò rất dễ thương, vừa chèo vừa kể chuyện lịch sử Đinh - Tiền Lê. Cảnh quan non nước hữu tình, nước trong đến mức nhìn rõ rong rêu dưới đáy.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Non nước hữu tình, nước trong vắt' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Cô lái đò tận tâm thuyết minh' },
-      { khia_canh: 'Vệ sinh', sac_thai: 'tich_cuc', chi_tiet: 'Đò sạch, không rác thải trôi nổi' }
-    ]
-  },
-  {
-    id: 104,
-    diem_den_id: 6,
-    ten_diem_den: 'Mua Caves',
-    nguoi_danh_gia: 'Sophie Laurent',
-    quoc_gia: 'France 🇫🇷',
-    ngay_dang: '2026-03-05',
-    diem_so: 5,
-    tieu_de: 'Breathtaking 360 view from the Dragon Peak!',
-    noi_dung: 'Leo gần 500 bậc thang đá dưới nắng có hơi mệt nhưng khi chạm đỉnh tượng Rồng Ngọa Long thì mọi nỗ lực đều được đền đáp xứng đáng. Góc nhìn 360 độ ngắm toàn thung lũng Tam Cốc và sông Ngô Đồng đẹp nín thở!',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Toàn cảnh Tam Cốc ngoạn mục nín thở' },
-      { khia_canh: 'Giá cả', sac_thai: 'tich_cuc', chi_tiet: 'Vé vào cổng 100k hợp lý' }
-    ]
-  },
-  {
-    id: 105,
-    diem_den_id: 2,
-    ten_diem_den: 'Melia Vinpearl Phu Quoc',
-    nguoi_danh_gia: 'Lê Hoàng Minh',
-    quoc_gia: 'TP. Hồ Chí Minh 🇻🇳',
-    ngay_dang: '2026-03-02',
-    diem_so: 4,
-    tieu_de: 'Resort đẹp, villa hồ bơi riêng tư nhưng đồ ăn hơi đắt',
-    noi_dung: 'Biệt thự 2 phòng ngủ có hồ bơi riêng rất thích hợp cho gia đình có trẻ nhỏ. Bãi biển riêng sạch sẽ, cát mịn, ngắm hoàng hôn lãng mạn. Tuy nhiên đồ ăn gọi món tại nhà hàng tính giá khá cao và menu ăn trưa ít lựa chọn.',
-    sac_thai: 'trung_tinh',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Bãi biển riêng cát mịn, hoàng hôn đẹp' },
-      { khia_canh: 'Vệ sinh', sac_thai: 'tich_cuc', chi_tiet: 'Villa sạch sẽ, hồ bơi bảo dưỡng tốt' },
-      { khia_canh: 'Giá cả', sac_thai: 'tieu_cuc', chi_tiet: 'Đồ ăn gọi món giá đắt đỏ' }
-    ]
-  },
-  {
-    id: 106,
-    diem_den_id: 4,
-    ten_diem_den: 'Vinpearl Resort & Spa Ha Long',
-    nguoi_danh_gia: 'Phạm Đức Anh',
-    quoc_gia: 'Đà Nẵng 🇻🇳',
-    ngay_dang: '2026-02-28',
-    diem_so: 4,
-    tieu_de: 'Kiến trúc lâu đài độc đáo, dịch vụ cano cần nhanh hơn',
-    noi_dung: 'Resort nằm trọn vẹn trên Đảo Rều tạo cảm giác nghỉ dưỡng tách biệt và sang chảnh. Phòng view vịnh đón bình minh rất đẹp. Điểm trừ duy nhất là lúc trả phòng cao điểm phải xếp hàng chờ cano sang đất liền mất gần 20 phút.',
-    sac_thai: 'trung_tinh',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'View biển 4 phía tuyệt đẹp' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tieu_cuc', chi_tiet: 'Chờ cano đón giờ cao điểm lâu' }
-    ]
-  },
-  {
-    id: 107,
-    diem_den_id: 7,
-    ten_diem_den: 'Van Long Nature Reserve',
-    nguoi_danh_gia: 'David & Emma Clark',
-    quoc_gia: 'United Kingdom 🇬🇧',
-    ngay_dang: '2026-02-25',
-    diem_so: 5,
-    tieu_de: 'Peaceful boat ride and spotted wild Delacour\'s Langurs!',
-    noi_dung: 'Đầm Vân Long tĩnh lặng vô cùng, không có động cơ tiếng máy ồn ào như những nơi khác, chỉ có tiếng mái chèo khua nước. Chúng tôi may mắn thấy đàn voọc quần đùi trắng leo trèo trên vách đá. Cảnh sắc hoang sơ hệt như trong phim Kong.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Cảnh quan hoang sơ, đàn voọc quý hiếm' },
-      { khia_canh: 'Vệ sinh', sac_thai: 'tich_cuc', chi_tiet: 'Môi trường tự nhiên được bảo tồn sạch đẹp' }
-    ]
-  },
-  {
-    id: 108,
-    diem_den_id: 1,
-    ten_diem_den: 'Ambassador Cruise - Halong Bay',
-    nguoi_danh_gia: 'Vũ Thanh Hằng',
-    quoc_gia: 'Hà Nội 🇻🇳',
-    ngay_dang: '2026-02-22',
-    diem_so: 5,
-    tieu_de: 'Chuyến đi trăng mật hoàn hảo trên du thuyền Ambassador',
-    noi_dung: 'Phòng Suite có ban công riêng nhìn thẳng ra vịnh. Tối có nhạc sống acoustic lãng mạn. Nhân viên buồng phòng chu đáo gấp thiên nga trang trí giường cưới rất đáng yêu. Rất đáng đồng tiền bát gạo!',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Set up phòng chu đáo, nhân viên tận tâm' },
-      { khia_canh: 'Ẩm thực', sac_thai: 'tich_cuc', chi_tiet: 'Bữa tối lãng mạn kèm nhạc sống' }
-    ]
-  },
-  {
-    id: 109,
-    diem_den_id: 3,
-    ten_diem_den: 'Halong Bay',
-    nguoi_danh_gia: 'Kenji Sato',
-    quoc_gia: 'Japan 🇯🇵',
-    ngay_dang: '2026-02-18',
-    diem_so: 4,
-    tieu_de: 'Beautiful nature, but too crowded at Sung Sot Cave',
-    noi_dung: 'Cảnh vịnh đẹp không tì vết. Tuy nhiên vào hang Sửng Sốt có quá nhiều đoàn khách đi cùng một lúc nên phải nhích từng bước một, hơi ngột ngạt. Hy vọng ban quản lý phân luồng giờ tham quan hợp lý hơn.',
-    sac_thai: 'trung_tinh',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Cảnh vịnh đẹp tuyệt tác' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tieu_cuc', chi_tiet: 'Phân luồng khách hang Sửng Sốt đông đúc' }
-    ]
-  },
-  {
-    id: 110,
-    diem_den_id: 5,
-    ten_diem_den: 'Trang An Grottoes',
-    nguoi_danh_gia: 'Nguyễn Bích Ngọc',
-    quoc_gia: 'Bắc Ninh 🇻🇳',
-    ngay_dang: '2026-02-14',
-    diem_so: 5,
-    tieu_de: 'Ninh Bình mùa lễ hội Tràng An đẹp mê hồn',
-    noi_dung: 'Dù đi vào dịp đầu xuân đông khách nhưng khâu xếp hàng mua vé và xuống đò rất văn minh, không chen lấn xô đẩy. Nước sông Sào Khê phẳng lặng xanh mướt, hoa súng nở ven bờ rất thơ mộng.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Hoa súng ven sông, non xanh nước biếc' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Tổ chức xếp hàng văn minh, nề nếp' }
-    ]
-  },
-  {
-    id: 111,
-    diem_den_id: 2,
-    ten_diem_den: 'Melia Vinpearl Phu Quoc',
-    nguoi_danh_gia: 'Dmitry Ivanov',
-    quoc_gia: 'Russia 🇷🇺',
-    ngay_dang: '2026-02-10',
-    diem_so: 5,
-    tieu_de: 'Great family retreat in tropical paradise',
-    noi_dung: 'Bãi biển cát trắng tinh, biển êm dịu rất an toàn cho trẻ em bơi lội. Trẻ con được tham gia câu lạc bộ Kids Club miễn phí với nhiều hoạt động vẽ tranh, làm bánh pizza. Gia đình chúng tôi sẽ quay lại vào mùa sau.',
-    sac_thai: 'tich_cuc',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Biển êm cát mịn, khí hậu ấm áp' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tich_cuc', chi_tiet: 'Hoạt động Kids Club xuất sắc' }
-    ]
-  },
-  {
-    id: 112,
-    diem_den_id: 6,
-    ten_diem_den: 'Mua Caves',
-    nguoi_danh_gia: 'Trần Quang Dũng',
-    quoc_gia: 'Nam Định 🇻🇳',
-    ngay_dang: '2026-02-05',
-    diem_so: 4,
-    tieu_de: 'Cảnh đẹp xuất sắc, cần lắp thêm tay vịn an toàn',
-    noi_dung: 'Bậc đá lên tháp ngọn núi hơi dốc và hẹp, một số đoạn đá trơn trượt khi trời mưa lất phất. Cần bổ sung tay vịn cáp an toàn cho người lớn tuổi. Bù lại view ngắm đầm sen và đồng lúa phía dưới quá đẹp.',
-    sac_thai: 'trung_tinh',
-    khia_canh_tags: [
-      { khia_canh: 'Cảnh quan', sac_thai: 'tich_cuc', chi_tiet: 'Đầm sen và đồng lúa Tam Cốc đẹp mê mẩn' },
-      { khia_canh: 'Dịch vụ', sac_thai: 'tieu_cuc', chi_tiet: 'Đường leo núi cần thêm rào chắn an toàn' }
-    ]
-  }
-]
+// TOÀN BỘ 874 ĐÁNH GIÁ TRIPADVISOR THỰC TẾ ĐƯỢC GẮN NHÃN ABSA & PHOBERT
+export const DANH_SACH_DANH_GIA_TRIPADVISOR = reviews874Data
 
 // 5 KHÍA CẠNH DU LỊCH TIÊU CHUẨN ABSA
 export const KHIA_CANH_ABSA = [
@@ -573,13 +378,13 @@ export const DataService = {
       ketQua = ketQua.filter(r => r.khia_canh_tags?.some(tag => tag.khia_canh.toLowerCase().includes(kcTen)))
     }
 
-    const tongBanGhi = 874 // Tổng số đánh giá TripAdvisor thực tế
-    const tongTrang = Math.ceil(ketQua.length / soDong) || 1
+    const tongBanGhi = ketQua.length
+    const tongTrang = Math.ceil(tongBanGhi / soDong) || 1
     const batDau = (trang - 1) * soDong
     const duLieuTrang = ketQua.slice(batDau, batDau + soDong)
 
     return {
-      danh_sach: duLieuTrang.length > 0 ? duLieuTrang : ketQua,
+      danh_sach: duLieuTrang,
       meta: {
         trang: Number(trang),
         so_dong: soDong,

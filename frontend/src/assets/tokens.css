@@ -267,3 +267,46 @@ button {
 .pulse-badge {
   animation: pulseGlow 2s infinite;
 }
+
+/* Tactile Click Micro-Interactions (Nevio UX standard) */
+button, .nevio-btn-yellow, .btn-nevio-white, .btn-card-action, .cat-pill, .btn-page, .page-num, .nevio-link {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, background-color 0.2s ease;
+  user-select: none;
+}
+
+button:active, .nevio-btn-yellow:active, .btn-nevio-white:active, .btn-card-action:active {
+  transform: scale(0.97) !important;
+}
+
+.anim-hover-lift {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+}
+
+.anim-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px -4px rgba(48, 48, 48, 0.12);
+}
+
+.anim-pop {
+  animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
