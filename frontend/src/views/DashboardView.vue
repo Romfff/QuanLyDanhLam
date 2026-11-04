@@ -464,22 +464,68 @@
           </div>
 
           <div class="monitor-col-formula">
-            <div class="formula-box-inner">
-              <div class="formula-head">
-                <span class="formula-tag">CÔNG THỨC TOÁN HỌC</span>
-                <h4>Khoảng Tin Cậy Wilson Score (95% CI)</h4>
+            <div class="trust-shield-card">
+              <div class="trust-shield-header">
+                <span class="formula-tag">BẢO CHỨNG DU KHÁCH</span>
+                <h4 class="trust-title">3 Lớp Bảo Vệ &amp; Minh Bạch Dữ Liệu</h4>
+                <p class="trust-sub">Hệ thống áp dụng thuật toán thống kê Wilson Score 95% nhằm giải quyết nỗi lo lớn nhất của du khách: đánh giá bị thổi phồng hoặc đánh giá ảo.</p>
               </div>
-              <div class="formula-math-display">
-                \( w = \frac{\hat{p} + \frac{z^2}{2n} - z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}} \)
+
+              <div class="trust-features-grid">
+                <div class="trust-item">
+                  <div class="trust-item-icon">
+                    <CheckCircle2 :size="18" class="text-emerald" />
+                  </div>
+                  <div>
+                    <strong>100% Đánh giá thực tế từ TripAdvisor</strong>
+                    <p>Dữ liệu được thu thập nguyên văn, minh bạch và phân bổ độc lập cho từng điểm đến riêng biệt.</p>
+                  </div>
+                </div>
+
+                <div class="trust-item">
+                  <div class="trust-item-icon">
+                    <CheckCircle2 :size="18" class="text-emerald" />
+                  </div>
+                  <div>
+                    <strong>Chống review ảo &amp; dìm hàng đối thủ</strong>
+                    <p>Điểm đến có ít lượt đánh giá sẽ không thể đạt điểm tuyệt đối ảo, bảo vệ bạn khỏi cơ sở tự "bơm điểm".</p>
+                  </div>
+                </div>
+
+                <div class="trust-item">
+                  <div class="trust-item-icon">
+                    <CheckCircle2 :size="18" class="text-emerald" />
+                  </div>
+                  <div>
+                    <strong>Chỉ tặng voucher cho Điểm Sáng thực thụ</strong>
+                    <p>Chỉ cơ sở đạt mức tín nhiệm cao bền vững mới được cấp mã ưu đãi 15%, đảm bảo chất lượng kỳ nghỉ của bạn.</p>
+                  </div>
+                </div>
               </div>
-              <div class="formula-parameters">
-                <div><span>\( \hat{p} \)</span>: Tỷ lệ đánh giá tích cực quan sát</div>
-                <div><span>\( n \)</span>: Tổng số đánh giá hợp lệ</div>
-                <div><span>\( z = 1.96 \)</span>: Hệ số chuẩn mức tin cậy 95%</div>
-              </div>
-              <div class="formula-verdict-box">
-                • \( w \ge 0.70 \): Vinh danh <strong>"Điểm sáng du lịch"</strong> (Mở ưu đãi tour)<br/>
-                • \( w &lt; 0.70 \): Trạng thái <strong>"Ổn định"</strong> hoặc <strong>"Cảnh báo"</strong>
+
+              <!-- Technical toggle for teachers/analysts -->
+              <div class="trust-footer-toggle">
+                <button @click="hienThiCongThuc = !hienThiCongThuc" class="btn-toggle-math" type="button">
+                  <Calculator :size="14" />
+                  <span>{{ hienThiCongThuc ? 'Ẩn công thức toán học' : 'Dành cho Hội đồng chấm điểm: Xem công thức Wilson Score' }}</span>
+                  <ChevronUp v-if="hienThiCongThuc" :size="14" />
+                  <ChevronDown v-else :size="14" />
+                </button>
+
+                <div v-if="hienThiCongThuc" class="clean-math-display anim-fade-in">
+                  <div class="math-title-bar">Công thức Cận Dưới Khoảng Tin Cậy Wilson (95% CI):</div>
+                  <div class="math-fraction-wrap">
+                    <div class="math-formula-box">
+                      w = [ p̂ + z²/(2n) - z · √( p̂(1-p̂)/n + z²/(4n²) ) ] / [ 1 + z²/n ]
+                    </div>
+                  </div>
+                  <div class="math-notes">
+                    <div>• <strong>p̂</strong>: Tỷ lệ đánh giá tích cực quan sát</div>
+                    <div>• <strong>n</strong>: Tổng số đánh giá TripAdvisor hợp lệ</div>
+                    <div>• <strong>z = 1.96</strong>: Hệ số phân phối chuẩn tương ứng độ tin cậy 95%</div>
+                    <div>• <strong>w ≥ 0.70</strong>: Đạt chuẩn vinh danh "Điểm sáng du lịch"</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -594,7 +640,10 @@ import {
   ArrowRight, 
   CheckCircle2, 
   AlertTriangle, 
-  Award 
+  Award,
+  Calculator,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-vue-next'
 import { DataService, DANH_SACH_DIEM_DEN_FALLBACK, KHIA_CANH_ABSA, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
@@ -606,6 +655,7 @@ const tuKhoaTimKiem = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
 const thongBaoVoucher = ref('')
+const hienThiCongThuc = ref(false)
 
 function layIconKhiaCanh(id) {
   switch (id) {
@@ -1555,11 +1605,116 @@ onMounted(async () => {
   margin: 2px 0 0 0;
 }
 
-.formula-box-inner {
+.trust-shield-card {
   background: var(--nevio-light-grey);
   border: 1px solid var(--nevio-border);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trust-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--mau-chu);
+  margin: 4px 0 6px 0;
+}
+
+.trust-sub {
+  font-size: 13px;
+  color: var(--mau-chu-phu);
+  line-height: 1.5;
+}
+
+.trust-features-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+}
+
+.trust-item strong {
+  font-size: 13.5px;
+  color: var(--mau-chu);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.trust-item p {
+  font-size: 12px;
+  color: var(--mau-chu-phu);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.btn-toggle-math {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px dashed var(--nevio-border);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mau-chu);
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-toggle-math:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.clean-math-display {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 10px;
+}
+
+.math-title-bar {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--nevio-orange);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.math-formula-box {
+  background: var(--nevio-light-grey);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  text-align: center;
+  word-break: break-all;
+  border: 1px solid var(--nevio-border);
+  margin-bottom: 10px;
+}
+
+.math-notes {
+  font-size: 11.5px;
+  color: var(--mau-chu-phu);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .formula-tag {
@@ -1569,42 +1724,6 @@ onMounted(async () => {
   letter-spacing: 0.05em;
   display: block;
   margin-bottom: 4px;
-}
-
-.formula-head h4 {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--mau-chu);
-  margin-bottom: 14px;
-}
-
-.formula-math-display {
-  font-size: 15px;
-  background: var(--nevio-card-bg);
-  border: 1px dashed var(--nevio-border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  text-align: center;
-  margin-bottom: 14px;
-  overflow-x: auto;
-}
-
-.formula-parameters {
-  font-size: 12px;
-  color: var(--mau-chu-phu);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 14px;
-}
-
-.formula-verdict-box {
-  background: rgba(2, 132, 199, 0.08);
-  border-left: 3px solid #0284c7;
-  padding: 10px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  line-height: 1.5;
 }
 
 /* =================================================== */
