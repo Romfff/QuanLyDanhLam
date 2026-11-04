@@ -1,8 +1,15 @@
 import os
+import sys
 import time
 import pandas as pd
 import pymysql
 from dotenv import load_dotenv
+
+if sys.stdout:
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 # 1. Đọc thông tin kết nối CSDL từ file .env
 load_dotenv()
