@@ -3,7 +3,7 @@
     <div class="nevio-container">
       <!-- 1. Header Section -->
       <div class="page-header">
-        <span class="nevio-label center">(VÍ PHIẾU BẢO HÀNH DANH TIẾNG)</span>
+        <span class="nevio-label center">VÍ PHIẾU BẢO HÀNH DANH TIẾNG</span>
         <h1 class="page-title">Phiếu Ưu Đãi &amp; Đặt Tour Của Tôi</h1>
         <p class="page-subtitle">
           Danh sách phiếu giảm giá và hỗ trợ đặt dịch vụ tour được hệ thống kích hoạt tự động cho các điểm đến đạt chuẩn <strong>"Điểm sáng du lịch"</strong> theo công thức Wilson Score.

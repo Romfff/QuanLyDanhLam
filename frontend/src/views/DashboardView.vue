@@ -3,7 +3,7 @@
     <!-- ======================================================== -->
     <!-- 1. NEVIO HERO SECTION (Exact Webflow Layout)            -->
     <!-- ======================================================== -->
-    <section class="section hero-section">
+    <section class="section hero-section anim-fade-up">
       <!-- Background Image & Overlay -->
       <div class="hero-image-wrap">
         <img 
@@ -16,7 +16,7 @@
 
       <!-- Giant Translucent Background Word "Discover" -->
       <div class="display-wrap">
-        <div class="display hero">Discover</div>
+        <div class="display hero anim-float">Discover</div>
       </div>
 
       <!-- Navbar Sitting Inside Top of Hero -->
@@ -34,13 +34,13 @@
             <span class="text-yellow">Giám Sát Danh Tiếng</span>
           </h1>
           <p class="hero-paragraph">
-            Ứng dụng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong> kết hợp <strong>Wilson Score</strong> phân tích 5 khía cạnh cốt lõi từ <strong>874 đánh giá TripAdvisor</strong>, định vị điểm đến sáng giá và bảo vệ quyền lợi du khách.
+            Ứng dụng trí tuệ nhân tạo <strong>PhoBERT</strong> kết hợp thuật toán <strong>Wilson Score</strong> bóc tách 5 khía cạnh dịch vụ từ <strong>874 đánh giá TripAdvisor</strong>, lọc sạch review ảo và bảo chứng các điểm sáng du lịch hàng đầu Việt Nam.
           </p>
         </div>
 
         <div class="hero-action-col">
-          <a href="#destinations-section" class="nevio-btn-yellow">
-            <span class="button-text">Khám Phá Điểm Đến</span>
+          <a href="#how-it-works" class="nevio-btn-yellow">
+            <span class="button-text">Khám Phá Cách Hoạt Động</span>
             <div class="btn-icon-circle">
               <ArrowRight :size="18" />
             </div>
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <!-- Torn Paper Brush Bottom Shape (Transition into light section) -->
+      <!-- Torn Paper Brush Bottom Shape -->
       <div class="hero-bottom-shape-wrap">
         <img 
           src="https://cdn.prod.website-files.com/6a5f49f597e097761e089dbc/6a5f6420da257b09ca8f49f9_hero-shape.svg" 
@@ -107,14 +107,83 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 3. ABOUT US / SYSTEM OVERVIEW STATS                      -->
+    <!-- 3. HOW IT WORKS & ONBOARDING GUIDE (HƯỚNG DẪN SỬ DỤNG)   -->
+    <!-- ======================================================== -->
+    <section id="how-it-works" class="section section-guide bg-light">
+      <div class="nevio-container">
+        <div class="common-heading-wrapper text-center">
+          <span class="nevio-label center">QUY TRÌNH HỆ THỐNG &amp; HƯỚNG DẪN TRẢI NGHIỆM</span>
+          <h2 class="heading-style-h2">Hệ Thống Này Dùng Để Làm Gì &amp; Sử Dụng Như Thế Nào?</h2>
+          <p class="guide-subtitle">
+            Hệ thống giải quyết bài toán nhức nhối trong du lịch: <strong>loại bỏ đánh giá giả mạo/thổi phồng</strong> và <strong>bóc tách chi tiết từng khía cạnh dịch vụ</strong> bằng 4 bước minh bạch:
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-badge">BƯỚC 1</div>
+            <div class="step-icon-box bg-sky">
+              <Search :size="26" class="text-sky" />
+            </div>
+            <h3 class="step-title">Thu Thập &amp; Tra Cứu</h3>
+            <p class="step-desc">
+              Tự động thu thập <strong>874 đánh giá nguyên văn</strong> từ TripAdvisor tại 7 điểm đến trọng điểm (Hạ Long, Tràng An, Phú Quốc...). Bạn có thể gõ tìm kiếm hoặc lọc theo địa phương ngay tại thanh công cụ phía trên.
+            </p>
+            <div class="step-hint">Du khách nhập từ khóa hoặc chọn tỉnh thành để xem dữ liệu.</div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-badge">BƯỚC 2</div>
+            <div class="step-icon-box bg-emerald">
+              <BarChart3 :size="26" class="text-emerald" />
+            </div>
+            <h3 class="step-title">Phân Tích ABSA (PhoBERT)</h3>
+            <p class="step-desc">
+              Thay vì chỉ đọc điểm sao chung chung, mô hình AI bóc tách cảm nghĩ du khách thành <strong>5 khía cạnh độc lập</strong>: Cảnh quan, Dịch vụ, Ẩm thực, Vệ sinh và Giá cả kèm tỷ lệ hài lòng chi tiết.
+            </p>
+            <div class="step-hint">Xem biểu đồ sắc thái Tích cực - Trung tính - Tiêu cực từng khía cạnh.</div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-badge">BƯỚC 3</div>
+            <div class="step-icon-box bg-amber">
+              <ShieldCheck :size="26" class="text-amber" />
+            </div>
+            <h3 class="step-title">Định Tuyến Wilson Score</h3>
+            <p class="step-desc">
+              Áp dụng công thức khoảng tin cậy nhị thức 95% để tính cận dưới điểm uy tín. Điểm đến ít review hoặc bị spam không thể giả mạo điểm số. Điểm đến đạt \(w \ge 0.70\) được chứng nhận <strong>"Điểm sáng du lịch"</strong>.
+            </p>
+            <div class="step-hint">Chỉ điểm đến có huy hiệu "Điểm sáng" mới đủ tiêu chuẩn mở ưu đãi.</div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <div class="step-badge">BƯỚC 4</div>
+            <div class="step-icon-box bg-purple">
+              <Ticket :size="26" class="text-purple" />
+            </div>
+            <h3 class="step-title">Nhận Ưu Đãi &amp; Đặt Tour</h3>
+            <p class="step-desc">
+              Bấm nút <strong>"Nhận ưu đãi"</strong> tại các Điểm sáng để nhận mã voucher bảo chứng độc lập có hiệu lực 15 phút và chuyển thẳng tới trang đặt dịch vụ của đối tác một cách an tâm tuyệt đối.
+            </p>
+            <div class="step-hint">Voucher lưu trong "Ví phiếu của tôi" và có thể chuyển hướng đối tác ngay.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 4. ABOUT US / SYSTEM OVERVIEW STATS                      -->
     <!-- ======================================================== -->
     <section class="section section-about">
       <div class="nevio-container">
         <div class="common-heading-wrapper text-center">
-          <span class="nevio-label center">(GIỚI THIỆU HỆ THỐNG ĐT-12)</span>
+          <span class="nevio-label center">VỀ HỆ THỐNG ĐT-12</span>
           <h2 class="heading-style-h3 about-heading">
-            Nền tảng trí tuệ nhân tạo giám sát danh tiếng điểm đến du lịch Việt Nam với dữ liệu thực nghiệm kiểm chứng độc lập.
+            Dữ liệu thực nghiệm kiểm chứng độc lập bảo vệ quyền lợi du khách và nâng tầm uy tín doanh nghiệp lữ hành.
           </h2>
         </div>
 
@@ -160,16 +229,16 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 4. CURATED DESTINATIONS (Nevio Packages Cards Layout)    -->
+    <!-- 5. CURATED DESTINATIONS (Nevio Packages Cards Layout)    -->
     <!-- ======================================================== -->
     <section id="destinations-section" class="section section-destinations">
       <div class="nevio-container">
         <div class="destinations-header-row">
           <div>
-            <span class="nevio-label">(POPULAR DESTINATIONS)</span>
-            <h2 class="heading-style-h2">Điểm Đến Du Lịch Tiêu Biểu</h2>
+            <span class="nevio-label">ĐIỂM ĐẾN DU LỊCH NỔI BẬT</span>
+            <h2 class="heading-style-h2">Khám Phá Danh Tiếng 7 Điểm Đến</h2>
             <p class="destinations-desc">
-              Khám phá các kỳ quan và khu nghỉ dưỡng hàng đầu với chỉ số sắc thái được trích xuất trực tiếp từ phản hồi du khách.
+              Nhấp vào từng điểm đến để xem chi tiết 5 khía cạnh dịch vụ và nhận voucher đặt tour nếu đạt chuẩn Điểm sáng.
             </p>
           </div>
 
@@ -224,11 +293,11 @@
               </div>
 
               <!-- Top Right: Wilson Status Badge with Lucide Icon -->
-              <div :class="['tag-status-badge', 'status-' + (dest.trang_thai_wilson || 'binh_thuong')]">
+              <div :class="['tag-status-badge', 'status-' + (dest.trang_thai_wilson || 'binh_thuong'), { 'pulse-badge': dest.trang_thai_wilson === 'diem_sang' }]">
                 <Sparkles v-if="dest.trang_thai_wilson === 'diem_sang'" :size="13" />
                 <AlertTriangle v-else-if="dest.trang_thai_wilson === 'canh_bao'" :size="13" />
                 <CheckCircle2 v-else :size="13" />
-                <span>{{ dest.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng' : dest.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý' : 'Ổn định' }}</span>
+                <span>{{ dest.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng du lịch' : dest.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý' : 'Ổn định' }}</span>
               </div>
 
               <!-- Bottom Right: Rating & Review Count -->
@@ -251,32 +320,32 @@
 
               <!-- 5 ABSA Micro-Score Chips with Lucide Icons -->
               <div v-if="dest.khia_canh" class="aspect-micro-chips">
-                <span class="micro-chip" title="Cảnh quan">
+                <span class="micro-chip" title="Cảnh quan & Không gian">
                   <Trees :size="13" />
-                  <span>{{ dest.khia_canh.canh_quan?.diem }}/5</span>
+                  <span>Cảnh quan: {{ dest.khia_canh.canh_quan?.diem }}/5</span>
                 </span>
-                <span class="micro-chip" title="Dịch vụ">
+                <span class="micro-chip" title="Chất lượng phục vụ">
                   <HeartHandshake :size="13" />
-                  <span>{{ dest.khia_canh.dich_vu?.diem }}/5</span>
+                  <span>Dịch vụ: {{ dest.khia_canh.dich_vu?.diem }}/5</span>
                 </span>
-                <span class="micro-chip" title="Ẩm thực">
+                <span class="micro-chip" title="Ẩm thực & Đặc sản">
                   <Utensils :size="13" />
-                  <span>{{ dest.khia_canh.am_thuc?.diem }}/5</span>
+                  <span>Ẩm thực: {{ dest.khia_canh.am_thuc?.diem }}/5</span>
                 </span>
-                <span class="micro-chip" title="Vệ sinh">
+                <span class="micro-chip" title="Vệ sinh & Môi trường">
                   <Sparkles :size="13" />
-                  <span>{{ dest.khia_canh.ve_sinh?.diem }}/5</span>
+                  <span>Vệ sinh: {{ dest.khia_canh.ve_sinh?.diem }}/5</span>
                 </span>
-                <span class="micro-chip" title="Giá cả">
+                <span class="micro-chip" title="Giá cả & Minh bạch">
                   <DollarSign :size="13" />
-                  <span>{{ dest.khia_canh.gia_ca?.diem }}/5</span>
+                  <span>Giá cả: {{ dest.khia_canh.gia_ca?.diem }}/5</span>
                 </span>
               </div>
 
               <!-- Action Row -->
               <div class="dest-card-footer">
                 <router-link :to="'/diem-den/' + dest.id" class="link-detail-action">
-                  <span>Chi tiết &amp; ABSA</span>
+                  <span>Chi tiết &amp; Khía cạnh ABSA</span>
                   <ArrowRight :size="14" />
                 </router-link>
 
@@ -284,12 +353,13 @@
                   v-if="dest.trang_thai_wilson === 'diem_sang'"
                   @click="nhanUuDaiNhanh(dest)"
                   class="btn-claim-pill"
+                  title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
                 >
                   <Ticket :size="14" />
-                  <span>Nhận ưu đãi</span>
+                  <span>Nhận ưu đãi 15%</span>
                 </button>
-                <span v-else class="locked-voucher-text">
-                  Ưu đãi khóa
+                <span v-else class="locked-voucher-text" title="Chỉ mở ưu đãi khi điểm đến đạt chỉ số Wilson >= 0.70">
+                  Chưa mở ưu đãi
                 </span>
               </div>
             </div>
@@ -307,15 +377,15 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 5. ABSA 5-ASPECT DEEP DIVE ANALYTICS SECTION            -->
+    <!-- 6. ABSA 5-ASPECT DEEP DIVE ANALYTICS SECTION            -->
     <!-- ======================================================== -->
     <section id="absa-section" class="section section-absa bg-light">
       <div class="nevio-container">
         <div class="common-heading-wrapper text-center">
-          <span class="nevio-label center">(CÔNG NGHỆ ABSA INTELLIGENCE)</span>
-          <h2 class="heading-style-h2">Phân Tích Chi Tiết 5 Khía Cạnh Du Lịch</h2>
+          <span class="nevio-label center">CÔNG NGHỆ TRÍ TUỆ NHÂN TẠO ABSA</span>
+          <h2 class="heading-style-h2">Báo Cáo Sắc Thái 5 Khía Cạnh Cốt Lõi</h2>
           <p class="absa-subheading">
-            Mô hình PhoBERT-base tự động trích xuất các ý kiến du khách và phân định 3 sắc thái độc lập cho từng khía cạnh dịch vụ.
+            Mô hình PhoBERT-base tự động phân định 3 sắc thái độc lập (Tích cực · Trung tính · Tiêu cực) cho từng khía cạnh dịch vụ du lịch.
           </p>
         </div>
 
@@ -353,7 +423,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 6. CRISIS MONITOR & WILSON FORMULA                      -->
+    <!-- 7. CRISIS MONITOR & WILSON FORMULA                      -->
     <!-- ======================================================== -->
     <section class="section section-monitor">
       <div class="nevio-container">
@@ -410,14 +480,14 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 7. TRAVELER TESTIMONIALS (874 TripAdvisor Reviews)      -->
+    <!-- 8. TRAVELER TESTIMONIALS (874 TripAdvisor Reviews)      -->
     <!-- ======================================================== -->
     <section class="section section-testimonials bg-light">
       <div class="nevio-container">
         <div class="destinations-header-row">
           <div>
-            <span class="nevio-label">(TRAVELER REVIEWS)</span>
-            <h2 class="heading-style-h2">Tiếng Nói Du Khách Từ 874 Đánh Giá TripAdvisor</h2>
+            <span class="nevio-label">ĐÁNH GIÁ CHÂN THỰC TỪ TRIPADVISOR</span>
+            <h2 class="heading-style-h2">Tiếng Nói Du Khách Thực Tế</h2>
             <p class="destinations-desc">
               Phản hồi gốc từ du khách trong và ngoài nước kèm trích xuất nhãn khía cạnh ABSA tự động.
             </p>
@@ -584,7 +654,7 @@ onMounted(async () => {
 }
 
 /* =================================================== */
-/* 1. HERO SECTION (Matching Nevio Webflow)            */
+/* 1. HERO SECTION                                     */
 /* =================================================== */
 .section.hero-section {
   position: relative;
@@ -806,14 +876,107 @@ onMounted(async () => {
 }
 
 /* =================================================== */
-/* 3. ABOUT & STATS SECTION                            */
+/* 3. STEP-BY-STEP GUIDE (HOW IT WORKS)                */
+/* =================================================== */
+.section-guide {
+  padding: 70px 0;
+  border-top: 1px solid var(--nevio-border);
+  border-bottom: 1px solid var(--nevio-border);
+}
+
+.guide-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--mau-chu-phu);
+  max-width: 780px;
+  margin: 0 auto 50px auto;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.step-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 30px 24px;
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.step-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--nevio-orange);
+  background: var(--nevio-orange-light);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.step-icon-box {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.step-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--mau-chu);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.step-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--mau-chu-phu);
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.step-hint {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nevio-dark);
+  background: var(--nevio-light-grey);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--nevio-orange);
+}
+
+[data-theme="dark"] .step-hint {
+  color: var(--nevio-yellow);
+}
+
+/* =================================================== */
+/* 4. ABOUT & STATS SECTION                            */
 /* =================================================== */
 .section {
   padding: 60px 0;
 }
 
 .section-about {
-  padding-top: 40px;
+  padding-top: 50px;
 }
 
 .about-heading {
@@ -888,7 +1051,7 @@ onMounted(async () => {
 }
 
 /* =================================================== */
-/* 4. CURATED DESTINATIONS (Nevio Style Cards)         */
+/* 5. CURATED DESTINATIONS                             */
 /* =================================================== */
 .destinations-header-row {
   display: flex;
@@ -1026,7 +1189,6 @@ onMounted(async () => {
 
 .status-diem_sang {
   background: #059669;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
 }
 
 .status-binh_thuong {
@@ -1184,7 +1346,7 @@ onMounted(async () => {
 }
 
 /* =================================================== */
-/* 5. ABSA 5-ASPECT DEEP DIVE                          */
+/* 6. ABSA 5-ASPECT DEEP DIVE                          */
 /* =================================================== */
 .section-absa {
   border-top: 1px solid var(--nevio-border);
@@ -1290,7 +1452,7 @@ onMounted(async () => {
 .text-negative { color: #e11d48; }
 
 /* =================================================== */
-/* 6. CRISIS MONITOR & WILSON                          */
+/* 7. CRISIS MONITOR & WILSON                          */
 /* =================================================== */
 .monitor-split-card {
   background: var(--nevio-card-bg);
@@ -1416,7 +1578,7 @@ onMounted(async () => {
 }
 
 /* =================================================== */
-/* 7. TESTIMONIALS                                     */
+/* 8. TESTIMONIALS                                     */
 /* =================================================== */
 .testimonials-grid {
   display: grid;
@@ -1433,6 +1595,11 @@ onMounted(async () => {
   box-shadow: var(--shadow-subtle);
   display: flex;
   flex-direction: column;
+  transition: transform 0.25s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
 }
 
 .test-card-top {
@@ -1593,6 +1760,9 @@ onMounted(async () => {
     flex-direction: column;
     align-items: flex-start;
   }
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .stats-grid-wrapper {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1614,6 +1784,9 @@ onMounted(async () => {
   }
   .bar-divider {
     display: none;
+  }
+  .steps-grid {
+    grid-template-columns: 1fr;
   }
   .stats-grid-wrapper {
     grid-template-columns: 1fr;

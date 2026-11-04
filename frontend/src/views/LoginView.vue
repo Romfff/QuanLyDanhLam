@@ -7,7 +7,7 @@
           <div class="brand-logo-circle">
             <Compass :size="28" class="text-dark" />
           </div>
-          <span class="nevio-label center">(CỔNG XÁC THỰC DU LỊCH)</span>
+          <span class="nevio-label center">CỔNG XÁC THỰC DU LỊCH</span>
           <h1 class="login-title">Đăng Nhập Hệ Thống Nevio ĐT-12</h1>
           <p class="login-subtitle">
             Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến

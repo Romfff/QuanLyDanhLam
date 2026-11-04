@@ -73,7 +73,7 @@
           <section class="detail-card">
             <div class="card-head-flex">
               <div>
-                <span class="nevio-label">(PHÂN TÍCH CHUYÊN SÂU)</span>
+                <span class="nevio-label">PHÂN TÍCH CHUYÊN SÂU</span>
                 <h2 class="card-section-title">Chỉ Số Đánh Giá Theo 5 Khía Cạnh (ABSA)</h2>
               </div>
               <span class="badge-pill absa-chip">PhoBERT AI</span>
@@ -154,7 +154,7 @@
           <section class="detail-card">
             <div class="card-head-flex">
               <div>
-                <span class="nevio-label">(TRIPADVISOR REVIEWS)</span>
+                <span class="nevio-label">ĐÁNH GIÁ GỐC TRIPADVISOR</span>
                 <h2 class="card-section-title">Đánh Giá Của Du Khách Về Điểm Đến</h2>
               </div>
               <router-link to="/danh-sach-danh-gia" class="link-all-reviews">

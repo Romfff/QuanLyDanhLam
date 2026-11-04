@@ -3,7 +3,7 @@
     <div class="nevio-container">
       <!-- 1. Header Section -->
       <div class="page-header">
-        <span class="nevio-label center">(CƠ SỞ DỮ LIỆU ĐÁNH GIÁ THỰC TẾ)</span>
+        <span class="nevio-label center">CƠ SỞ DỮ LIỆU ĐÁNH GIÁ KIỂM CHỨNG</span>
         <h1 class="page-title">Trung Tâm Dữ Liệu 874 Đánh Giá TripAdvisor</h1>
         <p class="page-subtitle">
           Toàn bộ đánh giá được thu thập khách quan từ TripAdvisor, phân tách và gán nhãn sắc thái theo 5 khía cạnh du lịch bằng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong>.
