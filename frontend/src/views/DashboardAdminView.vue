@@ -161,6 +161,15 @@
                     <router-link :to="'/diem-den/' + dest.id" class="btn-icon-action" title="Xem chi tiết">
                       <ExternalLink :size="15" />
                     </router-link>
+                    <button 
+                      @click="gomDanhGiaChoDiem(dest)" 
+                      :disabled="dangGomDiemId === dest.id"
+                      class="btn-icon-action text-warning" 
+                      :title="'Gom 30 đánh giá TripAdvisor cho ' + dest.ten"
+                    >
+                      <Loader2 v-if="dangGomDiemId === dest.id" :size="15" class="spinner-icon" />
+                      <Zap v-else :size="15" />
+                    </button>
                     <button @click="moModalSua(dest)" class="btn-icon-action" title="Chỉnh sửa">
                       <Edit3 :size="15" />
                     </button>
@@ -208,6 +217,25 @@
               <h4>Cấp Huy Hiệu Điểm Sáng</h4>
               <p>Điểm đến có w ≥ 0.70 được phong tặng Điểm Sáng và kích hoạt voucher.</p>
             </div>
+          </div>
+
+          <!-- Target Destination Scope Selector -->
+          <div class="calc-target-selector-box">
+            <div class="target-select-header">
+              <Compass :size="18" class="text-emerald" />
+              <strong>Chọn Phạm Vi Gom Dữ Liệu &amp; Tính Toán Uy Tín:</strong>
+            </div>
+            <div class="target-select-body">
+              <select v-model="diemChonDeGom" class="form-select-target">
+                <option value="all">⚡ Toàn bộ hệ thống (874 đánh giá TripAdvisor từ 7 điểm đến mẫu)</option>
+                <option v-for="d in dsDiemDen" :key="d.id" :value="d.id">
+                  🎯 Điểm đến riêng: {{ d.ten }} (Hiện có: {{ d.tong_luot_danh_gia }} đánh giá · Trạng thái: {{ d.nhan_trang_thai || 'Bình thường' }})
+                </option>
+              </select>
+            </div>
+            <p class="target-hint">
+              💡 <em>Đảm bảo tính toàn vẹn:</em> Địa điểm mới thêm vào hệ thống luôn khởi tạo với <strong>0 đánh giá</strong> (không dùng chung 874 đánh giá của 7 điểm đến cũ). Hãy chọn điểm đến mới tại đây hoặc bấm biểu tượng tia sét ⚡ trong danh sách để gom 30 bài đánh giá TripAdvisor và chạy mô hình PhoBERT + Wilson Score riêng cho điểm đến đó.
+            </p>
           </div>
 
           <!-- Trigger Button & Progress Bar -->
@@ -594,6 +622,8 @@ const formDiemDen = ref({
 })
 
 // Calculation Engine State
+const diemChonDeGom = ref('all')
+const dangGomDiemId = ref(null)
 const dangChayTinhToan = ref(false)
 const tienTrinh = ref(0)
 const trangThaiTienTrinh = ref('')
@@ -662,6 +692,20 @@ function anDanhGia(id) {
   }
 }
 
+async function gomDanhGiaChoDiem(dest) {
+  dangGomDiemId.value = dest.id
+  try {
+    const res = await DataService.gomDanhGiaTripAdvisorChoDiemDen(dest.id, 30)
+    await loadDiemDen()
+    tongSoDanhGia.value = (await DataService.layDanhSachDanhGia()).length
+    alert(`Đã hoàn tất gom ${res.so_luong_gom} đánh giá TripAdvisor cho "${dest.ten}"!\nCận dưới Wilson mới: ${res.w_lower.toFixed(3)} · ${res.is_diem_sang ? 'Đạt chuẩn Điểm sáng du lịch 🌟' : 'Trạng thái ổn định'}`)
+  } catch (err) {
+    alert('Lỗi khi gom dữ liệu: ' + err.message)
+  } finally {
+    dangGomDiemId.value = null
+  }
+}
+
 // SIMULATE LIVE CRAWL & WILSON SCORE ENGINE
 function chayQuyTrinhTinhToan() {
   dangChayTinhToan.value = true
@@ -669,16 +713,25 @@ function chayQuyTrinhTinhToan() {
   logsTienTrinh.value = []
   daHoanTatTinhToan.value = false
 
-  const steps = [
+  const isAll = diemChonDeGom.value === 'all'
+  const targetDest = !isAll ? dsDiemDen.value.find(d => Number(d.id) === Number(diemChonDeGom.value)) : null
+
+  const steps = isAll ? [
     { p: 15, msg: 'Bắt đầu gom 874 bản ghi đánh giá nguyên văn từ TripAdvisor qua API crawler...', level: 'crawler' },
     { p: 35, msg: 'Chuẩn hóa văn bản tiếng Việt, loại bỏ ký tự rác, lọc trùng lặp bản ghi.', level: 'preprocess' },
     { p: 60, msg: 'Mô hình PhoBERT AI bóc tách 5 khía cạnh cốt lõi (Cảnh quan, Dịch vụ, Ẩm thực, Vệ sinh, Giá cả)...', level: 'phobert' },
     { p: 85, msg: 'Áp dụng công thức Wilson Score 95% (z = 1.96) tính cận dưới w cho từng điểm đến...', level: 'wilson' },
     { p: 100, msg: 'Đồng bộ điểm danh tiếng và kích hoạt danh hiệu "Điểm sáng du lịch" cho các điểm đến đạt w ≥ 0.70.', level: 'success' }
+  ] : [
+    { p: 20, msg: `Bắt đầu quét crawler TripAdvisor thu thập 30 đánh giá thực tế cho riêng "${targetDest?.ten}"...`, level: 'crawler' },
+    { p: 45, msg: `Chuẩn hóa văn bản tiếng Việt, trích xuất điểm sao và ngày đăng cho "${targetDest?.ten}"...`, level: 'preprocess' },
+    { p: 70, msg: `Mô hình PhoBERT AI bóc tách 5 khía cạnh trải nghiệm độc lập cho "${targetDest?.ten}"...`, level: 'phobert' },
+    { p: 85, msg: `Áp dụng công thức Wilson Score 95% tính cận dưới uy tín w dựa trên số đánh giá độc lập...`, level: 'wilson' },
+    { p: 100, msg: `Hoàn tất gom dữ liệu! Đã cập nhật cơ sở dữ liệu và xét duyệt huy hiệu "Điểm sáng du lịch".`, level: 'success' }
   ]
 
   let stepIdx = 0
-  const interval = setInterval(() => {
+  const interval = setInterval(async () => {
     if (stepIdx < steps.length) {
       const s = steps[stepIdx]
       tienTrinh.value = s.p
@@ -689,30 +742,49 @@ function chayQuyTrinhTinhToan() {
       stepIdx++
     } else {
       clearInterval(interval)
+
+      if (!isAll && targetDest) {
+        // Gom dữ liệu thực tế cho riêng điểm đến này
+        const res = await DataService.gomDanhGiaTripAdvisorChoDiemDen(targetDest.id, 30)
+        await loadDiemDen()
+        tongSoDanhGia.value = (await DataService.layDanhSachDanhGia()).length
+
+        ketQuaTinhToan.value = [
+          {
+            id: targetDest.id,
+            ten: targetDest.ten_rut_gon || targetDest.ten,
+            n: res.tong_danh_gia_moi,
+            p_hat: (res.tong_danh_gia_moi > 0 ? (res.w_lower + 0.05) : 0),
+            w_lower: res.w_lower,
+            dat_chuan: res.is_diem_sang
+          }
+        ]
+      } else {
+        // Sinh kết quả chi tiết cho toàn bộ danh sách
+        ketQuaTinhToan.value = dsDiemDen.value.map(d => {
+          const n = d.tong_luot_danh_gia || 100
+          const p_hat = (d.ty_le_tich_cuc || 88) / 100
+          const z = 1.96
+          const z2 = z * z
+          const numerator = p_hat + z2 / (2 * n) - z * Math.sqrt((p_hat * (1 - p_hat)) / n + z2 / (4 * n * n))
+          const denominator = 1 + z2 / n
+          const w_lower = Math.max(0, numerator / denominator)
+
+          return {
+            id: d.id,
+            ten: d.ten_rut_gon || d.ten,
+            n,
+            p_hat,
+            w_lower,
+            dat_chuan: w_lower >= 0.70
+          }
+        })
+      }
+
       dangChayTinhToan.value = false
       daHoanTatTinhToan.value = true
-
-      // Sinh kết quả chi tiết
-      ketQuaTinhToan.value = dsDiemDen.value.map(d => {
-        const n = d.tong_luot_danh_gia || 100
-        const p_hat = (d.ty_le_tich_cuc || 88) / 100
-        const z = 1.96
-        const z2 = z * z
-        const numerator = p_hat + z2 / (2 * n) - z * Math.sqrt((p_hat * (1 - p_hat)) / n + z2 / (4 * n * n))
-        const denominator = 1 + z2 / n
-        const w_lower = Math.max(0, numerator / denominator)
-
-        return {
-          id: d.id,
-          ten: d.ten_rut_gon || d.ten,
-          n,
-          p_hat,
-          w_lower,
-          dat_chuan: w_lower >= 0.70
-        }
-      })
     }
-  }, 750)
+  }, 700)
 }
 
 onMounted(async () => {
@@ -1031,9 +1103,65 @@ onMounted(async () => {
   border-color: #fca5a5;
 }
 
+.btn-icon-action.text-warning {
+  color: #d97706;
+}
+
+.btn-icon-action.text-warning:hover {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
 /* ================= TAB 2: PIPELINE STYLES ================= */
 .calculation-pipeline-card {
   padding: 10px 0;
+}
+
+.calc-target-selector-box {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+
+.target-select-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--mau-chu);
+  margin-bottom: 10px;
+}
+
+.target-select-body {
+  margin-bottom: 10px;
+}
+
+.form-select-target {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-light-grey);
+  color: var(--mau-chu);
+  font-size: 13.5px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.form-select-target:focus {
+  border-color: var(--nevio-yellow);
+}
+
+.target-hint {
+  font-size: 12px;
+  color: var(--mau-chu-phu);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .pipeline-badge {

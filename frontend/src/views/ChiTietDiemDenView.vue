@@ -160,14 +160,38 @@
                   Đánh giá nguyên văn từ du khách TripAdvisor trải nghiệm tại {{ diemDen?.ten_rut_gon || diemDen?.ten }}.
                 </p>
               </div>
-              <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + (diemDen?.id || id)" class="link-all-reviews">
-                <span>Xem tất cả {{ danhGiaCuaDiemDen.length }} đánh giá của điểm đến này</span>
-                <ArrowRight :size="14" />
-              </router-link>
+              <div class="head-review-actions">
+                <button @click="moModalGuiDanhGia = true" class="btn-write-review" type="button">
+                  <PenLine :size="14" />
+                  <span>Viết Đánh Giá</span>
+                </button>
+                <router-link v-if="danhGiaCuaDiemDen.length > 0" :to="'/danh-sach-danh-gia?diem_den_id=' + (diemDen?.id || id)" class="link-all-reviews">
+                  <span>Xem tất cả {{ danhGiaCuaDiemDen.length }} đánh giá</span>
+                  <ArrowRight :size="14" />
+                </router-link>
+              </div>
             </div>
 
-            <!-- STAR RATING FILTER PILLS -->
-            <div class="dest-star-filters-bar">
+            <!-- Case: 0 Reviews (New Destination State) -->
+            <div v-if="danhGiaCuaDiemDen.length === 0" class="empty-dest-reviews-box">
+              <div class="empty-dest-icon">
+                <MessageSquareQuote :size="36" class="text-amber" />
+              </div>
+              <h4>Điểm Đến Mới Bổ Sung - Chưa Có Đánh Giá TripAdvisor Nào</h4>
+              <p>Điểm đến này vừa được thêm vào hệ thống và là một thực thể độc lập (không dùng chung dữ liệu với 7 điểm đến cũ). Hãy là người đầu tiên gửi đánh giá trải nghiệm, hoặc Quản trị viên bấm nút gom dữ liệu TripAdvisor phía dưới!</p>
+              <div class="empty-dest-actions">
+                <button @click="moModalGuiDanhGia = true" class="nevio-btn-yellow" type="button">
+                  <span class="button-text">Gửi Đánh Giá Trải Nghiệm Đầu Tiên</span>
+                </button>
+                <button v-if="laAdmin" @click="kichHoatGomDanhGiaTripAdvisor" :disabled="dangGomReview" class="btn-admin-crawl-lg" type="button">
+                  <Zap :size="16" />
+                  <span>{{ dangGomReview ? 'Đang gom dữ liệu...' : '⚡ Quản Trị Viên: Gom 30 Đánh Giá TripAdvisor Cho Điểm Này' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- STAR RATING FILTER PILLS (Only when reviews > 0) -->
+            <div v-if="danhGiaCuaDiemDen.length > 0" class="dest-star-filters-bar">
               <button 
                 @click="locSaoHienTai = 0; soLuongHienThi = 6" 
                 :class="['btn-star-filter', { active: locSaoHienTai === 0 }]"
@@ -426,6 +450,63 @@
         <router-link to="/dashboard" class="btn-back">Quay lại danh sách</router-link>
       </div>
     </div>
+
+    <!-- MODAL GỬI ĐÁNH GIÁ MỚI -->
+    <div v-if="moModalGuiDanhGia" class="nevio-modal-overlay">
+      <div class="nevio-modal-card anim-scale-up">
+        <div class="modal-head">
+          <h3>Gửi Đánh Giá Trải Nghiệm Tại {{ diemDen?.ten_rut_gon || diemDen?.ten }}</h3>
+          <button @click="moModalGuiDanhGia = false" class="btn-close-modal">✕</button>
+        </div>
+
+        <form @submit.prevent="guiDanhGiaMoi" class="modal-form">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Họ và tên của bạn *</label>
+              <input v-model="formDanhGia.nguoi_danh_gia" type="text" required placeholder="Ví dụ: Nguyễn Văn An" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Đến từ (Tỉnh thành / Quốc gia)</label>
+              <input v-model="formDanhGia.quoc_gia" type="text" placeholder="Ví dụ: Hà Nội, Việt Nam" class="form-input" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Số sao đánh giá của bạn *</label>
+            <div class="star-rating-selector">
+              <button 
+                v-for="s in 5" 
+                :key="s" 
+                type="button" 
+                @click="formDanhGia.diem_so = s" 
+                :class="['star-btn', { selected: s <= formDanhGia.diem_so }]"
+              >
+                <Star :size="24" :class="['star', { 'fill-yellow': s <= formDanhGia.diem_so }]" />
+              </button>
+              <span class="selected-star-text">{{ formDanhGia.diem_so }} / 5 sao ({{ getRatingLabel(formDanhGia.diem_so) }})</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tiêu đề tóm tắt nhận xét *</label>
+            <input v-model="formDanhGia.tieu_de" type="text" required placeholder="Ví dụ: Chuyến đi tuyệt vời, cảnh quan đẹp" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label>Nội dung nhận xét chi tiết *</label>
+            <textarea v-model="formDanhGia.noi_dung" rows="4" required placeholder="Chia sẻ chi tiết trải nghiệm thực tế về cảnh quan, dịch vụ, đồ ăn, giá cả..." class="form-textarea"></textarea>
+          </div>
+
+          <div class="modal-foot">
+            <button type="button" @click="moModalGuiDanhGia = false" class="btn-cancel">Hủy Bỏ</button>
+            <button type="submit" class="nevio-btn-yellow">
+              <span class="button-text">Gửi Đánh Giá Ngay</span>
+              <div class="btn-icon-circle"><Check :size="16" /></div>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -446,7 +527,11 @@ import {
   ShieldCheck, 
   AlertTriangle, 
   CheckCircle2, 
-  ArrowRight 
+  ArrowRight,
+  PenLine,
+  Zap,
+  Check,
+  MessageSquareQuote
 } from 'lucide-vue-next'
 import { DataService, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
@@ -464,6 +549,38 @@ let timer = null
 const danhGiaCuaDiemDen = ref([])
 const soLuongHienThi = ref(6)
 const locSaoHienTai = ref(0) // 0: Tất cả, 5: 5 sao, 4: 4 sao, 3: 3 sao, 1: 1-2 sao
+
+const laAdmin = computed(() => localStorage.getItem('vai_tro') === 'admin')
+const moModalGuiDanhGia = ref(false)
+const dangGomReview = ref(false)
+const formDanhGia = ref({
+  nguoi_danh_gia: '',
+  quoc_gia: 'Việt Nam',
+  diem_so: 5,
+  tieu_de: '',
+  noi_dung: ''
+})
+
+async function guiDanhGiaMoi() {
+  await DataService.themDanhGiaChoDiemDen(id, formDanhGia.value)
+  danhGiaCuaDiemDen.value = await DataService.layTatCaDanhGiaCuaDiemDen(Number(id))
+  diemDen.value = await DataService.layChiTietDiemDen(id)
+  moModalGuiDanhGia.value = false
+  formDanhGia.value = { nguoi_danh_gia: '', quoc_gia: 'Việt Nam', diem_so: 5, tieu_de: '', noi_dung: '' }
+  alert('Cảm ơn bạn! Đánh giá trải nghiệm của bạn đã được ghi nhận vào hệ thống.')
+}
+
+async function kichHoatGomDanhGiaTripAdvisor() {
+  dangGomReview.value = true
+  try {
+    const res = await DataService.gomDanhGiaTripAdvisorChoDiemDen(id, 30)
+    danhGiaCuaDiemDen.value = await DataService.layTatCaDanhGiaCuaDiemDen(Number(id))
+    diemDen.value = await DataService.layChiTietDiemDen(id)
+    alert(`Đã hoàn tất gom ${res.so_luong_gom} đánh giá nguyên văn từ TripAdvisor cho điểm đến này! Cận dưới Wilson mới: ${res.w_lower.toFixed(3)}`)
+  } finally {
+    dangGomReview.value = false
+  }
+}
 
 function demSoLuongSao(soSao) {
   if (soSao === 1) {
@@ -537,8 +654,7 @@ onMounted(async () => {
   try {
     diemDen.value = await DataService.layChiTietDiemDen(id)
     const targetId = Number(id)
-    const filteredReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => r.diem_den_id === targetId)
-    danhGiaCuaDiemDen.value = filteredReviews
+    danhGiaCuaDiemDen.value = await DataService.layTatCaDanhGiaCuaDiemDen(targetId)
   } finally {
     dangTai.value = false
   }
@@ -1352,6 +1468,235 @@ onUnmounted(() => {
 .safety-indicator p {
   font-size: 12px;
   color: var(--mau-chu-phu);
+}
+
+/* Head Actions & Empty Destination Reviews State */
+.head-review-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-write-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  border: 1px solid var(--nevio-yellow);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-write-review:hover {
+  background: #f59e0b;
+}
+
+.empty-dest-reviews-box {
+  text-align: center;
+  padding: 36px 24px;
+  background: var(--nevio-light-grey);
+  border: 2px dashed var(--nevio-border);
+  border-radius: var(--radius-lg);
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.empty-dest-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: #fef3c7;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+
+.empty-dest-reviews-box h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  margin-bottom: 8px;
+}
+
+.empty-dest-reviews-box p {
+  font-size: 13.5px;
+  color: var(--mau-chu-phu);
+  max-width: 600px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.empty-dest-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-admin-crawl-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #0284c7;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-crawl-lg:hover {
+  background: #0369a1;
+}
+
+.btn-admin-crawl-lg:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Review Submission Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--nevio-card-bg);
+  width: 100%;
+  max-width: 580px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--nevio-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--nevio-border);
+  background: var(--nevio-light-grey);
+}
+
+.modal-head h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mau-chu);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--mau-chu-mo);
+  cursor: pointer;
+}
+
+.modal-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--mau-chu);
+  margin-bottom: 6px;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-bg);
+  color: var(--mau-chu);
+  font-size: 13.5px;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--nevio-yellow);
+}
+
+.star-rating-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.star-btn .star {
+  color: #cbd5e1;
+  transition: transform 0.15s;
+}
+
+.star-btn:hover .star {
+  transform: scale(1.15);
+}
+
+.selected-star-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #b45309;
+  margin-left: 8px;
+}
+
+.modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--nevio-border);
+}
+
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--nevio-border);
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mau-chu-phu);
+  cursor: pointer;
 }
 
 @media (max-width: 900px) {
