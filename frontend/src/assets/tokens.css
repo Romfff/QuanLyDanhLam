@@ -139,6 +139,35 @@ button {
   color: var(--nevio-yellow);
 }
 
+/* Star Rating Global Styling (Vibrant Gold & Outline) */
+.star {
+  color: #d1d5db;
+  fill: #f3f4f6;
+  transition: all 0.2s ease;
+}
+
+.star.fill-yellow,
+.fill-yellow {
+  color: #f59e0b !important;
+  fill: #f59e0b !important;
+}
+
+.star.fill-orange {
+  color: #ea580c !important;
+  fill: #ea580c !important;
+}
+
+[data-theme="dark"] .star {
+  color: #4b5563;
+  fill: #1f2937;
+}
+
+[data-theme="dark"] .star.fill-yellow,
+[data-theme="dark"] .fill-yellow {
+  color: #fddd62 !important;
+  fill: #fddd62 !important;
+}
+
 /* 3. NEVIO ICONIC YELLOW BUTTON WITH ANIMATION */
 .nevio-btn-yellow {
   display: inline-flex;

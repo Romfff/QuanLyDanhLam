@@ -373,6 +373,14 @@ export const DataService = {
     if (boLoc.sac_thai) {
       ketQua = ketQua.filter(r => r.sac_thai == boLoc.sac_thai)
     }
+    if (boLoc.diem_so) {
+      const targetScore = Number(boLoc.diem_so)
+      if (targetScore === 1) {
+        ketQua = ketQua.filter(r => (r.diem_so || 5) <= 2)
+      } else {
+        ketQua = ketQua.filter(r => (r.diem_so || 5) === targetScore)
+      }
+    }
     if (boLoc.khia_canh_id) {
       const kcTen = boLoc.khia_canh_id.toLowerCase()
       ketQua = ketQua.filter(r => r.khia_canh_tags?.some(tag => tag.khia_canh.toLowerCase().includes(kcTen)))

@@ -166,6 +166,73 @@
               </router-link>
             </div>
 
+            <!-- STAR RATING FILTER PILLS -->
+            <div class="dest-star-filters-bar">
+              <button 
+                @click="locSaoHienTai = 0; soLuongHienThi = 6" 
+                :class="['btn-star-filter', { active: locSaoHienTai === 0 }]"
+                type="button"
+              >
+                <span>Tất cả</span>
+                <span class="count-badge">{{ danhGiaCuaDiemDen.length }}</span>
+              </button>
+
+              <button 
+                v-if="demSoLuongSao(5) > 0"
+                @click="locSaoHienTai = 5; soLuongHienThi = 6" 
+                :class="['btn-star-filter', { active: locSaoHienTai === 5 }]"
+                type="button"
+              >
+                <div class="star-pill-icons">
+                  <Star v-for="s in 5" :key="s" :size="11" class="star fill-yellow" />
+                </div>
+                <span>5 sao</span>
+                <span class="count-badge">{{ demSoLuongSao(5) }}</span>
+              </button>
+
+              <button 
+                v-if="demSoLuongSao(4) > 0"
+                @click="locSaoHienTai = 4; soLuongHienThi = 6" 
+                :class="['btn-star-filter', { active: locSaoHienTai === 4 }]"
+                type="button"
+              >
+                <div class="star-pill-icons">
+                  <Star v-for="s in 4" :key="s" :size="11" class="star fill-yellow" />
+                  <Star :size="11" class="star" />
+                </div>
+                <span>4 sao</span>
+                <span class="count-badge">{{ demSoLuongSao(4) }}</span>
+              </button>
+
+              <button 
+                v-if="demSoLuongSao(3) > 0"
+                @click="locSaoHienTai = 3; soLuongHienThi = 6" 
+                :class="['btn-star-filter', { active: locSaoHienTai === 3 }]"
+                type="button"
+              >
+                <div class="star-pill-icons">
+                  <Star v-for="s in 3" :key="s" :size="11" class="star fill-yellow" />
+                  <Star v-for="s in 2" :key="s" :size="11" class="star" />
+                </div>
+                <span>3 sao</span>
+                <span class="count-badge">{{ demSoLuongSao(3) }}</span>
+              </button>
+
+              <button 
+                v-if="demSoLuongSao(1) > 0"
+                @click="locSaoHienTai = 1; soLuongHienThi = 6" 
+                :class="['btn-star-filter', { active: locSaoHienTai === 1 }]"
+                type="button"
+              >
+                <div class="star-pill-icons">
+                  <Star :size="11" class="star fill-orange" />
+                  <Star v-for="s in 4" :key="s" :size="11" class="star" />
+                </div>
+                <span>1-2 sao</span>
+                <span class="count-badge">{{ demSoLuongSao(1) }}</span>
+              </button>
+            </div>
+
             <div class="dest-reviews-list">
               <div v-for="rev in danhGiaHienThi" :key="rev.id" class="dest-review-item">
                 <div class="rev-header">
@@ -176,8 +243,18 @@
                       <span class="rev-date">{{ rev.quoc_gia }} · {{ rev.ngay_dang }}</span>
                     </div>
                   </div>
-                  <div class="rev-rating">
-                    <Star v-for="s in 5" :key="s" :size="13" :class="['star', { 'fill-yellow': s <= rev.diem_so }]" />
+                  <div class="rev-rating-wrap">
+                    <div class="rev-rating">
+                      <Star 
+                        v-for="s in 5" 
+                        :key="s" 
+                        :size="14" 
+                        :class="['star', { 'fill-yellow': s <= (rev.diem_so || 5), 'empty-star': s > (rev.diem_so || 5) }]" 
+                      />
+                    </div>
+                    <span :class="['rev-score-badge', 'badge-score-' + (rev.diem_so || 5)]">
+                      {{ rev.diem_so || 5 }}/5 · {{ getRatingLabel(rev.diem_so || 5) }}
+                    </span>
                   </div>
                 </div>
                 <h4 class="rev-title">{{ rev.tieu_de }}</h4>
@@ -192,12 +269,17 @@
                   </span>
                 </div>
               </div>
+
+              <div v-if="danhGiaHienThi.length === 0" class="no-star-reviews-alert">
+                <p>Không có đánh giá {{ locSaoHienTai }} sao nào cho điểm đến này.</p>
+                <button @click="locSaoHienTai = 0" class="btn-clear-star-filter" type="button">Xem tất cả đánh giá</button>
+              </div>
             </div>
 
             <!-- Load more or view in review center -->
-            <div v-if="danhGiaCuaDiemDen.length > soLuongHienThi" class="reviews-load-more-wrap">
+            <div v-if="danhGiaDaLoc.length > soLuongHienThi" class="reviews-load-more-wrap">
               <button @click="soLuongHienThi += 6" class="btn-load-more-reviews" type="button">
-                Tải thêm 6 đánh giá (còn {{ danhGiaCuaDiemDen.length - soLuongHienThi }} đánh giá)
+                Tải thêm 6 đánh giá (còn {{ danhGiaDaLoc.length - soLuongHienThi }} đánh giá)
               </button>
               <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + (diemDen?.id || id)" class="btn-see-all-target-reviews">
                 Tra cứu đầy đủ {{ danhGiaCuaDiemDen.length }} đánh giá tại Trung tâm dữ liệu →
@@ -381,10 +463,36 @@ let timer = null
 
 const danhGiaCuaDiemDen = ref([])
 const soLuongHienThi = ref(6)
+const locSaoHienTai = ref(0) // 0: Tất cả, 5: 5 sao, 4: 4 sao, 3: 3 sao, 1: 1-2 sao
+
+function demSoLuongSao(soSao) {
+  if (soSao === 1) {
+    return danhGiaCuaDiemDen.value.filter(r => (r.diem_so || 5) <= 2).length
+  }
+  return danhGiaCuaDiemDen.value.filter(r => (r.diem_so || 5) === soSao).length
+}
+
+const danhGiaDaLoc = computed(() => {
+  if (locSaoHienTai.value === 0) {
+    return danhGiaCuaDiemDen.value
+  }
+  if (locSaoHienTai.value === 1) {
+    return danhGiaCuaDiemDen.value.filter(r => (r.diem_so || 5) <= 2)
+  }
+  return danhGiaCuaDiemDen.value.filter(r => (r.diem_so || 5) === locSaoHienTai.value)
+})
 
 const danhGiaHienThi = computed(() => {
-  return danhGiaCuaDiemDen.value.slice(0, soLuongHienThi.value)
+  return danhGiaDaLoc.value.slice(0, soLuongHienThi.value)
 })
+
+function getRatingLabel(score) {
+  if (score >= 5) return 'Tuyệt vời'
+  if (score === 4) return 'Rất tốt'
+  if (score === 3) return 'Hài lòng'
+  if (score === 2) return 'Cần cải thiện'
+  return 'Kém / Thất vọng'
+}
 
 const phut = computed(() => String(Math.floor(conLai.value / 60)).padStart(2, '0'))
 const giay = computed(() => String(conLai.value % 60).padStart(2, '0'))
@@ -777,9 +885,140 @@ onUnmounted(() => {
   color: var(--mau-chu-mo);
 }
 
+.rev-rating-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
 .rev-rating {
   display: flex;
-  gap: 2px;
+  align-items: center;
+  gap: 3px;
+}
+
+.rev-score-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.badge-score-5 {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-score-4 {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-score-3 {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-score-2 {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-score-1 {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Star Filters Bar */
+.dest-star-filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0 20px 0;
+  padding: 10px 14px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
+}
+
+.btn-star-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--nevio-light-grey);
+  color: var(--mau-chu);
+  border: 1px solid var(--nevio-border);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-star-filter:hover {
+  background: #e7e5e4;
+  transform: translateY(-1px);
+}
+
+.btn-star-filter.active {
+  background: var(--nevio-dark);
+  color: #ffffff;
+  border-color: var(--nevio-dark);
+  box-shadow: 0 4px 12px rgba(48, 48, 48, 0.2);
+}
+
+[data-theme="dark"] .btn-star-filter.active {
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  border-color: var(--nevio-yellow);
+}
+
+.star-pill-icons {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.count-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.btn-star-filter.active .count-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+}
+
+.no-star-reviews-alert {
+  padding: 24px;
+  text-align: center;
+  background: var(--nevio-card-bg);
+  border: 1px dashed var(--nevio-border);
+  border-radius: var(--radius-md);
+  color: var(--mau-chu-phu);
+}
+
+.btn-clear-star-filter {
+  margin-top: 10px;
+  background: var(--nevio-dark);
+  color: white;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .rev-title {

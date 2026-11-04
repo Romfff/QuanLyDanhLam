@@ -68,6 +68,18 @@
             </select>
           </div>
 
+          <!-- Star Rating Dropdown -->
+          <div class="dropdown-group">
+            <label>Số sao đánh giá:</label>
+            <select v-model="locSao" @change="thucHienLoc" class="filter-select">
+              <option value="">Tất cả số sao</option>
+              <option value="5">★★★★★ 5 sao (Tuyệt vời)</option>
+              <option value="4">★★★★☆ 4 sao (Rất tốt)</option>
+              <option value="3">★★★☆☆ 3 sao (Hài lòng)</option>
+              <option value="1">★☆☆☆☆ 1 - 2 sao (Cần cải thiện)</option>
+            </select>
+          </div>
+
           <!-- Sentiment Dropdown -->
           <div class="dropdown-group">
             <label>Sắc thái:</label>
@@ -125,8 +137,13 @@
               </div>
             </div>
 
-            <div class="rating-stars-badge">
-              <Star v-for="s in 5" :key="s" :size="13" :class="['star', { 'fill-yellow': s <= (rev.diem_so || 5) }]" />
+            <div class="rating-stars-badge-wrap">
+              <div class="rating-stars-badge">
+                <Star v-for="s in 5" :key="s" :size="13" :class="['star', { 'fill-yellow': s <= (rev.diem_so || 5), 'empty-star': s > (rev.diem_so || 5) }]" />
+              </div>
+              <span :class="['rev-score-badge', 'badge-score-' + (rev.diem_so || 5)]">
+                {{ rev.diem_so || 5 }}/5 · {{ getRatingLabel(rev.diem_so || 5) }}
+              </span>
             </div>
           </div>
 
@@ -232,10 +249,19 @@ const tuKhoa = ref(route.query.tu_khoa || '')
 const locDiemDenId = ref(route.query.diem_den_id || '')
 const locKhiaCanh = ref(route.query.khia_canh || '')
 const locSacThai = ref(route.query.sac_thai || '')
+const locSao = ref(route.query.diem_so || '')
 
 const trangHienTai = ref(Number(route.query.trang) || 1)
 const tongTrang = ref(1)
 const tongBanGhi = ref(874)
+
+function getRatingLabel(score) {
+  if (score >= 5) return 'Tuyệt vời'
+  if (score === 4) return 'Rất tốt'
+  if (score === 3) return 'Hài lòng'
+  if (score === 2) return 'Cần cải thiện'
+  return 'Kém / Thất vọng'
+}
 
 const tenDiemDenDangLoc = computed(() => {
   if (!locDiemDenId.value) return ''
@@ -269,7 +295,8 @@ async function taiDanhGia() {
       tu_khoa: tuKhoa.value,
       diem_den_id: locDiemDenId.value,
       khia_canh_id: locKhiaCanh.value,
-      sac_thai: locSacThai.value
+      sac_thai: locSacThai.value,
+      diem_so: locSao.value
     }
     const ketQua = await DataService.layDanhSachDanhGia(boLoc, trangHienTai.value, 16)
     danhSachDanhGia.value = ketQua.danh_sach
@@ -298,6 +325,7 @@ function datLaiBoLoc() {
   locDiemDenId.value = ''
   locKhiaCanh.value = ''
   locSacThai.value = ''
+  locSao.value = ''
   trangHienTai.value = 1
   capNhatUrl()
   taiDanhGia()
@@ -317,6 +345,7 @@ function capNhatUrl() {
   if (locDiemDenId.value) query.diem_den_id = locDiemDenId.value
   if (locKhiaCanh.value) query.khia_canh = locKhiaCanh.value
   if (locSacThai.value) query.sac_thai = locSacThai.value
+  if (locSao.value) query.diem_so = locSao.value
   if (trangHienTai.value > 1) query.trang = trangHienTai.value
   router.push({ query })
 }
@@ -579,18 +608,55 @@ onMounted(async () => {
   color: var(--mau-chu-mo);
 }
 
+.rating-stars-badge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
 .rating-stars-badge {
   display: flex;
+  align-items: center;
   gap: 2px;
 }
 
-.star {
-  color: #d6d3d1;
+.rev-score-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
 }
 
-.fill-yellow {
-  color: #fddd62;
-  fill: #fddd62;
+.badge-score-5 {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-score-4 {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-score-3 {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-score-2 {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-score-1 {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
 .review-destination-tag {
