@@ -317,7 +317,7 @@
               </div>
               <h4>Chưa Mở Gói Ưu Đãi Đối Tác</h4>
               <p>
-                Để bảo vệ quyền lợi du khách, hệ thống chỉ hỗ trợ kết nối ưu đãi với các điểm đến được thuật toán Wilson Score xác nhận danh hiệu <strong>"Điểm sáng du lịch"</strong> (cận dưới \(\ge 0.70\)).
+                Để bảo vệ quyền lợi du khách, hệ thống chỉ hỗ trợ kết nối ưu đãi với các điểm đến được thuật toán Wilson Score xác nhận danh hiệu <strong>"Điểm sáng du lịch"</strong> (cận dưới <strong>w ≥ 0.70</strong>).
               </p>
               <div class="locked-hint">
                 Chỉ số hiện tại: {{ diemDen.diem_danh_tieng_tb }}/5.0 (Cần đạt thêm đánh giá khen ngợi để kích hoạt).

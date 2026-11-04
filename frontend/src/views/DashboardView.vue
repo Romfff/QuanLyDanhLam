@@ -155,7 +155,7 @@
             </div>
             <h3 class="step-title">Định Tuyến Wilson Score</h3>
             <p class="step-desc">
-              Áp dụng công thức khoảng tin cậy nhị thức 95% để tính cận dưới điểm uy tín. Điểm đến ít review hoặc bị spam không thể giả mạo điểm số. Điểm đến đạt \(w \ge 0.70\) được chứng nhận <strong>"Điểm sáng du lịch"</strong>.
+              Áp dụng công thức khoảng tin cậy nhị thức 95% để tính cận dưới điểm uy tín. Điểm đến ít review hoặc bị spam không thể giả mạo điểm số. Điểm đến đạt <strong>w ≥ 0.70</strong> được chứng nhận <strong>"Điểm sáng du lịch"</strong>.
             </p>
             <div class="step-hint">Chỉ điểm đến có huy hiệu "Điểm sáng" mới đủ tiêu chuẩn mở ưu đãi.</div>
           </div>
