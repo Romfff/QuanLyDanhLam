@@ -2,3 +2,4 @@
 [2026-09-27 19:15:38 +0700] Phạm Tiến Nghĩa: feat(frontend): xay dung khung giao dien 3 view va bo tokens mau CSS
 [2026-10-18 20:20:53 +0700] Phạm Tiến Nghĩa: feat(frontend): bo loc da tieu chi diem den va chi tiet danh gia responsive
 [2026-10-29 16:40:55 +0700] Nguyễn Việt Dũng: feat(backend): bo dem cache du lieu phan tich va co che du phong khi python service offline
+[2026-11-04 13:15:10 +0700] Phạm Tiến Nghĩa: chore(frontend): dong goi ban build production toi uu bundle size
