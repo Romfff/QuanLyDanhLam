@@ -13,31 +13,27 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('../views/DashboardView.vue'),
-    meta: { canDangNhap: true }
+    component: () => import('../views/DashboardView.vue')
   },
-
   {
-  path: '/phieu-cua-toi',
-  name: 'PhieuCuaToi',
-  component: () => import('../views/PhieuCuaToiView.vue'),
-  meta: { canDangNhap: true }
-},
-
+    path: '/phieu-cua-toi',
+    name: 'PhieuCuaToi',
+    component: () => import('../views/PhieuCuaToiView.vue')
+  },
   {
     path: '/danh-sach-danh-gia',
     name: 'DanhSachDanhGia',
     component: () => import('../views/DanhSachDanhGiaView.vue')
   },
   {
-    path: '/diem-den/:id', // ✅ ĐÃ SỬA: Khớp đúng với đường dẫn /diem-den/3
+    path: '/diem-den/:id',
     name: 'ChiTietDiemDen',
     component: () => import('../views/ChiTietDiemDenView.vue')
   },
   {
     path: '/quan-tri/diem-den',
     name: 'QuanTriDiemDen',
-    component: () => import('../views/DashboardView.vue'), // Trỏ tạm về Dashboard cho Admin/Quản lý
+    component: () => import('../views/DashboardView.vue'),
     meta: { canDangNhap: true, chiQuanTri: true }
   },
   {
@@ -49,10 +45,16 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' }
+    }
+    return savedPosition || { top: 0 }
+  }
 })
 
-// ROUTE GUARD: Kiểm tra quyền truy cập ở Client
+// ROUTE GUARD
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const vaiTro = localStorage.getItem('vai_tro')
@@ -61,7 +63,7 @@ router.beforeEach((to, from, next) => {
     return next('/dang-nhap')
   }
 
-  if (to.meta.chiQuanTri && !['admin', 'quan_ly_diem_den'].includes(vaiTro)) {
+  if (to.meta.chiQuanTri && !['admin', 'quan_ly_diem_den', 'nha_phan_tich'].includes(vaiTro)) {
     return next('/khong-co-quyen')
   }
 

@@ -1,62 +1,205 @@
-/* frontend/src/assets/tokens.css */
+/* frontend/src/assets/tokens.css - Hệ thống thiết kế phong cách Nevio Webflow Luxury Travel */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 
-/* 1. Chủ đề sáng (Default Light Theme) */
 :root {
-  --mau-nen: #ffffff;
-  --mau-nen-phu: #f8fafc;
+  /* 1. Bảng màu Sáng (Nevio Light Theme) */
+  --font-chinh: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-tieu-de: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sang-trong: 'Playfair Display', Georgia, serif;
+
+  --mau-nen: #f8fafc;
+  --mau-nen-phu: #ffffff;
+  --mau-nen-the: #ffffff;
+  --mau-nen-the-hover: #ffffff;
+  --mau-header: rgba(255, 255, 255, 0.88);
+
   --mau-chu: #0f172a;
-  --mau-chu-phu: #475569;
-  --mau-chinh: #2563eb;        /* Màu nhấn nút/link */
-  --mau-tich-cuc: #16a34a;     /* Xanh lá - Sắc thái Tích cực */
-  --mau-tieu-cuc: #dc2626;     /* Đỏ - Sắc thái Tiêu cực */
-  --mau-trung-tinh: #64748b;   /* Xám - Sắc thái Trung tính */
+  --mau-chu-phu: #64748b;
+  --mau-chu-mo: #94a3b8;
+
+  --mau-chinh: #0f172a;          /* Charcoal luxury */
+  --mau-chinh-hover: #1e293b;
+  --mau-nhan: #0284c7;           /* Sky ocean */
+  --mau-nhan-sang: #e0f2fe;
+
+  --mau-vang-sang: #f59e0b;       /* Gold / Amber */
+  --mau-vang-nhe: #fef3c7;
+  --mau-vang-chu: #b45309;
+
+  --mau-tich-cuc: #10b981;      /* Emerald Green */
+  --mau-tich-cuc-nhe: #ecfdf5;
+  --mau-tich-cuc-chu: #047857;
+
+  --mau-tieu-cuc: #ef4444;      /* Ruby Red */
+  --mau-tieu-cuc-nhe: #fef2f2;
+  --mau-tieu-cuc-chu: #b91c1c;
+
+  --mau-trung-tinh: #64748b;    /* Slate */
+  --mau-trung-tinh-nhe: #f1f5f9;
+
   --duong-vien: #e2e8f0;
-  --khoang-cach-nho: 8px;
-  --khoang-cach-vua: 16px;
-  --khoang-cach-lon: 32px;
-  --bo-tron: 8px;
+  --duong-vien-nhe: #f1f5f9;
+  --duong-vien-dam: #cbd5e1;
+
+  --bong-nhe: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --bong-the: 0 10px 25px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+  --bong-noi: 0 20px 35px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+  --bong-nhan: 0 12px 24px -4px rgba(2, 132, 199, 0.25);
+
+  --bo-tron-nho: 8px;
+  --bo-tron-vua: 14px;
+  --bo-tron-lon: 22px;
+  --bo-tron-tron: 9999px;
+
+  --chieu-cao-cham: 44px;
+  --max-rong: 1280px;
 }
 
-/* 2. Chủ đề tối (Dark Theme) */
+/* 2. Bảng màu Tối (Nevio Luxury Dark Theme) */
 [data-theme="dark"] {
-  --mau-nen: #0f172a;
-  --mau-nen-phu: #1e293b;
+  --mau-nen: #0b0f19;
+  --mau-nen-phu: #111827;
+  --mau-nen-the: #151d30;
+  --mau-nen-the-hover: #1a243c;
+  --mau-header: rgba(11, 15, 25, 0.88);
+
   --mau-chu: #f8fafc;
   --mau-chu-phu: #94a3b8;
-  --mau-chinh: #3b82f6;
-  --mau-tich-cuc: #22c55e;
-  --mau-tieu-cuc: #ef4444;
+  --mau-chu-mo: #64748b;
+
+  --mau-chinh: #38bdf8;
+  --mau-chinh-hover: #0284c7;
+  --mau-nhan: #38bdf8;
+  --mau-nhan-sang: rgba(56, 189, 248, 0.15);
+
+  --mau-vang-sang: #fbbf24;
+  --mau-vang-nhe: rgba(251, 191, 36, 0.15);
+  --mau-vang-chu: #fef08a;
+
+  --mau-tich-cuc: #34d399;
+  --mau-tich-cuc-nhe: rgba(52, 211, 153, 0.15);
+  --mau-tich-cuc-chu: #a7f3d0;
+
+  --mau-tieu-cuc: #f87171;
+  --mau-tieu-cuc-nhe: rgba(248, 113, 113, 0.15);
+  --mau-tieu-cuc-chu: #fca5a5;
+
   --mau-trung-tinh: #94a3b8;
-  --duong-vien: #334155;
+  --mau-trung-tinh-nhe: rgba(148, 163, 184, 0.15);
+
+  --duong-vien: #1e293b;
+  --duong-vien-nhe: rgba(255, 255, 255, 0.06);
+  --duong-vien-dam: #334155;
+
+  --bong-nhe: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --bong-the: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
+  --bong-noi: 0 20px 35px -5px rgba(0, 0, 0, 0.6);
+  --bong-nhan: 0 12px 24px -4px rgba(56, 189, 248, 0.2);
 }
 
-/* 3. Đưa các biến token áp dụng cho toàn bộ trang web */
+/* 3. Global Reset & Typography */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 body {
   background-color: var(--mau-nen);
   color: var(--mau-chu);
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
-}
-:root {
-  --mau-the: #f8fafc;            /* Nền thẻ */
-  --mau-vien: #d1d5db;           /* Đường viền */
-  --mau-chu-phu: #4b5563;        /* Chữ phụ */
-  --mau-chu-tren-chinh: #ffffff; /* Chữ trên nút màu chính */
-  --mau-nen-phu: rgba(0, 0, 0, 0.5);  /* Lớp mờ phía sau ngăn kéo */
-  --chieu-cao-cham: 44px;        /* Vùng chạm tối thiểu cho ngón tay */
-  --max-rong: 1200px;
+  font-family: var(--font-chinh);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
 }
 
-[data-theme="dark"] {
-  --mau-the: #1f2937;
-  --mau-vien: #374151;
-  --mau-chu-phu: #d1d5db;
-  --mau-chu-tren-chinh: #0b1220; /* Chữ tối trên nền xanh sáng để đủ tương phản */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 4. Common Micro-Components (Nevio Style) */
+.nevio-container {
+  max-width: var(--max-rong);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.nevio-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--bo-tron-tron);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--mau-nhan-sang);
+  color: var(--mau-nhan);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  margin-bottom: 16px;
+}
+
+.nevio-eyebrow.gold {
+  background: var(--mau-vang-nhe);
+  color: var(--mau-vang-chu);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.nevio-eyebrow.emerald {
+  background: var(--mau-tich-cuc-nhe);
+  color: var(--mau-tich-cuc-chu);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+/* Badges */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--bo-tron-tron);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-diem-sang {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.badge-binh-thuong {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.badge-canh-bao {
+  background: #ef4444;
+  color: #ffffff;
+  animation: pulse-alert 2s infinite;
+}
+
+@keyframes pulse-alert {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--mau-nen);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--duong-vien-dam);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mau-chu-mo);
 }

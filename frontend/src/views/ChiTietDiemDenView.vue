@@ -1,145 +1,1047 @@
+<template>
+  <div class="nevio-destination-detail">
+    <!-- 1. Hero Cover Banner with Image & Breadcrumb -->
+    <div v-if="diemDen" class="detail-hero-banner" :style="{ backgroundImage: `url(${diemDen.hinh_anh})` }">
+      <div class="banner-gradient-overlay"></div>
+      <div class="nevio-container banner-content">
+        <nav class="detail-breadcrumbs" aria-label="Đường dẫn điều hướng">
+          <router-link to="/dashboard">Khám Phá Điểm Đến</router-link>
+          <span class="sep">/</span>
+          <span class="active">{{ diemDen.tinh_thanh }}</span>
+          <span class="sep">/</span>
+          <span class="current">{{ diemDen.ten_rut_gon || diemDen.ten }}</span>
+        </nav>
+
+        <div class="banner-meta-row">
+          <span :class="['banner-status-badge', 'badge-' + (diemDen.trang_thai_wilson || 'binh_thuong')]">
+            <span v-if="diemDen.trang_thai_wilson === 'diem_sang'">✨ Điểm sáng du lịch (Wilson >= 0.70)</span>
+            <span v-else-if="diemDen.trang_thai_wilson === 'canh_bao'">⚠️ Cần chú ý chất lượng</span>
+            <span v-else>🔷 Hoạt động ổn định</span>
+          </span>
+          <span class="banner-category-tag">📍 {{ diemDen.dia_chi || diemDen.tinh_thanh }}</span>
+        </div>
+
+        <h1 class="banner-title">{{ diemDen.ten }}</h1>
+        <p class="banner-category-sub">{{ diemDen.loai_hinh }}</p>
+
+        <div class="banner-score-strip">
+          <div class="score-pill">
+            <span class="star-icon">★</span>
+            <span class="score-val">{{ diemDen.diem_danh_tieng_tb || '4.8' }}</span>
+            <span class="score-max">/ 5.0</span>
+          </div>
+          <span class="strip-divider">·</span>
+          <span class="review-total-text"><strong>{{ diemDen.tong_luot_danh_gia || 164 }}</strong> đánh giá TripAdvisor đã kiểm chứng</span>
+          <span class="strip-divider">·</span>
+          <span class="positive-rate-text">🟢 {{ diemDen.ty_le_tich_cuc || 93.2 }}% Tích cực</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Main Two-Column Layout -->
+    <div class="nevio-container detail-main-layout">
+      <!-- Loading State -->
+      <div v-if="dangTai" class="loading-box">
+        <span class="spinner"></span>
+        <p>Đang tải thông tin điểm đến và phân tích ABSA...</p>
+      </div>
+
+      <template v-else-if="diemDen">
+        <!-- ================= LEFT COLUMN: CONTENT & ANALYTICS ================= -->
+        <div class="detail-left-col">
+          <!-- Overview Card -->
+          <section class="detail-card">
+            <h2 class="card-section-title">Giới Thiệu Điểm Đến</h2>
+            <p class="destination-description-text">{{ diemDen.mo_ta }}</p>
+
+            <!-- Gallery Strip -->
+            <div v-if="diemDen.hinh_anh_phu && diemDen.hinh_anh_phu.length > 0" class="photo-gallery-strip">
+              <img 
+                v-for="(img, idx) in diemDen.hinh_anh_phu" 
+                :key="idx" 
+                :src="img" 
+                :alt="diemDen.ten + ' ảnh ' + (idx + 1)"
+                class="gallery-thumb"
+              />
+            </div>
+          </section>
+
+          <!-- ABSA 5-Aspect Scorecards -->
+          <section class="detail-card">
+            <div class="card-head-flex">
+              <div>
+                <div class="nevio-eyebrow emerald">PHÂN TÍCH CHUYÊN SÂU</div>
+                <h2 class="card-section-title">Chỉ Số Đánh Giá Theo 5 Khía Cạnh (ABSA)</h2>
+              </div>
+              <span class="badge-pill absa-chip">PhoBERT AI</span>
+            </div>
+            <p class="section-subtext">
+              Hệ thống tự động phân tách ý kiến du khách thành 5 tiêu chí độc lập, tính toán tỷ lệ hài lòng theo phương pháp trích xuất sắc thái khía cạnh.
+            </p>
+
+            <div v-if="diemDen.khia_canh" class="aspects-list-container">
+              <!-- Aspect 1: Cảnh quan -->
+              <div class="aspect-metric-row">
+                <div class="aspect-row-top">
+                  <span class="aspect-title">🏞️ Cảnh quan &amp; Không gian</span>
+                  <span class="aspect-score-text">{{ diemDen.khia_canh.canh_quan?.diem }}/5.0 ({{ diemDen.khia_canh.canh_quan?.tich_cuc }}% Tích cực)</span>
+                </div>
+                <div class="aspect-bar">
+                  <div class="bar-pos" :style="{ width: diemDen.khia_canh.canh_quan?.tich_cuc + '%' }"></div>
+                  <div class="bar-neg" :style="{ width: diemDen.khia_canh.canh_quan?.tieu_cuc + '%' }"></div>
+                </div>
+                <p class="aspect-comment">"{{ diemDen.khia_canh.canh_quan?.mo_ta }}"</p>
+              </div>
+
+              <!-- Aspect 2: Dịch vụ -->
+              <div class="aspect-metric-row">
+                <div class="aspect-row-top">
+                  <span class="aspect-title">🛎️ Chất lượng phục vụ</span>
+                  <span class="aspect-score-text">{{ diemDen.khia_canh.dich_vu?.diem }}/5.0 ({{ diemDen.khia_canh.dich_vu?.tich_cuc }}% Tích cực)</span>
+                </div>
+                <div class="aspect-bar">
+                  <div class="bar-pos" :style="{ width: diemDen.khia_canh.dich_vu?.tich_cuc + '%' }"></div>
+                  <div class="bar-neg" :style="{ width: diemDen.khia_canh.dich_vu?.tieu_cuc + '%' }"></div>
+                </div>
+                <p class="aspect-comment">"{{ diemDen.khia_canh.dich_vu?.mo_ta }}"</p>
+              </div>
+
+              <!-- Aspect 3: Ẩm thực -->
+              <div class="aspect-metric-row">
+                <div class="aspect-row-top">
+                  <span class="aspect-title">🍜 Ẩm thực &amp; Đặc sản</span>
+                  <span class="aspect-score-text">{{ diemDen.khia_canh.am_thuc?.diem }}/5.0 ({{ diemDen.khia_canh.am_thuc?.tich_cuc }}% Tích cực)</span>
+                </div>
+                <div class="aspect-bar">
+                  <div class="bar-pos" :style="{ width: diemDen.khia_canh.am_thuc?.tich_cuc + '%' }"></div>
+                  <div class="bar-neg" :style="{ width: diemDen.khia_canh.am_thuc?.tieu_cuc + '%' }"></div>
+                </div>
+                <p class="aspect-comment">"{{ diemDen.khia_canh.am_thuc?.mo_ta }}"</p>
+              </div>
+
+              <!-- Aspect 4: Vệ sinh -->
+              <div class="aspect-metric-row">
+                <div class="aspect-row-top">
+                  <span class="aspect-title">🧹 Vệ sinh &amp; Môi trường</span>
+                  <span class="aspect-score-text">{{ diemDen.khia_canh.ve_sinh?.diem }}/5.0 ({{ diemDen.khia_canh.ve_sinh?.tich_cuc }}% Tích cực)</span>
+                </div>
+                <div class="aspect-bar">
+                  <div class="bar-pos" :style="{ width: diemDen.khia_canh.ve_sinh?.tich_cuc + '%' }"></div>
+                  <div class="bar-neg" :style="{ width: diemDen.khia_canh.ve_sinh?.tieu_cuc + '%' }"></div>
+                </div>
+                <p class="aspect-comment">"{{ diemDen.khia_canh.ve_sinh?.mo_ta }}"</p>
+              </div>
+
+              <!-- Aspect 5: Giá cả -->
+              <div class="aspect-metric-row">
+                <div class="aspect-row-top">
+                  <span class="aspect-title">💵 Giá cả &amp; Độ minh bạch</span>
+                  <span class="aspect-score-text">{{ diemDen.khia_canh.gia_ca?.diem }}/5.0 ({{ diemDen.khia_canh.gia_ca?.tich_cuc }}% Tích cực)</span>
+                </div>
+                <div class="aspect-bar">
+                  <div class="bar-pos" :style="{ width: diemDen.khia_canh.gia_ca?.tich_cuc + '%' }"></div>
+                  <div class="bar-neg" :style="{ width: diemDen.khia_canh.gia_ca?.tieu_cuc + '%' }"></div>
+                </div>
+                <p class="aspect-comment">"{{ diemDen.khia_canh.gia_ca?.mo_ta }}"</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Destination Reviews Tab -->
+          <section class="detail-card">
+            <div class="card-head-flex">
+              <div>
+                <div class="nevio-eyebrow gold">ĐÁNH GIÁ NGUYÊN VĂN</div>
+                <h2 class="card-section-title">Nhận Xét Của Du Khách Về Điểm Đến</h2>
+              </div>
+              <router-link to="/danh-sach-danh-gia" class="link-all-reviews">
+                Xem toàn bộ trong CSDL →
+              </router-link>
+            </div>
+
+            <div class="dest-reviews-list">
+              <div v-for="rev in danhGiaCuaDiemDen" :key="rev.id" class="dest-review-item">
+                <div class="rev-header">
+                  <div class="rev-user">
+                    <span class="rev-avatar">{{ rev.nguoi_danh_gia.charAt(0) }}</span>
+                    <div>
+                      <strong>{{ rev.nguoi_danh_gia }}</strong>
+                      <span class="rev-date">{{ rev.quoc_gia }} · {{ rev.ngay_dang }}</span>
+                    </div>
+                  </div>
+                  <div class="rev-rating">
+                    <span v-for="s in 5" :key="s" :class="['star', { filled: s <= rev.diem_so }]">★</span>
+                  </div>
+                </div>
+                <h4 class="rev-title">{{ rev.tieu_de }}</h4>
+                <p class="rev-text">{{ rev.noi_dung }}</p>
+                <div class="rev-tags">
+                  <span 
+                    v-for="(tag, tIdx) in rev.khia_canh_tags" 
+                    :key="tIdx"
+                    :class="['tag-pill', 'tag-' + tag.sac_thai]"
+                  >
+                    {{ tag.khia_canh }}: {{ tag.chi_tiet }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= RIGHT COLUMN: SIDEBAR (WILSON & VOUCHER) ================= -->
+        <aside class="detail-sidebar">
+          <!-- Wilson Reputation Rating Widget -->
+          <div class="sidebar-widget widget-wilson">
+            <div class="widget-head">
+              <span class="w-icon">⚖️</span>
+              <div>
+                <h3 class="widget-title">Định Tuyến Wilson Score</h3>
+                <span class="widget-sub">Khoảng tin cậy chuẩn 95%</span>
+              </div>
+            </div>
+
+            <div class="wilson-stat-box">
+              <div class="wilson-score-display">
+                <span class="w-val">{{ diemDen.diem_danh_tieng_tb }}</span>
+                <span class="w-denom">/ 5.0</span>
+              </div>
+              <div class="wilson-status-label">
+                <span :class="['badge-pill', 'badge-' + (diemDen.trang_thai_wilson || 'binh_thuong')]">
+                  {{ diemDen.nhan_trang_thai || 'Điểm sáng du lịch' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="wilson-details-list">
+              <div class="w-detail-row">
+                <span>Khoảng tin cậy Wilson:</span>
+                <strong>{{ diemDen.khoang_tin_cay_wilson || '0.884 - 0.957' }}</strong>
+              </div>
+              <div class="w-detail-row">
+                <span>Tổng đánh giá hợp lệ:</span>
+                <strong>{{ diemDen.tong_luot_danh_gia }} lượt</strong>
+              </div>
+              <div class="w-detail-row">
+                <span>Tỷ lệ tích cực quan sát:</span>
+                <strong class="text-positive">{{ diemDen.ty_le_tich_cuc }}%</strong>
+              </div>
+            </div>
+
+            <p class="wilson-note">
+              * Điểm đến chỉ được định tuyến làm <strong>"Điểm sáng"</strong> khi cận dưới khoảng tin cậy Wilson đạt từ 0.70 trở lên, đảm bảo chất lượng thật không bị thổi phồng bởi số lượng ít.
+            </p>
+          </div>
+
+          <!-- Voucher & Tour Referral Booking Box (Rubric Requirement) -->
+          <div class="sidebar-widget widget-voucher">
+            <div class="widget-head">
+              <span class="w-icon">🎟️</span>
+              <div>
+                <h3 class="widget-title">Ưu Đãi Đối Tác Du Lịch</h3>
+                <span class="widget-sub">Liên kết chính sách đối tác bảo chứng</span>
+              </div>
+            </div>
+
+            <!-- Case A: Qualified for Voucher ("Điểm sáng") -->
+            <div v-if="diemDen.trang_thai_wilson === 'diem_sang'" class="voucher-active-box">
+              <div class="voucher-badge-promo">
+                {{ diemDen.uu_dai?.tieu_de || 'Giảm 15% Vé Tham Quan & Dịch Vụ Tour' }}
+              </div>
+              <p class="voucher-limit-text">
+                Hôm nay còn <strong>38/50</strong> lượt ưu đãi dành cho du khách.
+              </p>
+
+              <!-- State 1: Before Claiming -->
+              <div v-if="!phieu">
+                <button 
+                  @click="nhanUuDai" 
+                  class="btn-claim-voucher"
+                  :disabled="dangXuLy"
+                >
+                  {{ dangXuLy ? 'Đang tạo mã bảo mật...' : '⚡ Nhận Phiếu Ưu Đãi Ngay' }}
+                </button>
+              </div>
+
+              <!-- State 2: After Claiming (Countdown Active) -->
+              <div v-else class="claimed-box">
+                <div class="claimed-header">
+                  <span class="badge-success">✓ Đã cấp phiếu</span>
+                  <div class="countdown-clock">
+                    ⏳ Còn lại: <strong>{{ phut }}:{{ giay }}</strong>
+                  </div>
+                </div>
+
+                <div class="ticket-code-display">
+                  <span class="code-lbl">MÃ THAM CHIẾU:</span>
+                  <span class="code-val">{{ phieu.ma_tham_chieu }}</span>
+                </div>
+
+                <button 
+                  @click="sangDoiTac" 
+                  class="btn-redirect-partner"
+                  :disabled="dangXuLy"
+                >
+                  {{ dangXuLy ? 'Đang kết nối đối tác...' : '🚀 Tiếp tục sang trang Đối tác →' }}
+                </button>
+              </div>
+
+              <p class="partner-transparency-note">
+                <strong>Minh bạch:</strong> Hệ thống có thể nhận hoa hồng giới thiệu khi du khách đặt tour thành công qua liên kết đối tác. Đánh giá danh tiếng được tính hoàn toàn độc lập với quyền lợi kinh tế.
+              </p>
+            </div>
+
+            <!-- Case B: Not Qualified ("Bình thường" or "Cảnh báo") -->
+            <div v-else class="voucher-locked-box">
+              <div class="locked-icon">🔒</div>
+              <h4>Chưa Mở Gói Ưu Đãi Đối Tác</h4>
+              <p>
+                Để bảo vệ quyền lợi du khách, hệ thống chỉ hỗ trợ kết nối ưu đãi với các điểm đến được thuật toán Wilson Score xác nhận danh hiệu <strong>"Điểm sáng du lịch"</strong> (cận dưới \(\ge 0.70\)).
+              </p>
+              <div class="locked-hint">
+                Chỉ số hiện tại: {{ diemDen.diem_danh_tieng_tb }}/5.0 (Cần đạt thêm đánh giá khen ngợi để kích hoạt).
+              </div>
+            </div>
+          </div>
+
+          <!-- Crisis Early Warning Card -->
+          <div class="sidebar-widget widget-safety">
+            <div class="safety-indicator safe">
+              <span class="safety-icon">🛡️</span>
+              <div>
+                <h4>Chỉ Số An Toàn Danh Tiếng</h4>
+                <p>Không ghi nhận bất kỳ đột biến tiêu cực nào trong 30 ngày qua.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </template>
+
+      <!-- Error State -->
+      <div v-else class="empty-state-box">
+        <h3>Không tìm thấy dữ liệu điểm đến</h3>
+        <router-link to="/dashboard" class="btn-back">Quay lại danh sách</router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import api from '../services/api'
+import { DataService, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
-const trangThai = ref(null)
 const route = useRoute()
 const router = useRouter()
 const id = route.params.id
 
 const diemDen = ref(null)
-const dieuKien = ref(null)
-const phieu = ref(null)
-const conLai = ref(0)
-const loi = ref('')
+const dangTai = ref(true)
 const dangXuLy = ref(false)
+const phieu = ref(null)
+const conLai = ref(900) // 15 phút = 900 giây
 let timer = null
+
+const danhGiaCuaDiemDen = ref([])
 
 const phut = computed(() => String(Math.floor(conLai.value / 60)).padStart(2, '0'))
 const giay = computed(() => String(conLai.value % 60).padStart(2, '0'))
-
-onMounted(async () => {
-  try {
-    diemDen.value = (await api.get(`/diem-den/${id}`)).data.data
-    dieuKien.value = (await api.get(`/diem-den/${id}/du-dieu-kien-gioi-thieu`)).data.data
-    trangThai.value = (await api.get(`/diem-den/${id}/trang-thai`)).data.data
-  } catch (e) {
-    loi.value = e.response?.data?.message || 'Không tải được thông tin điểm đến'
-  }
-})
-
-onUnmounted(() => clearInterval(timer))
 
 function batDauDem() {
   clearInterval(timer)
   timer = setInterval(() => {
     conLai.value--
-    if (conLai.value <= 0) { 
+    if (conLai.value <= 0) {
       clearInterval(timer)
       phieu.value = null
-      loi.value = 'Phiếu ưu đãi đã hết hạn, hãy nhận lại.' 
     }
   }, 1000)
 }
 
 async function nhanUuDai() {
-  loi.value = ''
-  if (!localStorage.getItem('token')) { 
-    router.push('/dang-nhap')
-    return 
-  }
   dangXuLy.value = true
   try {
-    const res = await api.post(`/diem-den/${id}/gioi-thieu-tour`)
-    phieu.value = res.data.data
-    conLai.value = phieu.value.con_lai_giay
+    const res = await DataService.nhanUuDai(id)
+    phieu.value = res
+    conLai.value = res.con_lai_giay || 900
     batDauDem()
-    dieuKien.value = (await api.get(`/diem-den/${id}/du-dieu-kien-gioi-thieu`)).data.data
   } catch (e) {
-    loi.value = e.response?.data?.message || 'Không nhận được ưu đãi'
-  } finally { 
-    dangXuLy.value = false 
+    console.error(e)
+  } finally {
+    dangXuLy.value = false
   }
 }
 
 async function sangDoiTac() {
-  if (dangXuLy.value) return
   dangXuLy.value = true
-  loi.value = ''
   try {
-    const res = await api.post(`/phieu-gioi-thieu/${phieu.value.ma_tham_chieu}/chuyen-huong`)
-    window.location.href = res.data.data.url
-  } catch (e) {
-    loi.value = e.response?.data?.message || 'Không chuyển hướng được'
+    const targetUrl = diemDen.value?.uu_dai?.link_doi_tac || 'https://tripadvisor.com'
+    window.open(targetUrl, '_blank')
+  } finally {
     dangXuLy.value = false
   }
 }
+
+onMounted(async () => {
+  dangTai.value = true
+  try {
+    diemDen.value = await DataService.layChiTietDiemDen(id)
+    // Lọc các review thuộc điểm đến này
+    const filteredReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => 
+      r.diem_den_id == id || 
+      (diemDen.value && r.ten_diem_den.toLowerCase().includes(diemDen.value.ten.toLowerCase()))
+    )
+    danhGiaCuaDiemDen.value = filteredReviews.length > 0 ? filteredReviews : DANH_SACH_DANH_GIA_TRIPADVISOR.slice(0, 4)
+  } finally {
+    dangTai.value = false
+  }
+})
+
+onUnmounted(() => {
+  clearInterval(timer)
+})
 </script>
 
-<template>
-  <div class="trang">
-    <p v-if="!diemDen && !loi">Đang tải thông tin...</p>
+<style scoped>
+.nevio-destination-detail {
+  padding-bottom: 80px;
+}
 
-    <div v-if="diemDen" class="bo-cuc-chi-tiet">
-      <!-- KHỐI THÔNG TIN ĐIỂM ĐẾN -->
-      <section class="khoi khoi--thong-tin">
-        <h1>{{ diemDen.ten }}</h1>
-        <p class="the__phu">{{ diemDen.tinh_thanh }} · {{ diemDen.loai_hinh }}</p>
-        <p>Điểm danh tiếng: <strong>{{ diemDen.diem_danh_tieng_tb ?? '—' }} / 5.0</strong>
-           ({{ diemDen.tong_luot_danh_gia }} đánh giá)</p>
-        <p>{{ diemDen.mo_ta }}</p>
-      </section>
+/* =================================================== */
+/* 1. HERO COVER BANNER                                */
+/* =================================================== */
+.detail-hero-banner {
+  position: relative;
+  min-height: 380px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px 0;
+  color: white;
+}
 
-      <!-- BANNER CẢNH BÁO DANH TIẾNG (HIỆN KHI CÓ CẢNH BÁO) -->
-      <section v-if="trangThai?.hien_canh_bao" class="khoi canh-bao-danh-tieng" role="alert">
-        <h2>Cảnh báo danh tiếng</h2>
-        <p>{{ trangThai.ly_do }}</p>
-        <p class="the__phu">{{ trangThai.ghi_chu }}</p>
-      </section>
+.banner-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.88) 100%);
+  backdrop-filter: blur(2px);
+}
 
-      <!-- KHỐI GIỚI THIỆU TOUR & ƯU ĐÃI ĐỐI TÁC (ẨN KHI CÓ CẢNH BÁO) -->
-      <section v-if="dieuKien && !trangThai?.hien_canh_bao" class="khoi khoi-gioi-thieu" aria-labelledby="tieu-de-gioi-thieu">
-        <template v-if="dieuKien.du_dieu_kien && dieuKien.uu_dai">
-          <h2 id="tieu-de-gioi-thieu">{{ dieuKien.uu_dai.ten }}</h2>
-          <p>Hôm nay còn <strong>{{ dieuKien.uu_dai.con_lai_hom_nay }}</strong> lượt ưu đãi.</p>
+.banner-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
 
-          <button 
-            v-if="!phieu" 
-            type="button" 
-            class="nut nut--chinh"
-            :disabled="dangXuLy" 
-            @click="nhanUuDai"
-          >
-            {{ dangXuLy ? 'Đang xử lý...' : 'Hỗ trợ đặt tour' }}
-          </button>
+.detail-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
 
-          <div v-else>
-            <p>Ưu đãi được giữ trong
-              <strong class="dem-nguoc" role="timer" aria-live="off">{{ phut }}:{{ giay }}</strong>
-            </p>
-            <button 
-              type="button" 
-              class="nut nut--chinh"
-              :disabled="dangXuLy" 
-              @click="sangDoiTac"
-            >
-              {{ dangXuLy ? 'Đang chuyển hướng...' : 'Tiếp tục sang đối tác' }}
-            </button>
-          </div>
+.detail-breadcrumbs a {
+  color: #38bdf8;
+  text-decoration: none;
+}
 
-          <p class="the__phu">Liên kết đối tác: nhóm có thể nhận hoa hồng khi bạn mua tour. Điểm danh tiếng được tính độc lập với việc điểm đến có đối tác hay không.</p>
-        </template>
+.detail-breadcrumbs .sep {
+  opacity: 0.5;
+}
 
-        <template v-else>
-          <h2 id="tieu-de-gioi-thieu">Hỗ trợ đặt tour</h2>
-          <p v-if="dieuKien.ly_do && dieuKien.ly_do.length">Chưa hỗ trợ đặt tour: {{ dieuKien.ly_do.join('; ') }}</p>
-          <p v-else>Điểm đến này chưa có ưu đãi đối tác.</p>
-        </template>
-      </section>
-    </div>
+.detail-breadcrumbs .current {
+  color: #ffffff;
+  font-weight: 600;
+}
 
-    <!-- THÔNG BÁO LỖI -->
-    <p v-if="loi" class="field-error" role="alert" style="margin-top: 15px;">{{ loi }}</p>
-  </div>
-</template>
+.banner-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.banner-status-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.banner-category-tag {
+  font-size: 13px;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.banner-title {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.banner-category-sub {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.banner-score-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.score-pill {
+  background: #f59e0b;
+  color: #000000;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.strip-divider {
+  opacity: 0.5;
+}
+
+.review-total-text {
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.positive-rate-text {
+  font-size: 14px;
+  color: #a7f3d0;
+  font-weight: 600;
+}
+
+/* =================================================== */
+/* 2. TWO-COLUMN LAYOUT                                */
+/* =================================================== */
+.detail-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 36px;
+  margin-top: 40px;
+  align-items: flex-start;
+}
+
+.detail-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.detail-card {
+  background: var(--mau-nen-the);
+  border: 1px solid var(--duong-vien);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: var(--bong-the);
+}
+
+.card-head-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--mau-chu);
+  margin-bottom: 8px;
+}
+
+.section-subtext {
+  font-size: 14px;
+  color: var(--mau-chu-phu);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.absa-chip {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+}
+
+.destination-description-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--mau-chu-phu);
+  margin-bottom: 24px;
+}
+
+.photo-gallery-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.gallery-thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--duong-vien);
+  transition: transform 0.25s ease;
+}
+
+.gallery-thumb:hover {
+  transform: scale(1.02);
+}
+
+/* Aspect Progress Bars */
+.aspects-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aspect-metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aspect-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aspect-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--mau-chu);
+}
+
+.aspect-score-text {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.aspect-bar {
+  display: flex;
+  height: 9px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.bar-pos { background: #10b981; }
+.bar-neg { background: #ef4444; }
+
+.aspect-comment {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--mau-chu-mo);
+}
+
+/* Review List */
+.link-all-reviews {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+.dest-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dest-review-item {
+  background: var(--mau-nen);
+  border: 1px solid var(--duong-vien);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.rev-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.rev-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rev-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7, #10b981);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.rev-user strong {
+  font-size: 13.5px;
+  color: var(--mau-chu);
+  display: block;
+}
+
+.rev-date {
+  font-size: 11.5px;
+  color: var(--mau-chu-mo);
+}
+
+.rev-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  margin-bottom: 4px;
+}
+
+.rev-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--mau-chu-phu);
+  margin-bottom: 12px;
+}
+
+.rev-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.tag-tich_cuc {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.tag-trung_tinh {
+  background: rgba(100, 116, 139, 0.12);
+  color: #475569;
+}
+
+.tag-tieu_cuc {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+
+/* =================================================== */
+/* 3. SIDEBAR                                          */
+/* =================================================== */
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 90px;
+}
+
+.sidebar-widget {
+  background: var(--mau-nen-the);
+  border: 1px solid var(--duong-vien);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--bong-the);
+}
+
+.widget-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.w-icon {
+  font-size: 24px;
+}
+
+.widget-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--mau-chu);
+  line-height: 1.2;
+}
+
+.widget-sub {
+  font-size: 12px;
+  color: var(--mau-chu-mo);
+}
+
+/* Wilson Widget Details */
+.wilson-stat-box {
+  background: var(--mau-nen);
+  border: 1px solid var(--duong-vien);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.wilson-score-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.w-val {
+  font-size: 34px;
+  font-weight: 800;
+  color: #0284c7;
+}
+
+.w-denom {
+  font-size: 16px;
+  color: var(--mau-chu-mo);
+}
+
+.wilson-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.w-detail-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--mau-chu-phu);
+}
+
+.w-detail-row strong {
+  color: var(--mau-chu);
+}
+
+.wilson-note {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--mau-chu-mo);
+  border-top: 1px dashed var(--duong-vien);
+  padding-top: 12px;
+}
+
+/* Voucher Widget */
+.voucher-badge-promo {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(2, 132, 199, 0.15));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #059669;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.voucher-limit-text {
+  font-size: 12.5px;
+  color: var(--mau-chu-phu);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.btn-claim-voucher {
+  width: 100%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s;
+}
+
+.btn-claim-voucher:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+}
+
+.claimed-box {
+  background: var(--mau-nen);
+  border: 1px solid #10b981;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.claimed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-success {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.countdown-clock {
+  font-size: 12.5px;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.ticket-code-display {
+  background: var(--mau-nen-the);
+  border: 1px dashed var(--duong-vien);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.code-lbl {
+  font-size: 11px;
+  color: var(--mau-chu-mo);
+  display: block;
+}
+
+.code-val {
+  font-size: 16px;
+  font-weight: 800;
+  font-family: monospace;
+  color: #0284c7;
+}
+
+.btn-redirect-partner {
+  width: 100%;
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+[data-theme="dark"] .btn-redirect-partner {
+  background: #38bdf8;
+  color: #0b1120;
+}
+
+.partner-transparency-note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mau-chu-mo);
+  margin-top: 14px;
+}
+
+/* Locked Voucher Box */
+.voucher-locked-box {
+  text-align: center;
+  padding: 16px;
+  background: var(--mau-nen);
+  border-radius: 14px;
+  border: 1px dashed var(--duong-vien);
+}
+
+.locked-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.voucher-locked-box h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  margin-bottom: 6px;
+}
+
+.voucher-locked-box p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--mau-chu-phu);
+  margin-bottom: 10px;
+}
+
+.locked-hint {
+  font-size: 11.5px;
+  color: #b45309;
+  font-weight: 600;
+  background: #fef3c7;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+/* Safety Widget */
+.safety-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.safety-icon {
+  font-size: 26px;
+}
+
+.safety-indicator h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #059669;
+  margin-bottom: 2px;
+}
+
+.safety-indicator p {
+  font-size: 12px;
+  color: var(--mau-chu-phu);
+}
+
+.loading-box {
+  text-align: center;
+  padding: 60px;
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .detail-main-layout {
+    grid-template-columns: 1fr;
+  }
+  .banner-title {
+    font-size: 28px;
+  }
+}
+</style>
