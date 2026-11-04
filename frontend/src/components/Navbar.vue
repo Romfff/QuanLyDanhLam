@@ -1,105 +1,102 @@
 <template>
-  <header class="nevio-header">
-    <div class="header-container">
+  <header class="nevio-navbar-wrap">
+    <div class="nevio-navbar-inner">
       <!-- 1. Brand Logo -->
-      <router-link to="/dashboard" class="brand-block">
-        <div class="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#brand-grad)" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="brand-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#10b981"/>
-                <stop offset="1" stop-color="#0284c7"/>
-              </linearGradient>
-            </defs>
+      <router-link to="/dashboard" class="nevio-brand">
+        <div class="nevio-logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="7" fill="white"/>
+            <path d="M12 4.5L14.5 9.5L20 10.3L16 14.2L16.9 19.7L12 17.1L7.1 19.7L8 14.2L4 10.3L9.5 9.5L12 4.5Z" fill="#303030"/>
           </svg>
         </div>
-        <div class="brand-text">
-          <span class="brand-title"><strong>ĐT-12</strong> TourSentiment</span>
-          <span class="brand-tag">ABSA & Wilson Intelligence</span>
+        <div class="nevio-brand-text">
+          <span class="nevio-brand-title">Nevio <span class="tag-dt12">ĐT-12</span></span>
         </div>
       </router-link>
 
-      <!-- 2. Desktop Navigation Menu -->
-      <nav class="nav-links" aria-label="Menu chính">
-        <router-link to="/dashboard" class="nav-item">
-          <span>🏝️ Khám Phá Điểm Đến</span>
+      <!-- 2. Centered Nav Links with Dot Indicator -->
+      <nav class="nevio-nav-links" aria-label="Menu điều hướng chính">
+        <router-link to="/dashboard" class="nevio-link">
+          <span class="link-dot">•</span>
+          <span>Khám Phá</span>
         </router-link>
-        <a href="/dashboard#absa-analytics" class="nav-item">
-          <span>📊 Phân Tích ABSA</span>
+        <a href="/dashboard#destinations-section" class="nevio-link">
+          <span>Điểm Đến</span>
         </a>
-        <router-link to="/danh-sach-danh-gia" class="nav-item">
-          <span>📝 874 Đánh Giá TripAdvisor</span>
+        <a href="/dashboard#absa-section" class="nevio-link">
+          <span>Phân Tích ABSA</span>
+        </a>
+        <router-link to="/danh-sach-danh-gia" class="nevio-link">
+          <span>874 Đánh Giá TripAdvisor</span>
         </router-link>
-        <router-link to="/phieu-cua-toi" class="nav-item nav-item--voucher">
-          <span>🎟️ Phiếu Của Tôi</span>
-          <span v-if="soPhieu > 0" class="voucher-count">{{ soPhieu }}</span>
+        <router-link to="/phieu-cua-toi" class="nevio-link">
+          <span>Ví Phiếu Của Tôi</span>
         </router-link>
       </nav>
 
-      <!-- 3. Actions: Role Switcher + Theme Toggle + Auth -->
-      <div class="header-actions">
-        <!-- Bộ chọn vai trò kiểm thử nhanh (1-click) -->
-        <div class="role-selector-pill" :title="'Vai trò hiện tại: ' + vaiTroHienTai">
-          <span class="role-icon">{{ roleIcon }}</span>
-          <select v-model="vaiTroHienTai" @change="doiVaiTro" class="role-select">
-            <option value="du_khach">Du khách (Tourist)</option>
-            <option value="admin">Quản trị viên (Admin)</option>
-            <option value="nha_phan_tich">Nhà phân tích (Analyst)</option>
-            <option value="doi_tac">Đối tác du lịch (Partner)</option>
-            <option value="kiem_duyet">Kiểm duyệt viên (Mod)</option>
+      <!-- 3. Right Header Actions -->
+      <div class="nevio-nav-actions">
+        <!-- Quick Role Switcher Pill with Lucide Icon -->
+        <div class="role-pill-select" :title="'Vai trò kiểm thử: ' + vaiTroHienTai">
+          <component :is="iconVaiTro" :size="15" class="role-icon-svg" />
+          <select v-model="vaiTroHienTai" @change="doiVaiTro" class="role-select-box">
+            <option value="du_khach">Du khách</option>
+            <option value="admin">Admin</option>
+            <option value="nha_phan_tich">Analyst</option>
+            <option value="doi_tac">Partner</option>
           </select>
         </div>
 
-        <ThemeToggle />
+        <!-- Theme Toggle Button -->
+        <button 
+          @click="toggleTheme" 
+          class="btn-theme-pill"
+          :title="isDark ? 'Chuyển sang giao diện Sáng' : 'Chuyển sang giao diện Tối'"
+        >
+          <Sun v-if="isDark" :size="16" />
+          <Moon v-else :size="16" />
+        </button>
 
-        <!-- User Profile / Auth Button -->
-        <div v-if="daDangNhap" class="user-profile">
-          <div class="avatar-circle" :title="tenNguoiDung">
-            {{ tenNguoiDung.charAt(0).toUpperCase() }}
-          </div>
-          <button @click="dangXuat" class="btn-ghost-logout" title="Đăng xuất khỏi hệ thống">
-            Đăng xuất
+        <!-- Auth Button (Nevio White Pill Style) -->
+        <div v-if="daDangNhap" class="user-pill-wrap">
+          <span class="user-avatar-char">{{ tenNguoiDung.charAt(0).toUpperCase() }}</span>
+          <button @click="dangXuat" class="btn-logout-text" title="Đăng xuất">
+            <LogOut :size="14" />
           </button>
         </div>
-        <router-link v-else to="/dang-nhap" class="btn-nevio-login">
-          Đăng nhập
+        <router-link v-else to="/dang-nhap" class="btn-nevio-white">
+          Đăng Nhập
         </router-link>
 
-        <!-- Mobile Hamburger Toggle -->
-        <button class="mobile-menu-btn" @click="moMenuMobile = !moMenuMobile" aria-label="Mở menu điều hướng">
-          <span v-if="!moMenuMobile">☰</span>
-          <span v-else>✕</span>
+        <!-- Mobile Menu Toggle Button -->
+        <button class="btn-mobile-burger" @click="moMenuMobile = !moMenuMobile" aria-label="Mở menu">
+          <X v-if="moMenuMobile" :size="20" />
+          <Menu v-else :size="20" />
         </button>
       </div>
     </div>
 
-    <!-- Mobile Drawer Navigation -->
-    <div v-if="moMenuMobile" class="mobile-drawer" @click.self="moMenuMobile = false">
-      <div class="drawer-content">
-        <router-link to="/dashboard" class="drawer-item" @click="moMenuMobile = false">
-          🏝️ Khám Phá Điểm Đến
-        </router-link>
-        <a href="/dashboard#absa-analytics" class="drawer-item" @click="moMenuMobile = false">
-          📊 Phân Tích Khía Cạnh ABSA
-        </a>
-        <router-link to="/danh-sach-danh-gia" class="drawer-item" @click="moMenuMobile = false">
-          📝 874 Đánh Giá TripAdvisor
-        </router-link>
-        <router-link to="/phieu-cua-toi" class="drawer-item" @click="moMenuMobile = false">
-          🎟️ Phiếu Của Tôi
-        </router-link>
-        <div class="drawer-divider"></div>
-        <div class="drawer-role">
-          <label>Chuyển vai trò hệ thống:</label>
-          <select v-model="vaiTroHienTai" @change="doiVaiTro" class="role-select-mobile">
-            <option value="du_khach">Du khách</option>
-            <option value="admin">Quản trị viên</option>
-            <option value="nha_phan_tich">Nhà phân tích</option>
-            <option value="doi_tac">Đối tác du lịch</option>
-          </select>
-        </div>
-      </div>
+    <!-- Mobile Drawer -->
+    <div v-if="moMenuMobile" class="nevio-mobile-dropdown">
+      <router-link to="/dashboard" class="mobile-nav-item" @click="moMenuMobile = false">
+        Khám Phá Điểm Đến
+      </router-link>
+      <a href="/dashboard#destinations-section" class="mobile-nav-item" @click="moMenuMobile = false">
+        Danh Sách 7 Điểm Đến
+      </a>
+      <a href="/dashboard#absa-section" class="mobile-nav-item" @click="moMenuMobile = false">
+        Phân Tích 5 Khía Cạnh ABSA
+      </a>
+      <router-link to="/danh-sach-danh-gia" class="mobile-nav-item" @click="moMenuMobile = false">
+        874 Đánh Giá TripAdvisor
+      </router-link>
+      <router-link to="/phieu-cua-toi" class="mobile-nav-item" @click="moMenuMobile = false">
+        Ví Phiếu Của Tôi
+      </router-link>
+      <div class="mobile-divider"></div>
+      <router-link to="/dang-nhap" class="mobile-nav-item" @click="moMenuMobile = false">
+        Cổng Xác Thực 5 Vai Trò
+      </router-link>
     </div>
   </header>
 </template>
@@ -107,25 +104,42 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ThemeToggle from './ThemeToggle.vue'
+import { 
+  Compass, 
+  User, 
+  ShieldCheck, 
+  BarChart2, 
+  Briefcase, 
+  Sun, 
+  Moon, 
+  LogOut, 
+  Menu, 
+  X 
+} from 'lucide-vue-next'
 
 const router = useRouter()
 const moMenuMobile = ref(false)
-const soPhieu = ref(2)
+const isDark = ref(false)
 
-const tenNguoiDung = ref(localStorage.getItem('ho_ten') || 'Khách trải nghiệm')
+const tenNguoiDung = ref(localStorage.getItem('ho_ten') || 'Khách')
 const vaiTroHienTai = ref(localStorage.getItem('vai_tro') || 'du_khach')
 const daDangNhap = ref(!!localStorage.getItem('token'))
 
-const roleIcon = computed(() => {
+const iconVaiTro = computed(() => {
   switch (vaiTroHienTai.value) {
-    case 'admin': return '👑'
-    case 'nha_phan_tich': return '📊'
-    case 'doi_tac': return '🏨'
-    case 'kiem_duyet': return '🛡️'
-    default: return '🧳'
+    case 'admin': return ShieldCheck
+    case 'nha_phan_tich': return BarChart2
+    case 'doi_tac': return Briefcase
+    default: return User
   }
 })
+
+function toggleTheme() {
+  isDark.value = !isDark.value
+  const mode = isDark.value ? 'dark' : 'light'
+  document.documentElement.setAttribute('data-theme', mode)
+  localStorage.setItem('dt12_theme', mode)
+}
 
 function doiVaiTro() {
   localStorage.setItem('vai_tro', vaiTroHienTai.value)
@@ -141,294 +155,260 @@ function dangXuat() {
   localStorage.removeItem('ho_ten')
   localStorage.removeItem('vai_tro')
   daDangNhap.value = false
-  tenNguoiDung.value = 'Khách trải nghiệm'
+  tenNguoiDung.value = 'Khách'
   vaiTroHienTai.value = 'du_khach'
   router.push('/dang-nhap')
 }
 
 onMounted(() => {
-  const localTickets = localStorage.getItem('dt12_my_tickets')
-  if (localTickets) {
-    try {
-      soPhieu.value = JSON.parse(localTickets).length
-    } catch (e) {}
+  const savedTheme = localStorage.getItem('dt12_theme')
+  if (savedTheme === 'dark') {
+    isDark.value = true
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else {
+    isDark.value = false
+    document.documentElement.setAttribute('data-theme', 'light')
   }
 })
 </script>
 
 <style scoped>
-.nevio-header {
-  position: sticky;
+.nevio-navbar-wrap {
+  width: 100%;
+  position: absolute;
   top: 0;
-  z-index: 100;
-  background: var(--mau-header, rgba(255, 255, 255, 0.9));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--duong-vien, #e2e8f0);
-  transition: all 0.25s ease;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 24px 36px;
 }
 
-.header-container {
-  max-width: var(--max-rong, 1280px);
-  margin: 0 auto;
-  padding: 12px 24px;
+.nevio-navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Brand */
-.brand-block {
+.nevio-brand {
   display: flex;
   align-items: center;
   gap: 12px;
   text-decoration: none;
 }
 
-.brand-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(2, 132, 199, 0.15));
-  border: 1px solid rgba(16, 185, 129, 0.3);
+.nevio-logo-icon {
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
 }
 
-.brand-text {
-  display: flex;
-  flex-direction: column;
+.nevio-brand-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
-.brand-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--mau-chu, #0f172a);
-  line-height: 1.2;
-}
-
-.brand-title strong {
-  color: #059669;
-}
-
-.brand-tag {
-  font-size: 11px;
-  color: var(--mau-chu-phu, #64748b);
-  letter-spacing: 0.04em;
+.tag-dt12 {
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  margin-left: 4px;
+  vertical-align: middle;
 }
 
 /* Nav Links */
-.nav-links {
+.nevio-nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 28px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 24px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.nav-item {
-  padding: 8px 14px;
-  border-radius: 9999px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--mau-chu-phu, #475569);
+.nevio-link {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: color 0.2s ease;
 }
 
-.nav-item:hover, .nav-item.router-link-active {
-  color: #0284c7;
-  background: var(--mau-nhan-sang, rgba(2, 132, 199, 0.08));
+.nevio-link:hover, .nevio-link.router-link-active {
+  color: #fddd62;
 }
 
-.nav-item--voucher {
-  position: relative;
+.link-dot {
+  font-size: 16px;
+  color: #fddd62;
+  line-height: 1;
 }
 
-.voucher-count {
-  background: #10b981;
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 9999px;
-  margin-left: 2px;
-}
-
-/* Header Actions */
-.header-actions {
+/* Right Actions */
+.nevio-nav-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.role-selector-pill {
+.role-pill-select {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: var(--mau-nen-the, #ffffff);
-  border: 1px solid var(--duong-vien, #e2e8f0);
-  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 5px 12px;
   border-radius: 9999px;
-  box-shadow: var(--bong-nhe);
+  color: #ffffff;
 }
 
-.role-icon {
-  font-size: 14px;
+.role-icon-svg {
+  color: #fddd62;
 }
 
-.role-select {
+.role-select-box {
   border: none;
   background: transparent;
-  font-size: 12.5px;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--mau-chu, #0f172a);
   cursor: pointer;
   outline: none;
   font-family: inherit;
 }
 
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.role-select-box option {
+  background: #303030;
+  color: #ffffff;
 }
 
-.avatar-circle {
-  width: 32px;
-  height: 32px;
+.btn-theme-pill {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10b981, #0284c7);
-  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-theme-pill:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-nevio-white {
+  background: #ffffff;
+  color: #303030 !important;
+  font-size: 14px;
   font-weight: 700;
-  font-size: 13px;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-}
-
-.btn-ghost-logout {
-  background: transparent;
-  border: 1px solid var(--duong-vien, #e2e8f0);
+  padding: 8px 22px;
   border-radius: 9999px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--mau-chu-phu, #64748b);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-ghost-logout:hover {
-  background: #fee2e2;
-  color: #dc2626;
-  border-color: #fca5a5;
-}
-
-.btn-nevio-login {
-  background: #0f172a;
-  color: #ffffff !important;
-  padding: 8px 18px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 600;
+  text-decoration: none;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-[data-theme="dark"] .btn-nevio-login {
-  background: #38bdf8;
-  color: #0b1120 !important;
+.btn-nevio-white:hover {
+  background: #fddd62;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
-.btn-nevio-login:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+.user-pill-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 9999px;
 }
 
-.mobile-menu-btn {
-  display: none;
+.user-avatar-char {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fddd62;
+  color: #303030;
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout-text {
   background: transparent;
-  border: 1px solid var(--duong-vien, #cbd5e1);
-  padding: 6px 10px;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.btn-mobile-burger {
+  display: none;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 6px;
   border-radius: 8px;
-  font-size: 18px;
-  color: var(--mau-chu, #0f172a);
   cursor: pointer;
 }
 
-/* Mobile Drawer */
-.mobile-drawer {
-  position: fixed;
-  top: 65px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 99;
-}
-
-.drawer-content {
-  background: var(--mau-nen-phu, #ffffff);
-  padding: 20px;
+.nevio-mobile-dropdown {
+  background: #1e2434;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-bottom: 1px solid var(--duong-vien);
-  box-shadow: var(--bong-the);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.drawer-item {
-  font-size: 15px;
+.mobile-nav-item {
+  color: #ffffff;
+  font-size: 14.5px;
   font-weight: 600;
-  padding: 10px 14px;
-  border-radius: 10px;
-  color: var(--mau-chu);
+  padding: 6px 0;
+  text-decoration: none;
 }
 
-.drawer-item:hover {
-  background: var(--mau-nhan-sang);
-  color: var(--mau-nhan);
-}
-
-.drawer-divider {
+.mobile-divider {
   height: 1px;
-  background: var(--duong-vien);
-  margin: 6px 0;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
 }
 
-.drawer-role {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--mau-chu-phu);
-}
-
-.role-select-mobile {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--duong-vien);
-  background: var(--mau-nen);
-  color: var(--mau-chu);
-  font-size: 14px;
-}
-
-@media (max-width: 900px) {
-  .nav-links {
+@media (max-width: 1024px) {
+  .nevio-nav-links {
     display: none;
   }
-  .role-selector-pill {
-    display: none;
-  }
-  .mobile-menu-btn {
-    display: block;
+  .btn-mobile-burger {
+    display: flex;
   }
 }
 </style>

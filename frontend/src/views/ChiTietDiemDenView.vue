@@ -5,7 +5,7 @@
       <div class="banner-gradient-overlay"></div>
       <div class="nevio-container banner-content">
         <nav class="detail-breadcrumbs" aria-label="Đường dẫn điều hướng">
-          <router-link to="/dashboard">Khám Phá Điểm Đến</router-link>
+          <router-link to="/dashboard" class="crumb-link">Khám Phá Điểm Đến</router-link>
           <span class="sep">/</span>
           <span class="active">{{ diemDen.tinh_thanh }}</span>
           <span class="sep">/</span>
@@ -14,11 +14,15 @@
 
         <div class="banner-meta-row">
           <span :class="['banner-status-badge', 'badge-' + (diemDen.trang_thai_wilson || 'binh_thuong')]">
-            <span v-if="diemDen.trang_thai_wilson === 'diem_sang'">✨ Điểm sáng du lịch (Wilson >= 0.70)</span>
-            <span v-else-if="diemDen.trang_thai_wilson === 'canh_bao'">⚠️ Cần chú ý chất lượng</span>
-            <span v-else>🔷 Hoạt động ổn định</span>
+            <Sparkles v-if="diemDen.trang_thai_wilson === 'diem_sang'" :size="13" />
+            <AlertTriangle v-else-if="diemDen.trang_thai_wilson === 'canh_bao'" :size="13" />
+            <CheckCircle2 v-else :size="13" />
+            <span>{{ diemDen.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng du lịch (Wilson >= 0.70)' : diemDen.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý chất lượng' : 'Hoạt động ổn định' }}</span>
           </span>
-          <span class="banner-category-tag">📍 {{ diemDen.dia_chi || diemDen.tinh_thanh }}</span>
+          <span class="banner-category-tag">
+            <MapPin :size="13" />
+            <span>{{ diemDen.dia_chi || diemDen.tinh_thanh }}</span>
+          </span>
         </div>
 
         <h1 class="banner-title">{{ diemDen.ten }}</h1>
@@ -26,14 +30,14 @@
 
         <div class="banner-score-strip">
           <div class="score-pill">
-            <span class="star-icon">★</span>
+            <Star :size="15" class="fill-yellow" />
             <span class="score-val">{{ diemDen.diem_danh_tieng_tb || '4.8' }}</span>
             <span class="score-max">/ 5.0</span>
           </div>
           <span class="strip-divider">·</span>
           <span class="review-total-text"><strong>{{ diemDen.tong_luot_danh_gia || 164 }}</strong> đánh giá TripAdvisor đã kiểm chứng</span>
           <span class="strip-divider">·</span>
-          <span class="positive-rate-text">🟢 {{ diemDen.ty_le_tich_cuc || 93.2 }}% Tích cực</span>
+          <span class="positive-rate-text">● {{ diemDen.ty_le_tich_cuc || 93.2 }}% Tích cực</span>
         </div>
       </div>
     </div>
@@ -42,7 +46,6 @@
     <div class="nevio-container detail-main-layout">
       <!-- Loading State -->
       <div v-if="dangTai" class="loading-box">
-        <span class="spinner"></span>
         <p>Đang tải thông tin điểm đến và phân tích ABSA...</p>
       </div>
 
@@ -66,11 +69,11 @@
             </div>
           </section>
 
-          <!-- ABSA 5-Aspect Scorecards -->
+          <!-- ABSA 5-Aspect Scorecards with Lucide Icons -->
           <section class="detail-card">
             <div class="card-head-flex">
               <div>
-                <div class="nevio-eyebrow emerald">PHÂN TÍCH CHUYÊN SÂU</div>
+                <span class="nevio-label">(PHÂN TÍCH CHUYÊN SÂU)</span>
                 <h2 class="card-section-title">Chỉ Số Đánh Giá Theo 5 Khía Cạnh (ABSA)</h2>
               </div>
               <span class="badge-pill absa-chip">PhoBERT AI</span>
@@ -83,7 +86,7 @@
               <!-- Aspect 1: Cảnh quan -->
               <div class="aspect-metric-row">
                 <div class="aspect-row-top">
-                  <span class="aspect-title">🏞️ Cảnh quan &amp; Không gian</span>
+                  <span class="aspect-title"><Trees :size="16" class="icon-inline" /> Cảnh quan &amp; Không gian</span>
                   <span class="aspect-score-text">{{ diemDen.khia_canh.canh_quan?.diem }}/5.0 ({{ diemDen.khia_canh.canh_quan?.tich_cuc }}% Tích cực)</span>
                 </div>
                 <div class="aspect-bar">
@@ -96,7 +99,7 @@
               <!-- Aspect 2: Dịch vụ -->
               <div class="aspect-metric-row">
                 <div class="aspect-row-top">
-                  <span class="aspect-title">🛎️ Chất lượng phục vụ</span>
+                  <span class="aspect-title"><HeartHandshake :size="16" class="icon-inline" /> Chất lượng phục vụ</span>
                   <span class="aspect-score-text">{{ diemDen.khia_canh.dich_vu?.diem }}/5.0 ({{ diemDen.khia_canh.dich_vu?.tich_cuc }}% Tích cực)</span>
                 </div>
                 <div class="aspect-bar">
@@ -109,7 +112,7 @@
               <!-- Aspect 3: Ẩm thực -->
               <div class="aspect-metric-row">
                 <div class="aspect-row-top">
-                  <span class="aspect-title">🍜 Ẩm thực &amp; Đặc sản</span>
+                  <span class="aspect-title"><Utensils :size="16" class="icon-inline" /> Ẩm thực &amp; Đặc sản</span>
                   <span class="aspect-score-text">{{ diemDen.khia_canh.am_thuc?.diem }}/5.0 ({{ diemDen.khia_canh.am_thuc?.tich_cuc }}% Tích cực)</span>
                 </div>
                 <div class="aspect-bar">
@@ -122,7 +125,7 @@
               <!-- Aspect 4: Vệ sinh -->
               <div class="aspect-metric-row">
                 <div class="aspect-row-top">
-                  <span class="aspect-title">🧹 Vệ sinh &amp; Môi trường</span>
+                  <span class="aspect-title"><Sparkles :size="16" class="icon-inline" /> Vệ sinh &amp; Môi trường</span>
                   <span class="aspect-score-text">{{ diemDen.khia_canh.ve_sinh?.diem }}/5.0 ({{ diemDen.khia_canh.ve_sinh?.tich_cuc }}% Tích cực)</span>
                 </div>
                 <div class="aspect-bar">
@@ -135,7 +138,7 @@
               <!-- Aspect 5: Giá cả -->
               <div class="aspect-metric-row">
                 <div class="aspect-row-top">
-                  <span class="aspect-title">💵 Giá cả &amp; Độ minh bạch</span>
+                  <span class="aspect-title"><DollarSign :size="16" class="icon-inline" /> Giá cả &amp; Độ minh bạch</span>
                   <span class="aspect-score-text">{{ diemDen.khia_canh.gia_ca?.diem }}/5.0 ({{ diemDen.khia_canh.gia_ca?.tich_cuc }}% Tích cực)</span>
                 </div>
                 <div class="aspect-bar">
@@ -151,11 +154,12 @@
           <section class="detail-card">
             <div class="card-head-flex">
               <div>
-                <div class="nevio-eyebrow gold">ĐÁNH GIÁ NGUYÊN VĂN</div>
-                <h2 class="card-section-title">Nhận Xét Của Du Khách Về Điểm Đến</h2>
+                <span class="nevio-label">(TRIPADVISOR REVIEWS)</span>
+                <h2 class="card-section-title">Đánh Giá Của Du Khách Về Điểm Đến</h2>
               </div>
               <router-link to="/danh-sach-danh-gia" class="link-all-reviews">
-                Xem toàn bộ trong CSDL →
+                <span>Xem toàn bộ 874 đánh giá</span>
+                <ArrowRight :size="14" />
               </router-link>
             </div>
 
@@ -170,7 +174,7 @@
                     </div>
                   </div>
                   <div class="rev-rating">
-                    <span v-for="s in 5" :key="s" :class="['star', { filled: s <= rev.diem_so }]">★</span>
+                    <Star v-for="s in 5" :key="s" :size="13" :class="['star', { 'fill-yellow': s <= rev.diem_so }]" />
                   </div>
                 </div>
                 <h4 class="rev-title">{{ rev.tieu_de }}</h4>
@@ -189,12 +193,12 @@
           </section>
         </div>
 
-        <!-- ================= RIGHT COLUMN: SIDEBAR (WILSON & VOUCHER) ================= -->
+        <!-- ================= RIGHT COLUMN: SIDEBAR ================= -->
         <aside class="detail-sidebar">
           <!-- Wilson Reputation Rating Widget -->
           <div class="sidebar-widget widget-wilson">
             <div class="widget-head">
-              <span class="w-icon">⚖️</span>
+              <ShieldCheck :size="22" class="text-emerald" />
               <div>
                 <h3 class="widget-title">Định Tuyến Wilson Score</h3>
                 <span class="widget-sub">Khoảng tin cậy chuẩn 95%</span>
@@ -233,10 +237,10 @@
             </p>
           </div>
 
-          <!-- Voucher & Tour Referral Booking Box (Rubric Requirement) -->
+          <!-- Voucher & Tour Referral Booking Box -->
           <div class="sidebar-widget widget-voucher">
             <div class="widget-head">
-              <span class="w-icon">🎟️</span>
+              <Ticket :size="22" class="text-amber" />
               <div>
                 <h3 class="widget-title">Ưu Đãi Đối Tác Du Lịch</h3>
                 <span class="widget-sub">Liên kết chính sách đối tác bảo chứng</span>
@@ -259,7 +263,8 @@
                   class="btn-claim-voucher"
                   :disabled="dangXuLy"
                 >
-                  {{ dangXuLy ? 'Đang tạo mã bảo mật...' : '⚡ Nhận Phiếu Ưu Đãi Ngay' }}
+                  <Ticket :size="16" />
+                  <span>{{ dangXuLy ? 'Đang tạo mã bảo mật...' : 'Nhận Phiếu Ưu Đãi Ngay' }}</span>
                 </button>
               </div>
 
@@ -268,7 +273,7 @@
                 <div class="claimed-header">
                   <span class="badge-success">✓ Đã cấp phiếu</span>
                   <div class="countdown-clock">
-                    ⏳ Còn lại: <strong>{{ phut }}:{{ giay }}</strong>
+                    <Clock :size="13" class="inline" /> Còn lại: <strong>{{ phut }}:{{ giay }}</strong>
                   </div>
                 </div>
 
@@ -282,7 +287,8 @@
                   class="btn-redirect-partner"
                   :disabled="dangXuLy"
                 >
-                  {{ dangXuLy ? 'Đang kết nối đối tác...' : '🚀 Tiếp tục sang trang Đối tác →' }}
+                  <span>{{ dangXuLy ? 'Đang kết nối đối tác...' : 'Tiếp tục sang trang Đối tác' }}</span>
+                  <ExternalLink :size="14" />
                 </button>
               </div>
 
@@ -293,7 +299,9 @@
 
             <!-- Case B: Not Qualified ("Bình thường" or "Cảnh báo") -->
             <div v-else class="voucher-locked-box">
-              <div class="locked-icon">🔒</div>
+              <div class="locked-icon">
+                <ShieldCheck :size="32" class="text-muted" />
+              </div>
               <h4>Chưa Mở Gói Ưu Đãi Đối Tác</h4>
               <p>
                 Để bảo vệ quyền lợi du khách, hệ thống chỉ hỗ trợ kết nối ưu đãi với các điểm đến được thuật toán Wilson Score xác nhận danh hiệu <strong>"Điểm sáng du lịch"</strong> (cận dưới \(\ge 0.70\)).
@@ -304,10 +312,10 @@
             </div>
           </div>
 
-          <!-- Crisis Early Warning Card -->
+          <!-- Safety Widget -->
           <div class="sidebar-widget widget-safety">
             <div class="safety-indicator safe">
-              <span class="safety-icon">🛡️</span>
+              <ShieldCheck :size="24" class="text-emerald" />
               <div>
                 <h4>Chỉ Số An Toàn Danh Tiếng</h4>
                 <p>Không ghi nhận bất kỳ đột biến tiêu cực nào trong 30 ngày qua.</p>
@@ -329,6 +337,22 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { 
+  MapPin, 
+  Sparkles, 
+  Star, 
+  Trees, 
+  HeartHandshake, 
+  Utensils, 
+  DollarSign, 
+  Ticket, 
+  Clock, 
+  ExternalLink, 
+  ShieldCheck, 
+  AlertTriangle, 
+  CheckCircle2, 
+  ArrowRight 
+} from 'lucide-vue-next'
 import { DataService, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
 const route = useRoute()
@@ -339,7 +363,7 @@ const diemDen = ref(null)
 const dangTai = ref(true)
 const dangXuLy = ref(false)
 const phieu = ref(null)
-const conLai = ref(900) // 15 phút = 900 giây
+const conLai = ref(900)
 let timer = null
 
 const danhGiaCuaDiemDen = ref([])
@@ -386,7 +410,6 @@ onMounted(async () => {
   dangTai.value = true
   try {
     diemDen.value = await DataService.layChiTietDiemDen(id)
-    // Lọc các review thuộc điểm đến này
     const filteredReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => 
       r.diem_den_id == id || 
       (diemDen.value && r.ten_diem_den.toLowerCase().includes(diemDen.value.ten.toLowerCase()))
@@ -407,25 +430,21 @@ onUnmounted(() => {
   padding-bottom: 80px;
 }
 
-/* =================================================== */
-/* 1. HERO COVER BANNER                                */
-/* =================================================== */
 .detail-hero-banner {
   position: relative;
-  min-height: 380px;
+  min-height: 400px;
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: flex-end;
-  padding: 40px 0;
+  padding: 50px 0;
   color: white;
 }
 
 .banner-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.88) 100%);
-  backdrop-filter: blur(2px);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%);
 }
 
 .banner-content {
@@ -438,14 +457,18 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 13.5px;
   color: #cbd5e1;
   margin-bottom: 16px;
 }
 
-.detail-breadcrumbs a {
-  color: #38bdf8;
+.crumb-link {
+  color: #fddd62;
   text-decoration: none;
+}
+
+.crumb-link:hover {
+  text-decoration: underline;
 }
 
 .detail-breadcrumbs .sep {
@@ -466,26 +489,42 @@ onUnmounted(() => {
 }
 
 .banner-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   font-weight: 700;
   padding: 5px 14px;
-  border-radius: 9999px;
-  backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+}
+
+.badge-diem_sang {
+  background: #059669;
+}
+
+.badge-binh_thuong {
+  background: #0284c7;
+}
+
+.badge-canh_bao {
+  background: #e11d48;
 }
 
 .banner-category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 13px;
   color: #e2e8f0;
   background: rgba(255, 255, 255, 0.15);
   padding: 4px 12px;
-  border-radius: 9999px;
-  backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
 }
 
 .banner-title {
-  font-size: 38px;
-  font-weight: 800;
-  line-height: 1.2;
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 900;
+  line-height: 1.15;
   margin-bottom: 6px;
   color: #ffffff;
 }
@@ -504,14 +543,14 @@ onUnmounted(() => {
 }
 
 .score-pill {
-  background: #f59e0b;
-  color: #000000;
+  background: #fddd62;
+  color: #303030;
   padding: 5px 12px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 14px;
 }
 
@@ -530,9 +569,7 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-/* =================================================== */
-/* 2. TWO-COLUMN LAYOUT                                */
-/* =================================================== */
+/* Two-column layout */
 .detail-main-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -548,11 +585,11 @@ onUnmounted(() => {
 }
 
 .detail-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 20px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   padding: 30px;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
 }
 
 .card-head-flex {
@@ -579,8 +616,12 @@ onUnmounted(() => {
 }
 
 .absa-chip {
-  background: rgba(2, 132, 199, 0.12);
+  background: rgba(2, 132, 199, 0.1);
   color: #0284c7;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
 }
 
 .destination-description-text {
@@ -601,12 +642,7 @@ onUnmounted(() => {
   height: 180px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid var(--duong-vien);
-  transition: transform 0.25s ease;
-}
-
-.gallery-thumb:hover {
-  transform: scale(1.02);
+  border: 1px solid var(--nevio-border);
 }
 
 /* Aspect Progress Bars */
@@ -629,9 +665,16 @@ onUnmounted(() => {
 }
 
 .aspect-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14.5px;
   font-weight: 700;
   color: var(--mau-chu);
+}
+
+.icon-inline {
+  color: var(--nevio-orange);
 }
 
 .aspect-score-text {
@@ -643,13 +686,13 @@ onUnmounted(() => {
 .aspect-bar {
   display: flex;
   height: 9px;
-  border-radius: 9999px;
-  background: #e2e8f0;
+  border-radius: var(--radius-full);
+  background: #e7e5e4;
   overflow: hidden;
 }
 
-.bar-pos { background: #10b981; }
-.bar-neg { background: #ef4444; }
+.bar-pos { background: #059669; }
+.bar-neg { background: #e11d48; }
 
 .aspect-comment {
   font-size: 12.5px;
@@ -659,10 +702,13 @@ onUnmounted(() => {
 
 /* Review List */
 .link-all-reviews {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13.5px;
   font-weight: 700;
-  color: #0284c7;
-  text-decoration: underline;
+  color: var(--nevio-orange);
+  text-decoration: none;
 }
 
 .dest-reviews-list {
@@ -672,9 +718,9 @@ onUnmounted(() => {
 }
 
 .dest-review-item {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  border-radius: 14px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
   padding: 18px;
 }
 
@@ -695,12 +741,12 @@ onUnmounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0284c7, #10b981);
-  color: white;
+  background: var(--nevio-dark);
+  color: var(--nevio-yellow);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 13px;
 }
 
@@ -713,6 +759,11 @@ onUnmounted(() => {
 .rev-date {
   font-size: 11.5px;
   color: var(--mau-chu-mo);
+}
+
+.rev-rating {
+  display: flex;
+  gap: 2px;
 }
 
 .rev-title {
@@ -742,24 +793,11 @@ onUnmounted(() => {
   border-radius: 4px;
 }
 
-.tag-tich_cuc {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-}
+.tag-tich_cuc { background: #ecfdf5; color: #047857; }
+.tag-trung_tinh { background: #f5f5f4; color: #57534e; }
+.tag-tieu_cuc { background: #fff1f2; color: #be123c; }
 
-.tag-trung_tinh {
-  background: rgba(100, 116, 139, 0.12);
-  color: #475569;
-}
-
-.tag-tieu_cuc {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
-}
-
-/* =================================================== */
-/* 3. SIDEBAR                                          */
-/* =================================================== */
+/* Sidebar */
 .detail-sidebar {
   display: flex;
   flex-direction: column;
@@ -769,11 +807,11 @@ onUnmounted(() => {
 }
 
 .sidebar-widget {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 20px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
 }
 
 .widget-head {
@@ -781,10 +819,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   margin-bottom: 18px;
-}
-
-.w-icon {
-  font-size: 24px;
 }
 
 .widget-title {
@@ -799,11 +833,10 @@ onUnmounted(() => {
   color: var(--mau-chu-mo);
 }
 
-/* Wilson Widget Details */
 .wilson-stat-box {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  border-radius: 14px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
   padding: 16px;
   text-align: center;
   margin-bottom: 16px;
@@ -820,7 +853,7 @@ onUnmounted(() => {
 .w-val {
   font-size: 34px;
   font-weight: 800;
-  color: #0284c7;
+  color: var(--mau-chu);
 }
 
 .w-denom {
@@ -850,14 +883,14 @@ onUnmounted(() => {
   font-size: 11.5px;
   line-height: 1.5;
   color: var(--mau-chu-mo);
-  border-top: 1px dashed var(--duong-vien);
+  border-top: 1px dashed var(--nevio-border);
   padding-top: 12px;
 }
 
 /* Voucher Widget */
 .voucher-badge-promo {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(2, 132, 199, 0.15));
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(5, 150, 105, 0.1);
+  border: 1px solid rgba(5, 150, 105, 0.25);
   padding: 12px;
   border-radius: 12px;
   font-size: 13.5px;
@@ -876,27 +909,29 @@ onUnmounted(() => {
 
 .btn-claim-voucher {
   width: 100%;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #059669;
   color: white;
   border: none;
   padding: 12px 20px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
-  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-claim-voucher:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+  background: #047857;
 }
 
 .claimed-box {
-  background: var(--mau-nen);
-  border: 1px solid #10b981;
-  border-radius: 14px;
+  background: var(--nevio-light-grey);
+  border: 1px solid #059669;
+  border-radius: var(--radius-md);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -920,13 +955,13 @@ onUnmounted(() => {
 
 .countdown-clock {
   font-size: 12.5px;
-  color: #dc2626;
+  color: #e11d48;
   font-weight: 600;
 }
 
 .ticket-code-display {
-  background: var(--mau-nen-the);
-  border: 1px dashed var(--duong-vien);
+  background: var(--nevio-card-bg);
+  border: 1px dashed var(--nevio-border);
   padding: 10px;
   border-radius: 8px;
   text-align: center;
@@ -947,20 +982,22 @@ onUnmounted(() => {
 
 .btn-redirect-partner {
   width: 100%;
-  background: #0f172a;
+  background: var(--nevio-dark);
   color: white;
   border: none;
   padding: 10px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 [data-theme="dark"] .btn-redirect-partner {
-  background: #38bdf8;
-  color: #0b1120;
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
 }
 
 .partner-transparency-note {
@@ -970,17 +1007,15 @@ onUnmounted(() => {
   margin-top: 14px;
 }
 
-/* Locked Voucher Box */
 .voucher-locked-box {
   text-align: center;
   padding: 16px;
-  background: var(--mau-nen);
-  border-radius: 14px;
-  border: 1px dashed var(--duong-vien);
+  background: var(--nevio-light-grey);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--nevio-border);
 }
 
 .locked-icon {
-  font-size: 28px;
   margin-bottom: 8px;
 }
 
@@ -1007,15 +1042,10 @@ onUnmounted(() => {
   border-radius: 6px;
 }
 
-/* Safety Widget */
 .safety-indicator {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.safety-icon {
-  font-size: 26px;
 }
 
 .safety-indicator h4 {
@@ -1030,18 +1060,9 @@ onUnmounted(() => {
   color: var(--mau-chu-phu);
 }
 
-.loading-box {
-  text-align: center;
-  padding: 60px;
-  grid-column: 1 / -1;
-}
-
 @media (max-width: 900px) {
   .detail-main-layout {
     grid-template-columns: 1fr;
-  }
-  .banner-title {
-    font-size: 28px;
   }
 }
 </style>

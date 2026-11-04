@@ -1,103 +1,85 @@
-/* frontend/src/assets/tokens.css - Hệ thống thiết kế phong cách Nevio Webflow Luxury Travel */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+/* frontend/src/assets/tokens.css - Hệ thống thiết kế chuẩn xác Nevio Webflow Template */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 
 :root {
-  /* 1. Bảng màu Sáng (Nevio Light Theme) */
-  --font-chinh: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-tieu-de: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-sang-trong: 'Playfair Display', Georgia, serif;
+  /* 1. BẢNG MÀU CHÍNH THỨC TỪ NEVIO WEBFLOW TEMPLATE */
+  --nevio-dark: #303030;
+  --nevio-dark-800: rgba(48, 48, 48, 0.8);
+  --nevio-dark-700: rgba(48, 48, 48, 0.7);
+  --nevio-dark-100: rgba(48, 48, 48, 0.08);
 
-  --mau-nen: #f8fafc;
+  --nevio-yellow: #fddd62;
+  --nevio-dark-yellow: #e5be29;
+  --nevio-orange: #d97706;
+  --nevio-orange-light: #fffbeb;
+
+  --nevio-white: #ffffff;
+  --nevio-white-700: rgba(255, 255, 255, 0.7);
+  --nevio-white-500: rgba(255, 255, 255, 0.5);
+  --nevio-white-200: rgba(255, 255, 255, 0.2);
+  --nevio-white-100: rgba(255, 255, 255, 0.1);
+
+  --nevio-light-grey: #f5f5f4;
+  --nevio-card-bg: #ffffff;
+  --nevio-border: #e7e5e4;
+  --nevio-border-subtle: #f5f5f4;
+
+  --nevio-emerald: #059669;
+  --nevio-emerald-light: #ecfdf5;
+  --nevio-emerald-border: #a7f3d0;
+
+  --nevio-ruby: #e11d48;
+  --nevio-ruby-light: #fff1f2;
+
+  --nevio-sky: #0284c7;
+  --nevio-sky-light: #f0f9ff;
+
+  /* Typography */
+  --font-chinh: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+  /* Spacing & Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  --radius-hero: 36px;
+  --radius-full: 9999px;
+
+  /* Shadow */
+  --shadow-subtle: 0 4px 20px -2px rgba(48, 48, 48, 0.06);
+  --shadow-card: 0 10px 30px -4px rgba(48, 48, 48, 0.08);
+  --shadow-hover: 0 20px 40px -6px rgba(48, 48, 48, 0.12);
+
+  /* Mapping sang biến dự án chung */
+  --mau-nen: #fcfcfb;
   --mau-nen-phu: #ffffff;
   --mau-nen-the: #ffffff;
-  --mau-nen-the-hover: #ffffff;
-  --mau-header: rgba(255, 255, 255, 0.88);
-
-  --mau-chu: #0f172a;
-  --mau-chu-phu: #64748b;
-  --mau-chu-mo: #94a3b8;
-
-  --mau-chinh: #0f172a;          /* Charcoal luxury */
-  --mau-chinh-hover: #1e293b;
-  --mau-nhan: #0284c7;           /* Sky ocean */
-  --mau-nhan-sang: #e0f2fe;
-
-  --mau-vang-sang: #f59e0b;       /* Gold / Amber */
-  --mau-vang-nhe: #fef3c7;
-  --mau-vang-chu: #b45309;
-
-  --mau-tich-cuc: #10b981;      /* Emerald Green */
-  --mau-tich-cuc-nhe: #ecfdf5;
-  --mau-tich-cuc-chu: #047857;
-
-  --mau-tieu-cuc: #ef4444;      /* Ruby Red */
-  --mau-tieu-cuc-nhe: #fef2f2;
-  --mau-tieu-cuc-chu: #b91c1c;
-
-  --mau-trung-tinh: #64748b;    /* Slate */
-  --mau-trung-tinh-nhe: #f1f5f9;
-
-  --duong-vien: #e2e8f0;
-  --duong-vien-nhe: #f1f5f9;
-  --duong-vien-dam: #cbd5e1;
-
-  --bong-nhe: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --bong-the: 0 10px 25px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
-  --bong-noi: 0 20px 35px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
-  --bong-nhan: 0 12px 24px -4px rgba(2, 132, 199, 0.25);
-
-  --bo-tron-nho: 8px;
-  --bo-tron-vua: 14px;
-  --bo-tron-lon: 22px;
-  --bo-tron-tron: 9999px;
-
-  --chieu-cao-cham: 44px;
-  --max-rong: 1280px;
+  --mau-chu: #303030;
+  --mau-chu-phu: #78716c;
+  --mau-chu-mo: #a8a29e;
+  --duong-vien: #e7e5e4;
+  --max-rong: 1320px;
 }
 
-/* 2. Bảng màu Tối (Nevio Luxury Dark Theme) */
+/* Chủ đề Tối (Nevio Luxury Midnight Dark) */
 [data-theme="dark"] {
-  --mau-nen: #0b0f19;
-  --mau-nen-phu: #111827;
-  --mau-nen-the: #151d30;
-  --mau-nen-the-hover: #1a243c;
-  --mau-header: rgba(11, 15, 25, 0.88);
-
-  --mau-chu: #f8fafc;
-  --mau-chu-phu: #94a3b8;
-  --mau-chu-mo: #64748b;
-
-  --mau-chinh: #38bdf8;
-  --mau-chinh-hover: #0284c7;
-  --mau-nhan: #38bdf8;
-  --mau-nhan-sang: rgba(56, 189, 248, 0.15);
-
-  --mau-vang-sang: #fbbf24;
-  --mau-vang-nhe: rgba(251, 191, 36, 0.15);
-  --mau-vang-chu: #fef08a;
-
-  --mau-tich-cuc: #34d399;
-  --mau-tich-cuc-nhe: rgba(52, 211, 153, 0.15);
-  --mau-tich-cuc-chu: #a7f3d0;
-
-  --mau-tieu-cuc: #f87171;
-  --mau-tieu-cuc-nhe: rgba(248, 113, 113, 0.15);
-  --mau-tieu-cuc-chu: #fca5a5;
-
-  --mau-trung-tinh: #94a3b8;
-  --mau-trung-tinh-nhe: rgba(148, 163, 184, 0.15);
-
-  --duong-vien: #1e293b;
-  --duong-vien-nhe: rgba(255, 255, 255, 0.06);
-  --duong-vien-dam: #334155;
-
-  --bong-nhe: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  --bong-the: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
-  --bong-noi: 0 20px 35px -5px rgba(0, 0, 0, 0.6);
-  --bong-nhan: 0 12px 24px -4px rgba(56, 189, 248, 0.2);
+  --mau-nen: #14171f;
+  --mau-nen-phu: #1a1f2c;
+  --mau-nen-the: #1e2434;
+  --mau-chu: #f5f5f4;
+  --mau-chu-phu: #a8a29e;
+  --mau-chu-mo: #78716c;
+  --duong-vien: #2d3548;
+  --nevio-light-grey: #1a1f2c;
+  --nevio-card-bg: #1e2434;
+  --nevio-border: #2d3548;
+  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 10px 30px -4px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 20px 40px -6px rgba(0, 0, 0, 0.5);
 }
 
-/* 3. Global Reset & Typography */
+/* Global Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -120,86 +102,101 @@ a {
   text-decoration: none;
 }
 
-/* 4. Common Micro-Components (Nevio Style) */
-.nevio-container {
-  max-width: var(--max-rong);
-  margin: 0 auto;
-  padding: 0 24px;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
 }
 
-.nevio-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: var(--bo-tron-tron);
-  font-size: 12px;
+/* 2. NEVIO COMMON LABELS & HEADINGS */
+.nevio-label {
+  color: var(--nevio-orange);
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: var(--mau-nhan-sang);
-  color: var(--mau-nhan);
-  border: 1px solid rgba(2, 132, 199, 0.2);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  display: inline-block;
 }
 
-.nevio-eyebrow.gold {
-  background: var(--mau-vang-nhe);
-  color: var(--mau-vang-chu);
-  border-color: rgba(245, 158, 11, 0.25);
+.nevio-label.center {
+  text-align: center;
+  display: block;
 }
 
-.nevio-eyebrow.emerald {
-  background: var(--mau-tich-cuc-nhe);
-  color: var(--mau-tich-cuc-chu);
-  border-color: rgba(16, 185, 129, 0.25);
+.text-yellow {
+  color: var(--nevio-yellow);
 }
 
-/* Badges */
-.badge-pill {
+/* 3. NEVIO ICONIC YELLOW BUTTON */
+.nevio-btn-yellow {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--bo-tron-tron);
-  font-size: 12px;
-  font-weight: 600;
+  background-color: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: var(--radius-full);
+  padding: 5px 6px 5px 22px;
+  gap: 14px;
+  box-shadow: 0 4px 15px rgba(253, 221, 98, 0.35);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.badge-diem-sang {
-  background: #10b981;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+.nevio-btn-yellow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(253, 221, 98, 0.45);
 }
 
-.badge-binh-thuong {
-  background: #0284c7;
-  color: #ffffff;
+.nevio-btn-yellow .btn-icon-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--nevio-dark);
+  color: var(--nevio-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
 }
 
-.badge-canh-bao {
-  background: #ef4444;
-  color: #ffffff;
-  animation: pulse-alert 2s infinite;
+.nevio-btn-yellow:hover .btn-icon-circle {
+  transform: translateX(3px);
 }
 
-@keyframes pulse-alert {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.75; }
+/* Nevio Dark Button */
+.nevio-btn-dark {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--nevio-dark);
+  color: var(--nevio-white);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: var(--radius-full);
+  padding: 8px 20px;
+  gap: 10px;
+  transition: all 0.25s ease;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.nevio-btn-dark:hover {
+  background-color: #000000;
+  transform: translateY(-2px);
 }
-::-webkit-scrollbar-track {
-  background: var(--mau-nen);
+
+[data-theme="dark"] .nevio-btn-dark {
+  background-color: var(--nevio-yellow);
+  color: var(--nevio-dark);
 }
-::-webkit-scrollbar-thumb {
-  background: var(--duong-vien-dam);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--mau-chu-mo);
+
+/* 4. CONTAINER */
+.nevio-container {
+  width: 100%;
+  max-width: var(--max-rong);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
 }

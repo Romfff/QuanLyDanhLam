@@ -3,7 +3,7 @@
     <div class="nevio-container">
       <!-- 1. Header Section -->
       <div class="page-header">
-        <div class="nevio-eyebrow emerald">CƠ SỞ DỮ LIỆU ĐÁNH GIÁ THỰC TẾ</div>
+        <span class="nevio-label center">(CƠ SỞ DỮ LIỆU ĐÁNH GIÁ THỰC TẾ)</span>
         <h1 class="page-title">Trung Tâm Dữ Liệu 874 Đánh Giá TripAdvisor</h1>
         <p class="page-subtitle">
           Toàn bộ đánh giá được thu thập khách quan từ TripAdvisor, phân tách và gán nhãn sắc thái theo 5 khía cạnh du lịch bằng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong>.
@@ -14,7 +14,7 @@
       <div class="reviews-filter-bar">
         <!-- Row 1: Keyword Search -->
         <div class="filter-search-box">
-          <span class="search-icon">🔍</span>
+          <Search :size="18" class="search-icon text-muted" />
           <input 
             v-model="tuKhoa" 
             @input="thucHienLoc"
@@ -22,7 +22,9 @@
             placeholder="Tìm theo nội dung đánh giá, từ khóa, người đánh giá..." 
             class="input-search-text"
           />
-          <button v-if="tuKhoa" @click="tuKhoa = ''; thucHienLoc()" class="btn-clear-input">✕</button>
+          <button v-if="tuKhoa" @click="tuKhoa = ''; thucHienLoc()" class="btn-clear-input">
+            <X :size="16" />
+          </button>
         </div>
 
         <!-- Row 2: Dropdowns -->
@@ -43,11 +45,11 @@
             <label>Khía cạnh ABSA:</label>
             <select v-model="locKhiaCanh" @change="thucHienLoc" class="filter-select">
               <option value="">Mọi khía cạnh</option>
-              <option value="Cảnh quan">🏞️ Cảnh quan & Không gian</option>
-              <option value="Dịch vụ">🛎️ Chất lượng phục vụ</option>
-              <option value="Ẩm thực">🍜 Ẩm thực & Đặc sản</option>
-              <option value="Vệ sinh">🧹 Vệ sinh & Môi trường</option>
-              <option value="Giá cả">💵 Giá cả & Minh bạch</option>
+              <option value="Cảnh quan">Cảnh quan &amp; Không gian</option>
+              <option value="Dịch vụ">Chất lượng phục vụ</option>
+              <option value="Ẩm thực">Ẩm thực &amp; Đặc sản</option>
+              <option value="Vệ sinh">Vệ sinh &amp; Môi trường</option>
+              <option value="Giá cả">Giá cả &amp; Minh bạch</option>
             </select>
           </div>
 
@@ -56,15 +58,16 @@
             <label>Sắc thái:</label>
             <select v-model="locSacThai" @change="thucHienLoc" class="filter-select">
               <option value="">Tất cả sắc thái</option>
-              <option value="tich_cuc">🟢 Tích cực</option>
-              <option value="trung_tinh">⚪ Trung tính</option>
-              <option value="tieu_cuc">🔴 Tiêu cực</option>
+              <option value="tich_cuc">Tích cực</option>
+              <option value="trung_tinh">Trung tính</option>
+              <option value="tieu_cuc">Tiêu cực</option>
             </select>
           </div>
 
           <!-- Reset Button -->
           <button @click="datLaiBoLoc" class="btn-reset">
-            Làm mới
+            <RotateCcw :size="14" />
+            <span>Làm mới</span>
           </button>
         </div>
       </div>
@@ -75,15 +78,14 @@
           Hiển thị <strong>{{ tongBanGhi }}</strong> đánh giá hợp lệ
         </div>
         <div class="ribbon-sentiment-stats">
-          <span class="ribbon-pill pill-pos">🟢 88.5% Khen ngợi</span>
-          <span class="ribbon-pill pill-neu">⚪ 7.5% Trung gian</span>
-          <span class="ribbon-pill pill-neg">🔴 4.0% Góp ý</span>
+          <span class="ribbon-pill pill-pos">● 88.5% Khen ngợi</span>
+          <span class="ribbon-pill pill-neu">● 7.5% Trung gian</span>
+          <span class="ribbon-pill pill-neg">● 4.0% Góp ý</span>
         </div>
       </div>
 
       <!-- 4. Reviews Grid -->
       <div v-if="dangTai" class="loading-state">
-        <span class="spinner"></span>
         <p>Đang tải dữ liệu đánh giá TripAdvisor...</p>
       </div>
 
@@ -98,20 +100,21 @@
               <div>
                 <h3 class="reviewer-name">{{ rev.nguoi_danh_gia || 'Du khách ẩn danh' }}</h3>
                 <span class="reviewer-sub">
-                  {{ rev.quoc_gia || 'Việt Nam 🇻🇳' }} · {{ rev.ngay_dang || '2026' }}
+                  {{ rev.quoc_gia || 'Việt Nam' }} · {{ rev.ngay_dang || '2026' }}
                 </span>
               </div>
             </div>
 
             <div class="rating-stars-badge">
-              <span v-for="s in 5" :key="s" :class="['star', { filled: s <= (rev.diem_so || 5) }]">★</span>
+              <Star v-for="s in 5" :key="s" :size="13" :class="['star', { 'fill-yellow': s <= (rev.diem_so || 5) }]" />
             </div>
           </div>
 
           <!-- Destination Tag -->
           <div class="review-destination-tag">
             <router-link :to="'/diem-den/' + (rev.diem_den_id || 1)">
-              📍 {{ rev.ten_diem_den }}
+              <MapPin :size="12" />
+              <span>{{ rev.ten_diem_den }}</span>
             </router-link>
           </div>
 
@@ -132,7 +135,9 @@
 
           <!-- Card Bottom: Verified Tag -->
           <div class="card-bottom">
-            <span class="verified-tag">✓ Đã kiểm chứng TripAdvisor</span>
+            <span class="verified-tag">
+              <CheckCircle2 :size="13" class="inline" /> Đã kiểm chứng TripAdvisor
+            </span>
             <span :class="['sentiment-indicator', 'sent-' + (rev.sac_thai || 'tich_cuc')]">
               {{ rev.sac_thai === 'tieu_cuc' ? 'Tiêu cực' : rev.sac_thai === 'trung_tinh' ? 'Trung tính' : 'Tích cực' }}
             </span>
@@ -142,7 +147,7 @@
 
       <!-- Empty State -->
       <div v-else class="empty-state-box">
-        <span class="empty-icon">📝</span>
+        <Search :size="32" class="text-muted mb-2" />
         <h3>Không tìm thấy đánh giá nào phù hợp</h3>
         <p>Vui lòng thử tìm kiếm bằng từ khóa khác hoặc xóa bớt các tiêu chí lọc.</p>
         <button @click="datLaiBoLoc" class="btn-reset">Làm mới bộ lọc</button>
@@ -184,7 +189,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { DataService, DANH_SACH_DIEM_DEN_FALLBACK } from '../services/dataService'
+import { 
+  Search, 
+  MapPin, 
+  Star, 
+  CheckCircle2, 
+  RotateCcw, 
+  X 
+} from 'lucide-vue-next'
+import { DataService } from '../services/dataService'
 
 const route = useRoute()
 const router = useRouter()
@@ -241,7 +254,7 @@ function chuyenTrang(soTrang) {
   trangHienTai.value = soTrang
   capNhatUrl()
   taiDanhGia()
-  window.scrollTo({ top: 300, behavior: 'smooth' })
+  window.scrollTo({ top: 250, behavior: 'smooth' })
 }
 
 function capNhatUrl() {
@@ -272,7 +285,7 @@ onMounted(async () => {
 }
 
 .page-title {
-  font-size: 34px;
+  font-size: clamp(26px, 3.5vw, 36px);
   font-weight: 800;
   color: var(--mau-chu);
   margin-bottom: 12px;
@@ -284,15 +297,12 @@ onMounted(async () => {
   color: var(--mau-chu-phu);
 }
 
-/* =================================================== */
-/* 2. FILTER BAR                                       */
-/* =================================================== */
 .reviews-filter-bar {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 20px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   padding: 20px 24px;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
@@ -303,15 +313,10 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  border-radius: 12px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
   padding: 8px 16px;
-}
-
-.search-icon {
-  font-size: 16px;
-  opacity: 0.7;
 }
 
 .input-search-text {
@@ -328,8 +333,9 @@ onMounted(async () => {
   background: transparent;
   border: none;
   color: var(--mau-chu-mo);
-  font-size: 14px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .filter-dropdowns-row {
@@ -357,9 +363,9 @@ onMounted(async () => {
 .filter-select {
   width: 100%;
   padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--duong-vien);
-  background: var(--mau-nen);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-card-bg);
   color: var(--mau-chu);
   font-size: 13.5px;
   font-family: inherit;
@@ -368,27 +374,25 @@ onMounted(async () => {
 }
 
 .btn-reset {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
   color: var(--mau-chu-phu);
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
   white-space: nowrap;
 }
 
 .btn-reset:hover {
   background: #fee2e2;
   color: #dc2626;
-  border-color: #fca5a5;
 }
 
-/* =================================================== */
-/* 3. SUMMARY RIBBON                                   */
-/* =================================================== */
 .filter-summary-ribbon {
   display: flex;
   justify-content: space-between;
@@ -417,16 +421,13 @@ onMounted(async () => {
   font-size: 12px;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
-.pill-pos { background: rgba(16, 185, 129, 0.12); color: #047857; }
-.pill-neu { background: rgba(100, 116, 139, 0.12); color: #475569; }
-.pill-neg { background: rgba(239, 68, 68, 0.12); color: #b91c1c; }
+.pill-pos { background: #ecfdf5; color: #047857; }
+.pill-neu { background: #f5f5f4; color: #57534e; }
+.pill-neg { background: #fff1f2; color: #be123c; }
 
-/* =================================================== */
-/* 4. REVIEWS GRID                                     */
-/* =================================================== */
 .reviews-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -434,11 +435,11 @@ onMounted(async () => {
 }
 
 .review-nevio-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 18px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -446,7 +447,7 @@ onMounted(async () => {
 
 .review-nevio-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--bong-noi);
+  box-shadow: var(--shadow-card);
 }
 
 .card-head {
@@ -466,12 +467,12 @@ onMounted(async () => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0284c7, #10b981);
-  color: white;
+  background: var(--nevio-dark);
+  color: var(--nevio-yellow);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 14px;
 }
 
@@ -492,15 +493,18 @@ onMounted(async () => {
 }
 
 .star {
-  color: #cbd5e1;
-  font-size: 15px;
+  color: #d6d3d1;
 }
 
-.star.filled {
-  color: #f59e0b;
+.fill-yellow {
+  color: #fddd62;
+  fill: #fddd62;
 }
 
 .review-destination-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12.5px;
   font-weight: 700;
   color: #0284c7;
@@ -508,6 +512,9 @@ onMounted(async () => {
 }
 
 .review-destination-tag a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   text-decoration: none;
 }
 
@@ -541,36 +548,25 @@ onMounted(async () => {
 .aspect-pill {
   font-size: 11.5px;
   padding: 3px 8px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-.aspect-tich_cuc {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.aspect-trung_tinh {
-  background: rgba(100, 116, 139, 0.12);
-  color: #475569;
-  border: 1px solid rgba(100, 116, 139, 0.25);
-}
-
-.aspect-tieu_cuc {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
+.aspect-tich_cuc { background: #ecfdf5; color: #047857; }
+.aspect-trung_tinh { background: #f5f5f4; color: #57534e; }
+.aspect-tieu_cuc { background: #fff1f2; color: #be123c; }
 
 .card-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-top: 14px;
-  border-top: 1px solid var(--duong-vien);
+  border-top: 1px solid var(--nevio-border);
 }
 
 .verified-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 11.5px;
   color: #059669;
   font-weight: 600;
@@ -584,12 +580,9 @@ onMounted(async () => {
 }
 
 .sent-tich_cuc { background: #ecfdf5; color: #047857; }
-.sent-trung_tinh { background: #f1f5f9; color: #475569; }
-.sent-tieu_cuc { background: #fef2f2; color: #b91c1c; }
+.sent-trung_tinh { background: #f5f5f4; color: #57534e; }
+.sent-tieu_cuc { background: #fff1f2; color: #be123c; }
 
-/* =================================================== */
-/* 5. PAGINATION                                       */
-/* =================================================== */
 .pagination-wrapper {
   display: flex;
   justify-content: center;
@@ -599,15 +592,14 @@ onMounted(async () => {
 }
 
 .btn-page {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
   color: var(--mau-chu);
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .btn-page:disabled {
@@ -626,9 +618,9 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  border: 1px solid var(--duong-vien);
-  background: var(--mau-nen-the);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-card-bg);
   color: var(--mau-chu);
   font-size: 13px;
   font-weight: 600;
@@ -636,36 +628,27 @@ onMounted(async () => {
 }
 
 .page-num.active {
-  background: #0f172a;
-  color: #ffffff;
-  border-color: #0f172a;
+  background: var(--nevio-dark);
+  color: var(--nevio-white);
+  border-color: var(--nevio-dark);
 }
 
 [data-theme="dark"] .page-num.active {
-  background: #38bdf8;
-  color: #0b1120;
-  border-color: #38bdf8;
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  border-color: var(--nevio-yellow);
 }
 
 .empty-state-box, .loading-state {
   text-align: center;
   padding: 60px 20px;
-  background: var(--mau-nen-the);
-  border-radius: 20px;
-  border: 1px dashed var(--duong-vien);
+  background: var(--nevio-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--nevio-border);
   margin-top: 20px;
 }
 
-.empty-icon {
-  font-size: 40px;
-  margin-bottom: 12px;
-  display: block;
-}
-
 @media (max-width: 768px) {
-  .page-title {
-    font-size: 26px;
-  }
   .filter-dropdowns-row {
     flex-direction: column;
     align-items: stretch;

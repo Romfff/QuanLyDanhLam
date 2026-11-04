@@ -1,211 +1,295 @@
 <template>
-  <div class="nevio-dashboard">
+  <div class="nevio-dashboard-page">
     <!-- ======================================================== -->
-    <!-- 1. HERO SECTION (Nevio Webflow Travel Style)             -->
+    <!-- 1. NEVIO HERO SECTION (Exact Webflow Layout)            -->
     <!-- ======================================================== -->
-    <section class="nevio-hero">
-      <div class="nevio-container">
-        <div class="hero-content">
-          <div class="nevio-eyebrow emerald">
-            <span class="pulse-dot"></span>
-            HỆ THỐNG GIÁM SÁT DANH TIẾNG & CÔNG NGHỆ ABSA DU LỊCH ĐT-12
+    <section class="section hero-section">
+      <!-- Background Image & Overlay -->
+      <div class="hero-image-wrap">
+        <img 
+          src="https://cdn.prod.website-files.com/6a5f49f597e097761e089dbc/6a5f608a1795f7f89a8b565f_hero-girl.webp" 
+          alt="Nevio Travel Hero" 
+          class="hero-image"
+        />
+        <div class="hero-overlay"></div>
+      </div>
+
+      <!-- Giant Translucent Background Word "Discover" -->
+      <div class="display-wrap">
+        <div class="display hero">Discover</div>
+      </div>
+
+      <!-- Navbar Sitting Inside Top of Hero -->
+      <Navbar />
+
+      <!-- Hero Main Content (Bottom Left & Right) -->
+      <div class="hero-content-wrapper">
+        <div class="hero-text-col">
+          <div class="nevio-eyebrow-pill">
+            <span class="eyebrow-dot"></span>
+            HỆ THỐNG GIÁM SÁT DANH TIẾNG &amp; CÔNG NGHỆ ABSA DU LỊCH ĐT-12
           </div>
-          <h1 class="hero-title">
-            Phân Tích Ý Kiến Du Khách &amp;<br/>
-            <span class="text-gradient">Định Vị Điểm Đến Sáng Giá</span>
+          <h1 class="hero-heading">
+            Khám Phá Kỳ Quan &amp;<br/>
+            <span class="text-yellow">Giám Sát Danh Tiếng</span>
           </h1>
-          <p class="hero-subtitle">
-            Ứng dụng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong> kết hợp Lexicon chuyên sâu phân tích 5 khía cạnh cốt lõi từ <strong>874 đánh giá TripAdvisor</strong>, áp dụng thuật toán <strong>Wilson Score</strong> chuẩn mực để xếp hạng danh tiếng minh bạch.
+          <p class="hero-paragraph">
+            Ứng dụng mô hình trí tuệ nhân tạo <strong>PhoBERT</strong> kết hợp <strong>Wilson Score</strong> phân tích 5 khía cạnh cốt lõi từ <strong>874 đánh giá TripAdvisor</strong>, định vị điểm đến sáng giá và bảo vệ quyền lợi du khách.
           </p>
+        </div>
 
-          <!-- Floating Interactive Hero Search & Filter Bar -->
-          <div class="hero-search-card">
-            <div class="search-field">
-              <span class="field-icon">🔍</span>
-              <input 
-                v-model="tuKhoaTimKiem" 
-                type="text" 
-                placeholder="Tìm điểm đến (Hạ Long, Tràng An, Phú Quốc...)" 
-                class="search-input"
-              />
+        <div class="hero-action-col">
+          <a href="#destinations-section" class="nevio-btn-yellow">
+            <span class="button-text">Khám Phá Điểm Đến</span>
+            <div class="btn-icon-circle">
+              <ArrowRight :size="18" />
             </div>
+          </a>
+        </div>
+      </div>
 
-            <div class="search-divider"></div>
+      <!-- Torn Paper Brush Bottom Shape (Transition into light section) -->
+      <div class="hero-bottom-shape-wrap">
+        <img 
+          src="https://cdn.prod.website-files.com/6a5f49f597e097761e089dbc/6a5f6420da257b09ca8f49f9_hero-shape.svg" 
+          alt="Nevio Torn Shape" 
+          class="hero-bottom-shape"
+        />
+      </div>
+    </section>
 
-            <div class="search-field">
-              <span class="field-icon">📍</span>
-              <select v-model="locTinhThanh" class="search-select">
-                <option value="">Tất cả địa phương</option>
-                <option value="Quảng Ninh">Quảng Ninh (Hạ Long)</option>
-                <option value="Ninh Bình">Ninh Bình (Tràng An, Hang Múa)</option>
-                <option value="Kiên Giang">Kiên Giang (Phú Quốc)</option>
-              </select>
-            </div>
-
-            <div class="search-divider"></div>
-
-            <div class="search-field">
-              <span class="field-icon">⭐</span>
-              <select v-model="locTrangThai" class="search-select">
-                <option value="">Tất cả trạng thái Wilson</option>
-                <option value="diem_sang">✨ Điểm sáng du lịch (>= 0.70)</option>
-                <option value="binh_thuong">🔷 Hoạt động ổn định</option>
-                <option value="canh_bao">⚠️ Cần cải thiện chất lượng</option>
-              </select>
-            </div>
-
-            <button @click="datLaiBoLoc" class="btn-reset-filter" title="Xóa bộ lọc">
-              Làm mới
-            </button>
+    <!-- ======================================================== -->
+    <!-- 2. SEARCH & FILTER TOOLBAR                               -->
+    <!-- ======================================================== -->
+    <section class="section-search-toolbar">
+      <div class="nevio-container">
+        <div class="floating-search-bar">
+          <div class="search-field flex-grow">
+            <Search :size="18" class="field-icon-svg text-muted" />
+            <input 
+              v-model="tuKhoaTimKiem" 
+              type="text" 
+              placeholder="Tìm kiếm điểm đến (Hạ Long, Tràng An, Phú Quốc...)" 
+              class="field-input"
+            />
           </div>
 
-          <!-- Hero Metrics Counters -->
-          <div class="hero-stats-grid">
-            <div class="stat-box">
-              <div class="stat-number">874</div>
-              <div class="stat-label">Đánh giá TripAdvisor</div>
-              <div class="stat-trend positive">↑ Dữ liệu cào thực tế</div>
+          <div class="bar-divider"></div>
+
+          <div class="search-field">
+            <MapPin :size="18" class="field-icon-svg text-muted" />
+            <select v-model="locTinhThanh" class="field-select">
+              <option value="">Tất cả địa phương</option>
+              <option value="Quảng Ninh">Quảng Ninh (Hạ Long)</option>
+              <option value="Ninh Bình">Ninh Bình (Tràng An, Hang Múa)</option>
+              <option value="Kiên Giang">Kiên Giang (Phú Quốc)</option>
+            </select>
+          </div>
+
+          <div class="bar-divider"></div>
+
+          <div class="search-field">
+            <ShieldCheck :size="18" class="field-icon-svg text-muted" />
+            <select v-model="locTrangThai" class="field-select">
+              <option value="">Tất cả trạng thái Wilson</option>
+              <option value="diem_sang">Điểm sáng du lịch (>= 0.70)</option>
+              <option value="binh_thuong">Hoạt động ổn định</option>
+              <option value="canh_bao">Cần chú ý cải thiện</option>
+            </select>
+          </div>
+
+          <button @click="datLaiBoLoc" class="btn-clear-filter" title="Làm mới bộ lọc">
+            <RotateCcw :size="15" />
+            <span>Làm mới</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 3. ABOUT US / SYSTEM OVERVIEW STATS                      -->
+    <!-- ======================================================== -->
+    <section class="section section-about">
+      <div class="nevio-container">
+        <div class="common-heading-wrapper text-center">
+          <span class="nevio-label center">(GIỚI THIỆU HỆ THỐNG ĐT-12)</span>
+          <h2 class="heading-style-h3 about-heading">
+            Nền tảng trí tuệ nhân tạo giám sát danh tiếng điểm đến du lịch Việt Nam với dữ liệu thực nghiệm kiểm chứng độc lập.
+          </h2>
+        </div>
+
+        <!-- 4 Stats Cards with Lucide Icons -->
+        <div class="stats-grid-wrapper">
+          <div class="nevio-stat-card">
+            <div class="stat-icon-wrap bg-sky">
+              <MessageSquareQuote :size="24" class="text-sky" />
             </div>
-            <div class="stat-box">
-              <div class="stat-number">7</div>
-              <div class="stat-label">Điểm đến trọng điểm</div>
-              <div class="stat-trend">Quảng Ninh · Ninh Bình · Phú Quốc</div>
+            <div class="stat-main-number">874</div>
+            <div class="stat-title">Đánh Giá TripAdvisor</div>
+            <p class="stat-caption">Dữ liệu cào thực tế từ du khách toàn cầu</p>
+          </div>
+
+          <div class="nevio-stat-card">
+            <div class="stat-icon-wrap bg-emerald">
+              <Compass :size="24" class="text-emerald" />
             </div>
-            <div class="stat-box">
-              <div class="stat-number">94.6%</div>
-              <div class="stat-label">Độ chính xác ABSA</div>
-              <div class="stat-trend positive">PhoBERT F1-Score 0.89</div>
+            <div class="stat-main-number">7</div>
+            <div class="stat-title">Điểm Đến Trọng Điểm</div>
+            <p class="stat-caption">Quảng Ninh · Ninh Bình · Phú Quốc</p>
+          </div>
+
+          <div class="nevio-stat-card">
+            <div class="stat-icon-wrap bg-amber">
+              <BarChart3 :size="24" class="text-amber" />
             </div>
-            <div class="stat-box">
-              <div class="stat-number">95%</div>
-              <div class="stat-label">Khoảng tin cậy Wilson</div>
-              <div class="stat-trend">Phân bổ nhị thức khách quan</div>
+            <div class="stat-main-number">94.6%</div>
+            <div class="stat-title">Độ Chính Xác ABSA</div>
+            <p class="stat-caption">Mô hình PhoBERT F1-Score 0.89</p>
+          </div>
+
+          <div class="nevio-stat-card">
+            <div class="stat-icon-wrap bg-purple">
+              <ShieldCheck :size="24" class="text-purple" />
             </div>
+            <div class="stat-main-number">95%</div>
+            <div class="stat-title">Khoảng Tin Cậy Wilson</div>
+            <p class="stat-caption">Định tuyến nhị thức công tâm, minh bạch</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- 2. CURATED DESTINATION SHOWCASE (Nevio Cards Grid)       -->
+    <!-- 4. CURATED DESTINATIONS (Nevio Packages Cards Layout)    -->
     <!-- ======================================================== -->
-    <section class="section-destinations">
+    <section id="destinations-section" class="section section-destinations">
       <div class="nevio-container">
-        <div class="section-header">
+        <div class="destinations-header-row">
           <div>
-            <div class="nevio-eyebrow gold">KHÁM PHÁ DANH TIẾNG</div>
-            <h2 class="section-title">Danh Sách Điểm Đến Du Lịch Tiêu Biểu</h2>
-            <p class="section-desc">
-              Phân tích tự động dựa trên toàn bộ phản hồi du khách thực tế được kiểm chứng độc lập.
+            <span class="nevio-label">(POPULAR DESTINATIONS)</span>
+            <h2 class="heading-style-h2">Điểm Đến Du Lịch Tiêu Biểu</h2>
+            <p class="destinations-desc">
+              Khám phá các kỳ quan và khu nghỉ dưỡng hàng đầu với chỉ số sắc thái được trích xuất trực tiếp từ phản hồi du khách.
             </p>
           </div>
-          <!-- Quick Filter Buttons -->
-          <div class="quick-filter-pills">
+
+          <!-- Quick Filter Pills -->
+          <div class="category-pills">
             <button 
               @click="locNhanh('')" 
-              :class="['filter-pill', { active: locTinhThanh === '' && locTrangThai === '' }]"
+              :class="['cat-pill', { active: locTinhThanh === '' && locTrangThai === '' }]"
             >
               Tất cả ({{ dsDiemDen.length }})
             </button>
             <button 
               @click="locNhanhTrangThai('diem_sang')" 
-              :class="['filter-pill', { active: locTrangThai === 'diem_sang' }]"
+              :class="['cat-pill', { active: locTrangThai === 'diem_sang' }]"
             >
-              ✨ Điểm sáng ({{ demDiemSang }})
+              <Sparkles :size="13" />
+              <span>Điểm sáng ({{ demDiemSang }})</span>
             </button>
             <button 
               @click="locNhanhTinh('Quảng Ninh')" 
-              :class="['filter-pill', { active: locTinhThanh === 'Quảng Ninh' }]"
+              :class="['cat-pill', { active: locTinhThanh === 'Quảng Ninh' }]"
             >
               Quảng Ninh
             </button>
             <button 
               @click="locNhanhTinh('Ninh Bình')" 
-              :class="['filter-pill', { active: locTinhThanh === 'Ninh Bình' }]"
+              :class="['cat-pill', { active: locTinhThanh === 'Ninh Bình' }]"
             >
               Ninh Bình
             </button>
             <button 
               @click="locNhanhTinh('Kiên Giang')" 
-              :class="['filter-pill', { active: locTinhThanh === 'Kiên Giang' }]"
+              :class="['cat-pill', { active: locTinhThanh === 'Kiên Giang' }]"
             >
               Phú Quốc
             </button>
           </div>
         </div>
 
-        <!-- Destination Cards Grid -->
-        <div v-if="diemDenHienThi.length > 0" class="dest-grid">
-          <article v-for="dest in diemDenHienThi" :key="dest.id" class="nevio-card">
-            <!-- Card Image Box with Overlay Tags -->
-            <div class="card-img-wrap">
-              <img :src="dest.hinh_anh" :alt="dest.ten" class="card-img" loading="lazy" />
-              <div class="card-overlay-gradient"></div>
+        <!-- Cards Grid -->
+        <div v-if="diemDenHienThi.length > 0" class="destinations-cards-grid">
+          <article v-for="dest in diemDenHienThi" :key="dest.id" class="nevio-destination-card">
+            <!-- Card Image Wrap with Overlays -->
+            <div class="dest-image-wrap">
+              <img :src="dest.hinh_anh" :alt="dest.ten" class="dest-card-img" loading="lazy" />
+              <div class="card-img-gradient"></div>
 
-              <!-- Top Left: Location Pin -->
-              <span class="overlay-tag location-tag">
-                📍 {{ dest.tinh_thanh }}
-              </span>
+              <!-- Top Left: Location Tag with Lucide MapPin -->
+              <div class="tag-location-pill">
+                <MapPin :size="13" />
+                <span>{{ dest.tinh_thanh }}</span>
+              </div>
 
-              <!-- Top Right: Wilson Status Pill -->
-              <span :class="['overlay-tag', 'status-tag', 'badge-' + (dest.trang_thai_wilson || 'binh_thuong')]">
-                <span v-if="dest.trang_thai_wilson === 'diem_sang'">✨ Điểm sáng</span>
-                <span v-else-if="dest.trang_thai_wilson === 'canh_bao'">⚠️ Cảnh báo</span>
-                <span v-else>🔷 Ổn định</span>
-              </span>
+              <!-- Top Right: Wilson Status Badge with Lucide Icon -->
+              <div :class="['tag-status-badge', 'status-' + (dest.trang_thai_wilson || 'binh_thuong')]">
+                <Sparkles v-if="dest.trang_thai_wilson === 'diem_sang'" :size="13" />
+                <AlertTriangle v-else-if="dest.trang_thai_wilson === 'canh_bao'" :size="13" />
+                <CheckCircle2 v-else :size="13" />
+                <span>{{ dest.trang_thai_wilson === 'diem_sang' ? 'Điểm sáng' : dest.trang_thai_wilson === 'canh_bao' ? 'Cần chú ý' : 'Ổn định' }}</span>
+              </div>
 
-              <!-- Bottom Right: Wilson Confidence Badge -->
-              <div class="overlay-wilson-score">
-                <span class="w-score">★ {{ dest.diem_danh_tieng_tb }}</span>
-                <span class="w-total">({{ dest.tong_luot_danh_gia }} reviews)</span>
+              <!-- Bottom Right: Rating & Review Count -->
+              <div class="tag-rating-pill">
+                <Star :size="14" class="fill-yellow" />
+                <span class="rating-num">{{ dest.diem_danh_tieng_tb }}</span>
+                <span class="rating-count">({{ dest.tong_luot_danh_gia }} reviews)</span>
               </div>
             </div>
 
             <!-- Card Content Body -->
-            <div class="card-body">
-              <div class="card-category">{{ dest.loai_hinh }}</div>
-              <h3 class="card-title">
+            <div class="dest-card-body">
+              <span class="dest-type-category">{{ dest.loai_hinh }}</span>
+              <h3 class="dest-card-title">
                 <router-link :to="'/diem-den/' + dest.id">
                   {{ dest.ten }}
                 </router-link>
               </h3>
-              <p class="card-desc">{{ dest.mo_ta }}</p>
+              <p class="dest-card-summary">{{ dest.mo_ta }}</p>
 
-              <!-- 5 ABSA Aspect Micro-Scores Chips -->
-              <div v-if="dest.khia_canh" class="aspect-chips">
-                <span class="aspect-chip" title="Cảnh quan & Không gian">
-                  🏞️ {{ dest.khia_canh.canh_quan?.diem }}/5
+              <!-- 5 ABSA Micro-Score Chips with Lucide Icons -->
+              <div v-if="dest.khia_canh" class="aspect-micro-chips">
+                <span class="micro-chip" title="Cảnh quan">
+                  <Trees :size="13" />
+                  <span>{{ dest.khia_canh.canh_quan?.diem }}/5</span>
                 </span>
-                <span class="aspect-chip" title="Chất lượng phục vụ">
-                  🛎️ {{ dest.khia_canh.dich_vu?.diem }}/5
+                <span class="micro-chip" title="Dịch vụ">
+                  <HeartHandshake :size="13" />
+                  <span>{{ dest.khia_canh.dich_vu?.diem }}/5</span>
                 </span>
-                <span class="aspect-chip" title="Ẩm thực & Đặc sản">
-                  🍜 {{ dest.khia_canh.am_thuc?.diem }}/5
+                <span class="micro-chip" title="Ẩm thực">
+                  <Utensils :size="13" />
+                  <span>{{ dest.khia_canh.am_thuc?.diem }}/5</span>
                 </span>
-                <span class="aspect-chip" title="Vệ sinh môi trường">
-                  🧹 {{ dest.khia_canh.ve_sinh?.diem }}/5
+                <span class="micro-chip" title="Vệ sinh">
+                  <Sparkles :size="13" />
+                  <span>{{ dest.khia_canh.ve_sinh?.diem }}/5</span>
                 </span>
-                <span class="aspect-chip" title="Giá cả & Minh bạch">
-                  💵 {{ dest.khia_canh.gia_ca?.diem }}/5
+                <span class="micro-chip" title="Giá cả">
+                  <DollarSign :size="13" />
+                  <span>{{ dest.khia_canh.gia_ca?.diem }}/5</span>
                 </span>
               </div>
 
-              <!-- Card Action Footer -->
-              <div class="card-actions">
-                <router-link :to="'/diem-den/' + dest.id" class="btn-card-detail">
-                  Xem chi tiết &amp; ABSA →
+              <!-- Action Row -->
+              <div class="dest-card-footer">
+                <router-link :to="'/diem-den/' + dest.id" class="link-detail-action">
+                  <span>Chi tiết &amp; ABSA</span>
+                  <ArrowRight :size="14" />
                 </router-link>
 
                 <button 
                   v-if="dest.trang_thai_wilson === 'diem_sang'"
                   @click="nhanUuDaiNhanh(dest)"
-                  class="btn-card-voucher"
-                  title="Nhận phiếu ưu đãi đối tác du lịch"
+                  class="btn-claim-pill"
                 >
-                  🎟️ Nhận ưu đãi
+                  <Ticket :size="14" />
+                  <span>Nhận ưu đãi</span>
                 </button>
-                <span v-else class="voucher-locked-hint" title="Chỉ mở ưu đãi khi điểm đến đạt chỉ số Điểm sáng">
-                  🔒 Ưu đãi khóa
+                <span v-else class="locked-voucher-text">
+                  Ưu đãi khóa
                 </span>
               </div>
             </div>
@@ -213,61 +297,55 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="empty-state-box">
-          <span class="empty-icon">🏝️</span>
-          <h3>Không tìm thấy điểm đến phù hợp với bộ lọc</h3>
-          <p>Hãy thử tìm kiếm với từ khóa khác hoặc bấm nút Làm mới bên dưới.</p>
-          <button @click="datLaiBoLoc" class="btn-reset-filter">Làm mới bộ lọc</button>
+        <div v-else class="empty-state-card">
+          <Search :size="36" class="text-muted mb-2" />
+          <h3>Không tìm thấy điểm đến nào phù hợp</h3>
+          <p>Hãy thử tìm kiếm với từ khóa khác hoặc bấm nút bên dưới để xem lại toàn bộ 7 điểm đến.</p>
+          <button @click="datLaiBoLoc" class="btn-reset-dark">Làm mới bộ lọc</button>
         </div>
       </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- 3. ABSA 5-ASPECT DEEP DIVE ANALYTICS SECTION            -->
+    <!-- 5. ABSA 5-ASPECT DEEP DIVE ANALYTICS SECTION            -->
     <!-- ======================================================== -->
-    <section id="absa-analytics" class="section-absa">
+    <section id="absa-section" class="section section-absa bg-light">
       <div class="nevio-container">
-        <div class="section-header">
-          <div>
-            <div class="nevio-eyebrow emerald">CÔNG NGHỆ TRÍ TUỆ NHÂN TẠO</div>
-            <h2 class="section-title">Phân Tích Chi Tiết 5 Khía Cạnh Du Lịch (ABSA)</h2>
-            <p class="section-desc">
-              Mô hình PhoBERT nhận diện chính xác các sắc thái (Tích cực · Trung tính · Tiêu cực) trên từng khía cạnh dịch vụ độc lập.
-            </p>
-          </div>
-          <div class="absa-badge-pill">
-            <span>⚡ Mô hình: PhoBERT-base + ABSA Lexicon</span>
-          </div>
+        <div class="common-heading-wrapper text-center">
+          <span class="nevio-label center">(CÔNG NGHỆ ABSA INTELLIGENCE)</span>
+          <h2 class="heading-style-h2">Phân Tích Chi Tiết 5 Khía Cạnh Du Lịch</h2>
+          <p class="absa-subheading">
+            Mô hình PhoBERT-base tự động trích xuất các ý kiến du khách và phân định 3 sắc thái độc lập cho từng khía cạnh dịch vụ.
+          </p>
         </div>
 
-        <div class="absa-grid">
-          <div v-for="item in danhSachKhiaCanh" :key="item.id" class="absa-card">
-            <div class="absa-card-head">
-              <div class="absa-icon-title">
-                <span class="absa-icon">{{ item.icon }}</span>
+        <div class="absa-cards-grid">
+          <div v-for="item in danhSachKhiaCanh" :key="item.id" class="absa-analysis-card">
+            <div class="absa-card-top">
+              <div class="absa-title-group">
+                <component :is="layIconKhiaCanh(item.id)" :size="20" class="absa-icon-svg" />
                 <div>
-                  <h4 class="absa-name">{{ item.ten }}</h4>
-                  <span class="absa-meta">{{ item.so_luot }} lượt phân tích trích xuất</span>
+                  <h4 class="absa-aspect-name">{{ item.ten }}</h4>
+                  <span class="absa-aspect-count">{{ item.so_luot }} lượt trích xuất</span>
                 </div>
               </div>
-              <div class="absa-score-badge">
-                <span class="score-num">{{ item.diem }}</span>
-                <span class="score-scale">/5.0</span>
+              <div class="absa-aspect-rating">
+                <span class="rate-val">{{ item.diem }}</span>
+                <span class="rate-max">/5.0</span>
               </div>
             </div>
 
-            <!-- Multi-color Sentiment Progress Bar -->
-            <div class="sentiment-meter">
-              <div class="meter-bar">
-                <div class="fill-positive" :style="{ width: item.tich_cuc + '%' }" :title="'Tích cực: ' + item.tich_cuc + '%'"></div>
-                <div class="fill-neutral" :style="{ width: item.trung_tinh + '%' }" :title="'Trung tính: ' + item.trung_tinh + '%'"></div>
-                <div class="fill-negative" :style="{ width: item.tieu_cuc + '%' }" :title="'Tiêu cực: ' + item.tieu_cuc + '%'"></div>
-              </div>
-              <div class="meter-labels">
-                <span class="lbl-pos">🟢 {{ item.tich_cuc }}% Tích cực</span>
-                <span class="lbl-neu">⚪ {{ item.trung_tinh }}% Trung tính</span>
-                <span class="lbl-neg">🔴 {{ item.tieu_cuc }}% Tiêu cực</span>
-              </div>
+            <!-- Sentiment Breakdown Progress Bar -->
+            <div class="sentiment-bar-track">
+              <div class="seg-positive" :style="{ width: item.tich_cuc + '%' }" :title="'Tích cực: ' + item.tich_cuc + '%'"></div>
+              <div class="seg-neutral" :style="{ width: item.trung_tinh + '%' }" :title="'Trung tính: ' + item.trung_tinh + '%'"></div>
+              <div class="seg-negative" :style="{ width: item.tieu_cuc + '%' }" :title="'Tiêu cực: ' + item.tieu_cuc + '%'"></div>
+            </div>
+
+            <div class="sentiment-legend-row">
+              <span class="leg-item text-positive">● {{ item.tich_cuc }}% Tích cực</span>
+              <span class="leg-item text-neutral">● {{ item.trung_tinh }}% Trung tính</span>
+              <span class="leg-item text-negative">● {{ item.tieu_cuc }}% Tiêu cực</span>
             </div>
           </div>
         </div>
@@ -275,53 +353,55 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 4. CRISIS MONITOR & WILSON SCORE EXPLANATION             -->
+    <!-- 6. CRISIS MONITOR & WILSON FORMULA                      -->
     <!-- ======================================================== -->
-    <section class="section-monitor">
+    <section class="section section-monitor">
       <div class="nevio-container">
-        <div class="monitor-card">
-          <div class="monitor-left">
-            <div class="monitor-status-badge">
-              <span class="pulse-beacon"></span>
-              TRẠNG THÁI HỆ THỐNG: AN TOÀN &amp; ỔN ĐỊNH
+        <div class="monitor-split-card">
+          <div class="monitor-col-info">
+            <div class="safe-indicator-badge">
+              <span class="status-pulse-dot"></span>
+              <span>TRẠNG THÁI HỆ THỐNG: AN TOÀN &amp; ỔN ĐỊNH</span>
             </div>
-            <h3 class="monitor-title">Giám Sát Cảnh Báo Sớm Khủng Hoảng Danh Tiếng</h3>
-            <p class="monitor-desc">
-              Thuật toán liên tục quét biến động tỷ lệ tiêu cực theo cửa sổ trượt 30 ngày. Trong 874 đánh giá TripAdvisor được phân tích, hệ thống không ghi nhận bất kỳ đột biến tiêu cực nào vượt ngưỡng cảnh báo 20%. Toàn bộ dữ liệu phản ánh mức độ tín nhiệm cao của du khách quốc tế và nội địa.
+            <h3 class="monitor-heading">Giám Sát Cảnh Báo Sớm Khủng Hoảng Danh Tiếng</h3>
+            <p class="monitor-paragraph">
+              Thuật toán tự động quét biến động tỷ lệ tiêu cực trong 874 đánh giá TripAdvisor theo cửa sổ trượt 30 ngày. Không ghi nhận bất kỳ đột biến tiêu cực nào vượt ngưỡng cảnh báo 20%, đảm bảo danh tiếng điểm đến được phản ánh chân thực.
             </p>
-            <div class="monitor-highlights">
-              <div class="m-highlight-item">
-                <span class="h-icon">🛡️</span>
+            <div class="monitor-features-list">
+              <div class="m-feature-row">
+                <ShieldCheck :size="20" class="text-emerald" />
                 <div>
-                  <strong>Chống đánh giá ảo (Spam)</strong>
-                  <p>Khoảng tin cậy Wilson trừng phạt điểm đến có ít đánh giá hoặc đánh giá tập trung bất thường.</p>
+                  <strong>Chống gian lận &amp; đánh giá ảo (Spam Reviews)</strong>
+                  <p>Khoảng tin cậy Wilson trừng phạt các điểm đến có ít đánh giá hoặc đánh giá tập trung bất thường.</p>
                 </div>
               </div>
-              <div class="m-highlight-item">
-                <span class="h-icon">⚖️</span>
+              <div class="m-feature-row">
+                <Award :size="20" class="text-amber" />
                 <div>
-                  <strong>Công thức Wilson Score</strong>
-                  <p>Tính cận dưới của tỷ lệ thành công nhị thức với độ tin cậy 95% (Z = 1.96), loại bỏ định kiến số đông.</p>
+                  <strong>Định tuyến Điểm sáng du lịch khách quan</strong>
+                  <p>Chỉ khi cận dưới của khoảng tin cậy 95% đạt từ 0.70 trở lên thì hệ thống mới cấp huy hiệu Điểm sáng và mở quyền nhận voucher.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="monitor-right">
-            <div class="formula-box">
-              <div class="formula-title">📐 Công Thức Định Tuyến Wilson (Rubric ĐT-12)</div>
-              <div class="formula-latex">
+          <div class="monitor-col-formula">
+            <div class="formula-box-inner">
+              <div class="formula-head">
+                <span class="formula-tag">CÔNG THỨC TOÁN HỌC</span>
+                <h4>Khoảng Tin Cậy Wilson Score (95% CI)</h4>
+              </div>
+              <div class="formula-math-display">
                 \( w = \frac{\hat{p} + \frac{z^2}{2n} - z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}} \)
               </div>
-              <div class="formula-legend">
-                <div><span>\( \hat{p} \)</span>: Tỷ lệ đánh giá tích cực quan sát được</div>
-                <div><span>\( n \)</span>: Tổng số lượt đánh giá hợp lệ đã kiểm tra</div>
-                <div><span>\( z = 1.96 \)</span>: Khoảng tin cậy chuẩn 95%</div>
+              <div class="formula-parameters">
+                <div><span>\( \hat{p} \)</span>: Tỷ lệ đánh giá tích cực quan sát</div>
+                <div><span>\( n \)</span>: Tổng số đánh giá hợp lệ</div>
+                <div><span>\( z = 1.96 \)</span>: Hệ số chuẩn mức tin cậy 95%</div>
               </div>
-              <div class="formula-rule">
-                <strong>Quy tắc kích hoạt:</strong><br/>
-                • \( w \ge 0.70 \): Phân loại <strong>"Điểm sáng du lịch"</strong> → Kích hoạt gói Voucher đối tác.<br/>
-                • \( w &lt; 0.70 \): Trạng thái <strong>"Ổn định / Cảnh báo"</strong>.
+              <div class="formula-verdict-box">
+                • \( w \ge 0.70 \): Vinh danh <strong>"Điểm sáng du lịch"</strong> (Mở ưu đãi tour)<br/>
+                • \( w &lt; 0.70 \): Trạng thái <strong>"Ổn định"</strong> hoặc <strong>"Cảnh báo"</strong>
               </div>
             </div>
           </div>
@@ -330,53 +410,54 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 5. VERIFIED TRIPADVISOR REVIEWS STREAM                  -->
+    <!-- 7. TRAVELER TESTIMONIALS (874 TripAdvisor Reviews)      -->
     <!-- ======================================================== -->
-    <section class="section-reviews">
+    <section class="section section-testimonials bg-light">
       <div class="nevio-container">
-        <div class="section-header">
+        <div class="destinations-header-row">
           <div>
-            <div class="nevio-eyebrow gold">ĐÁNH GIÁ CHÂN THỰC</div>
-            <h2 class="section-title">Tiếng Nói Du Khách Từ 874 Đánh Giá TripAdvisor</h2>
-            <p class="section-desc">
+            <span class="nevio-label">(TRAVELER REVIEWS)</span>
+            <h2 class="heading-style-h2">Tiếng Nói Du Khách Từ 874 Đánh Giá TripAdvisor</h2>
+            <p class="destinations-desc">
               Phản hồi gốc từ du khách trong và ngoài nước kèm trích xuất nhãn khía cạnh ABSA tự động.
             </p>
           </div>
-          <router-link to="/danh-sach-danh-gia" class="btn-view-all-reviews">
-            Xem tất cả 874 đánh giá →
+          <router-link to="/danh-sach-danh-gia" class="btn-nevio-dark">
+            <span>Xem tất cả 874 đánh giá</span>
+            <ArrowRight :size="16" />
           </router-link>
         </div>
 
-        <div class="reviews-grid">
-          <div v-for="rev in danhGiaTieuBieu" :key="rev.id" class="review-testimonial-card">
-            <div class="review-head">
-              <div class="reviewer-info">
-                <div class="avatar-initials">
+        <div class="testimonials-grid">
+          <div v-for="rev in danhGiaTieuBieu" :key="rev.id" class="testimonial-card">
+            <div class="test-card-top">
+              <div class="reviewer-badge-wrap">
+                <div class="reviewer-initials-box">
                   {{ rev.nguoi_danh_gia.charAt(0) }}
                 </div>
                 <div>
-                  <h4 class="reviewer-name">{{ rev.nguoi_danh_gia }}</h4>
-                  <span class="reviewer-location">{{ rev.quoc_gia }} · {{ rev.ngay_dang }}</span>
+                  <h4 class="reviewer-fullname">{{ rev.nguoi_danh_gia }}</h4>
+                  <span class="reviewer-country">{{ rev.quoc_gia }} · {{ rev.ngay_dang }}</span>
                 </div>
               </div>
-              <div class="review-stars">
-                <span v-for="s in 5" :key="s" :class="['star', { filled: s <= rev.diem_so }]">★</span>
+              <div class="review-star-rating">
+                <Star v-for="s in 5" :key="s" :size="14" :class="['star-icon', { 'fill-yellow': s <= rev.diem_so }]" />
               </div>
             </div>
 
-            <div class="review-dest-tag">
-              📍 {{ rev.ten_diem_den }}
+            <div class="dest-tag-link">
+              <MapPin :size="12" />
+              <span>{{ rev.ten_diem_den }}</span>
             </div>
 
-            <h5 class="review-title">"{{ rev.tieu_de }}"</h5>
-            <p class="review-body">{{ rev.noi_dung }}</p>
+            <h5 class="review-card-title">"{{ rev.tieu_de }}"</h5>
+            <p class="review-card-body">{{ rev.noi_dung }}</p>
 
-            <!-- ABSA Aspect Badges Highlight -->
-            <div class="review-aspect-tags">
+            <div class="aspect-labels-cluster">
               <span 
                 v-for="(tag, idx) in rev.khia_canh_tags" 
-                :key="idx"
-                :class="['tag-chip', 'chip-' + tag.sac_thai]"
+                :key="idx" 
+                :class="['sentiment-chip', 'sent-' + tag.sac_thai]"
               >
                 {{ tag.khia_canh }}: {{ tag.chi_tiet }}
               </span>
@@ -386,22 +467,43 @@
       </div>
     </section>
 
-    <!-- Voucher Toast Notification Modal -->
-    <div v-if="thongBaoVoucher" class="voucher-toast" role="alert">
-      <div class="toast-content">
-        <span class="toast-icon">🎟️</span>
+    <!-- Floating Voucher Toast Notification -->
+    <div v-if="thongBaoVoucher" class="nevio-toast" role="alert">
+      <div class="toast-inner">
+        <Ticket :size="22" class="text-emerald" />
         <div>
-          <h4>Đã nhận phiếu ưu đãi thành công!</h4>
+          <h4>Đã cấp phiếu ưu đãi đối tác!</h4>
           <p>{{ thongBaoVoucher }}</p>
         </div>
       </div>
-      <router-link to="/phieu-cua-toi" class="toast-link">Xem trong ví phiếu →</router-link>
+      <router-link to="/phieu-cua-toi" class="toast-action-link">Xem ví phiếu →</router-link>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import Navbar from '../components/Navbar.vue'
+import { 
+  Search, 
+  MapPin, 
+  ShieldCheck, 
+  RotateCcw, 
+  MessageSquareQuote, 
+  Compass, 
+  BarChart3, 
+  Sparkles, 
+  Trees, 
+  HeartHandshake, 
+  Utensils, 
+  DollarSign, 
+  Star, 
+  Ticket, 
+  ArrowRight, 
+  CheckCircle2, 
+  AlertTriangle, 
+  Award 
+} from 'lucide-vue-next'
 import { DataService, DANH_SACH_DIEM_DEN_FALLBACK, KHIA_CANH_ABSA, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
 const dsDiemDen = ref([])
@@ -413,20 +515,25 @@ const locTinhThanh = ref('')
 const locTrangThai = ref('')
 const thongBaoVoucher = ref('')
 
-// Computed Filtered List
+function layIconKhiaCanh(id) {
+  switch (id) {
+    case 1: return Trees
+    case 2: return HeartHandshake
+    case 3: return Utensils
+    case 4: return Sparkles
+    default: return DollarSign
+  }
+}
+
 const diemDenHienThi = computed(() => {
   return dsDiemDen.value.filter(dest => {
-    // 1. Từ khóa
     const kw = tuKhoaTimKiem.value.trim().toLowerCase()
     const matchKw = !kw || 
       dest.ten.toLowerCase().includes(kw) || 
       dest.tinh_thanh.toLowerCase().includes(kw) ||
       (dest.mo_ta && dest.mo_ta.toLowerCase().includes(kw))
 
-    // 2. Tỉnh thành
     const matchTinh = !locTinhThanh.value || dest.tinh_thanh.includes(locTinhThanh.value)
-
-    // 3. Trạng thái Wilson
     const matchTrangThai = !locTrangThai.value || dest.trang_thai_wilson === locTrangThai.value
 
     return matchKw && matchTinh && matchTrangThai
@@ -471,376 +578,530 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.nevio-dashboard {
+.nevio-dashboard-page {
   display: flex;
   flex-direction: column;
-  gap: 60px;
 }
 
 /* =================================================== */
-/* 1. HERO SECTION                                     */
+/* 1. HERO SECTION (Matching Nevio Webflow)            */
 /* =================================================== */
-.nevio-hero {
+.section.hero-section {
   position: relative;
-  padding: 60px 0 30px 0;
-  background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.08) 0%, rgba(16, 185, 129, 0.04) 40%, transparent 70%);
+  margin: 16px 16px 0 16px;
+  border-radius: var(--radius-hero);
+  height: calc(100vh - 40px);
+  min-height: 640px;
+  max-height: 900px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 70px;
 }
 
-.hero-content {
+.hero-image-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 60%;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.8) 100%);
+  z-index: 2;
+}
+
+/* Giant Translucent Display Word "Discover" */
+.display-wrap {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  right: 0;
   text-align: center;
-  max-width: 900px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.display.hero {
+  font-size: clamp(80px, 16vw, 220px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: -0.04em;
+  text-transform: capitalize;
+  user-select: none;
+  line-height: 1;
+}
+
+.hero-content-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
 }
 
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
-  display: inline-block;
-  animation: pulse-ring 2s infinite;
+.hero-text-col {
+  max-width: 760px;
 }
 
-@keyframes pulse-ring {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-.hero-title {
-  font-size: 42px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  color: var(--mau-chu);
+.nevio-eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.06em;
   margin-bottom: 20px;
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #059669 0%, #0284c7 60%, #6366f1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fddd62;
+  box-shadow: 0 0 8px #fddd62;
 }
 
-.hero-subtitle {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--mau-chu-phu);
-  max-width: 760px;
-  margin: 0 auto 36px auto;
+.hero-heading {
+  font-size: clamp(40px, 5.5vw, 76px);
+  font-weight: 900;
+  line-height: 1.08;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
 }
 
-/* Floating Search Bar */
-.hero-search-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 9999px;
+.hero-paragraph {
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 620px;
+}
+
+.hero-action-col {
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+
+/* Torn Paper Brush Bottom Shape */
+.hero-bottom-shape-wrap {
+  position: absolute;
+  inset: auto 0% -2px;
+  width: 100%;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.hero-bottom-shape {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =================================================== */
+/* 2. SEARCH TOOLBAR                                   */
+/* =================================================== */
+.section-search-toolbar {
+  position: relative;
+  z-index: 20;
+  margin-top: -30px;
+  padding: 0 20px 40px 20px;
+}
+
+.floating-search-bar {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-full);
   padding: 8px 16px;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-card);
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: 840px;
-  margin: 0 auto 40px auto;
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto;
   transition: all 0.25s ease;
-}
-
-.hero-search-card:focus-within {
-  border-color: #0284c7;
-  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.15);
 }
 
 .search-field {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.search-field.flex-grow {
   flex: 1;
 }
 
-.field-icon {
-  font-size: 16px;
-  opacity: 0.7;
-}
-
-.search-input {
+.field-input {
   width: 100%;
   border: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--mau-chu);
   outline: none;
   font-family: inherit;
 }
 
-.search-select {
-  width: 100%;
+.field-select {
   border: none;
   background: transparent;
   font-size: 13.5px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--mau-chu);
   outline: none;
   cursor: pointer;
   font-family: inherit;
 }
 
-.search-divider {
+.field-select option {
+  background: var(--nevio-card-bg);
+  color: var(--mau-chu);
+}
+
+.bar-divider {
   width: 1px;
   height: 24px;
-  background: var(--duong-vien);
+  background: var(--nevio-border);
 }
 
-.btn-reset-filter {
-  background: var(--mau-nen-phu);
-  border: 1px solid var(--duong-vien);
+.btn-clear-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-light-grey);
   color: var(--mau-chu-phu);
   padding: 8px 16px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
-.btn-reset-filter:hover {
+.btn-clear-filter:hover {
   background: #fee2e2;
   color: #dc2626;
-  border-color: #fca5a5;
 }
 
-/* Hero Stats Grid */
-.hero-stats-grid {
+/* =================================================== */
+/* 3. ABOUT & STATS SECTION                            */
+/* =================================================== */
+.section {
+  padding: 60px 0;
+}
+
+.section-about {
+  padding-top: 40px;
+}
+
+.about-heading {
+  max-width: 880px;
+  margin: 0 auto 50px auto;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--mau-chu);
+}
+
+.stats-grid-wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 20px;
+  gap: 24px;
 }
 
-.stat-box {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: var(--bo-tron-vua);
-  padding: 16px;
-  text-align: left;
-  box-shadow: var(--bong-nhe);
+.nevio-stat-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.stat-number {
-  font-size: 26px;
-  font-weight: 800;
+.nevio-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.stat-icon-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.bg-sky { background: rgba(2, 132, 199, 0.1); }
+.text-sky { color: #0284c7; }
+
+.bg-emerald { background: rgba(5, 150, 105, 0.1); }
+.text-emerald { color: #059669; }
+
+.bg-amber { background: rgba(217, 119, 6, 0.1); }
+.text-amber { color: #d97706; }
+
+.bg-purple { background: rgba(147, 51, 234, 0.1); }
+.text-purple { color: #9333ea; }
+
+.stat-main-number {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
   color: var(--mau-chu);
-  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.stat-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--mau-chu);
   margin-bottom: 4px;
 }
 
-.stat-label {
-  font-size: 13px;
-  font-weight: 600;
+.stat-caption {
+  font-size: 12.5px;
   color: var(--mau-chu-phu);
-  margin-bottom: 6px;
-}
-
-.stat-trend {
-  font-size: 11.5px;
-  color: var(--mau-chu-mo);
-}
-
-.stat-trend.positive {
-  color: #059669;
-  font-weight: 600;
 }
 
 /* =================================================== */
-/* 2. DESTINATIONS SECTION                             */
+/* 4. CURATED DESTINATIONS (Nevio Style Cards)         */
 /* =================================================== */
-.section-destinations {
-  padding: 20px 0;
-}
-
-.section-header {
+.destinations-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 20px;
 }
 
-.section-title {
-  font-size: 28px;
+.heading-style-h2 {
+  font-size: clamp(28px, 3.5vw, 42px);
   font-weight: 800;
   color: var(--mau-chu);
   margin-bottom: 6px;
+  line-height: 1.2;
 }
 
-.section-desc {
-  font-size: 14.5px;
+.destinations-desc {
+  font-size: 15px;
   color: var(--mau-chu-phu);
   max-width: 600px;
 }
 
-.quick-filter-pills {
+.category-pills {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.filter-pill {
-  border: 1px solid var(--duong-vien);
-  background: var(--mau-nen-the);
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
   color: var(--mau-chu-phu);
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13.5px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
 }
 
-.filter-pill:hover, .filter-pill.active {
-  background: #0f172a;
-  color: #ffffff;
-  border-color: #0f172a;
+.cat-pill:hover, .cat-pill.active {
+  background: var(--nevio-dark);
+  color: var(--nevio-white);
+  border-color: var(--nevio-dark);
 }
 
-[data-theme="dark"] .filter-pill:hover, [data-theme="dark"] .filter-pill.active {
-  background: #38bdf8;
-  color: #0b1120;
-  border-color: #38bdf8;
+[data-theme="dark"] .cat-pill:hover, [data-theme="dark"] .cat-pill.active {
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  border-color: var(--nevio-yellow);
 }
 
-/* Destination Cards */
-.dest-grid {
+.destinations-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 32px;
 }
 
-.nevio-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 20px;
+.nevio-destination-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nevio-card:hover {
+.nevio-destination-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--bong-noi);
-  border-color: rgba(2, 132, 199, 0.4);
+  box-shadow: var(--shadow-hover);
 }
 
-.card-img-wrap {
+.dest-image-wrap {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 240px;
   overflow: hidden;
-  background: #1e293b;
+  background: #2a2a2a;
 }
 
-.card-img {
+.dest-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nevio-card:hover .card-img {
+.nevio-destination-card:hover .dest-card-img {
   transform: scale(1.06);
 }
 
-.card-overlay-gradient {
+.card-img-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.65) 100%);
 }
 
-.overlay-tag {
+.tag-location-pill {
   position: absolute;
-  z-index: 2;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  backdrop-filter: blur(8px);
-}
-
-.location-tag {
   top: 14px;
   left: 14px;
-  background: rgba(15, 23, 42, 0.7);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(48, 48, 48, 0.75);
+  backdrop-filter: blur(8px);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.status-tag {
+.tag-status-badge {
+  position: absolute;
   top: 14px;
   right: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.overlay-wilson-score {
+.status-diem_sang {
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+}
+
+.status-binh_thuong {
+  background: #0284c7;
+}
+
+.status-canh_bao {
+  background: #e11d48;
+}
+
+.tag-rating-pill {
   position: absolute;
   bottom: 12px;
   right: 14px;
   z-index: 2;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fef08a;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  color: #ffffff;
 }
 
-.w-total {
-  font-size: 11px;
-  color: #cbd5e1;
-  font-weight: 400;
+.fill-yellow {
+  color: #fddd62;
+  fill: #fddd62;
 }
 
-.card-body {
-  padding: 22px;
+.rating-num {
+  font-weight: 800;
+  font-size: 13.5px;
+  color: #fddd62;
+}
+
+.rating-count {
+  font-size: 11.5px;
+  color: #d6d3d1;
+}
+
+.dest-card-body {
+  padding: 24px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.card-category {
+.dest-type-category {
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #0284c7;
+  color: var(--nevio-orange);
   letter-spacing: 0.05em;
   margin-bottom: 6px;
 }
 
-.card-title {
-  font-size: 19px;
-  font-weight: 700;
+.dest-card-title {
+  font-size: 20px;
+  font-weight: 800;
   color: var(--mau-chu);
   margin-bottom: 8px;
   line-height: 1.3;
 }
 
-.card-title a {
-  color: inherit;
+.dest-card-title a {
   transition: color 0.2s;
 }
 
-.card-title a:hover {
-  color: #0284c7;
+.dest-card-title a:hover {
+  color: var(--nevio-orange);
 }
 
-.card-desc {
-  font-size: 13.5px;
+.dest-card-summary {
+  font-size: 14px;
   line-height: 1.6;
   color: var(--mau-chu-phu);
   margin-bottom: 18px;
@@ -850,304 +1111,293 @@ onMounted(async () => {
   overflow: hidden;
 }
 
-/* Aspect Chips */
-.aspect-chips {
+.aspect-micro-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 20px;
 }
 
-.aspect-chip {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  padding: 3px 8px;
-  border-radius: 6px;
+.micro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
   font-size: 11.5px;
   font-weight: 600;
   color: var(--mau-chu-phu);
 }
 
-.card-actions {
+.dest-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
   padding-top: 16px;
-  border-top: 1px solid var(--duong-vien);
+  border-top: 1px solid var(--nevio-border);
+  margin-top: auto;
 }
 
-.btn-card-detail {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #0284c7;
+.link-detail-action {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nevio-dark);
   transition: transform 0.2s;
 }
 
-.btn-card-detail:hover {
-  transform: translateX(3px);
-  text-decoration: underline;
+[data-theme="dark"] .link-detail-action {
+  color: var(--nevio-yellow);
 }
 
-.btn-card-voucher {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  border: none;
+.link-detail-action:hover {
+  transform: translateX(4px);
+}
+
+.btn-claim-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #059669;
+  color: #ffffff;
   padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 12px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
   font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
   transition: all 0.2s;
 }
 
-.btn-card-voucher:hover {
+.btn-claim-pill:hover {
+  background: #047857;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
 }
 
-.voucher-locked-hint {
+.locked-voucher-text {
   font-size: 12px;
   color: var(--mau-chu-mo);
   font-weight: 500;
 }
 
-/* Empty State */
-.empty-state-box {
-  text-align: center;
-  padding: 60px 20px;
-  background: var(--mau-nen-the);
-  border-radius: 20px;
-  border: 1px dashed var(--duong-vien);
-}
-
-.empty-icon {
-  font-size: 40px;
-  margin-bottom: 12px;
-  display: block;
-}
-
 /* =================================================== */
-/* 3. ABSA SECTION                                     */
+/* 5. ABSA 5-ASPECT DEEP DIVE                          */
 /* =================================================== */
 .section-absa {
-  padding: 40px 0;
-  background: var(--mau-nen-phu);
-  border-top: 1px solid var(--duong-vien);
-  border-bottom: 1px solid var(--duong-vien);
+  border-top: 1px solid var(--nevio-border);
+  border-bottom: 1px solid var(--nevio-border);
 }
 
-.absa-badge-pill {
-  font-size: 12.5px;
-  font-weight: 700;
-  background: rgba(16, 185, 129, 0.12);
-  color: #059669;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+.bg-light {
+  background: var(--nevio-light-grey);
 }
 
-.absa-grid {
+.absa-subheading {
+  font-size: 15px;
+  color: var(--mau-chu-phu);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.absa-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 20px;
+  gap: 24px;
+  margin-top: 40px;
 }
 
-.absa-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--bong-nhe);
+.absa-analysis-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-subtle);
 }
 
-.absa-card-head {
+.absa-card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
 
-.absa-icon-title {
+.absa-title-group {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.absa-icon {
-  font-size: 24px;
+.absa-icon-svg {
+  color: var(--nevio-orange);
 }
 
-.absa-name {
+.absa-aspect-name {
   font-size: 15.5px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--mau-chu);
-  margin-bottom: 2px;
 }
 
-.absa-meta {
+.absa-aspect-count {
   font-size: 11.5px;
   color: var(--mau-chu-mo);
 }
 
-.absa-score-badge {
+.absa-aspect-rating {
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: baseline;
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  padding: 4px 10px;
-  border-radius: 8px;
 }
 
-.score-num {
-  font-size: 18px;
+.rate-val {
+  font-size: 17px;
   font-weight: 800;
-  color: #0284c7;
+  color: var(--mau-chu);
 }
 
-.score-scale {
+.rate-max {
   font-size: 11px;
   color: var(--mau-chu-mo);
-  margin-left: 2px;
 }
 
-.meter-bar {
+.sentiment-bar-track {
   display: flex;
-  height: 10px;
-  border-radius: 9999px;
+  height: 9px;
+  border-radius: var(--radius-full);
   overflow: hidden;
-  background: #e2e8f0;
+  background: #e7e5e4;
   margin-bottom: 10px;
 }
 
-.fill-positive { background: #10b981; }
-.fill-neutral { background: #94a3b8; }
-.fill-negative { background: #ef4444; }
+.seg-positive { background: #059669; }
+.seg-neutral { background: #a8a29e; }
+.seg-negative { background: #e11d48; }
 
-.meter-labels {
+.sentiment-legend-row {
   display: flex;
   justify-content: space-between;
   font-size: 11.5px;
   font-weight: 600;
 }
 
-.lbl-pos { color: #059669; }
-.lbl-neu { color: #64748b; }
-.lbl-neg { color: #dc2626; }
+.text-positive { color: #059669; }
+.text-neutral { color: #78716c; }
+.text-negative { color: #e11d48; }
 
 /* =================================================== */
-/* 4. MONITOR & WILSON FORMULA                         */
+/* 6. CRISIS MONITOR & WILSON                          */
 /* =================================================== */
-.section-monitor {
-  padding: 20px 0;
-}
-
-.monitor-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 24px;
-  padding: 36px;
-  box-shadow: var(--bong-noi);
+.monitor-split-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  box-shadow: var(--shadow-card);
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 36px;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
   align-items: center;
 }
 
-.monitor-status-badge {
+.safe-indicator-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
-  font-weight: 800;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
   color: #059669;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  padding: 6px 14px;
-  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
   margin-bottom: 16px;
 }
 
-.pulse-beacon {
-  width: 8px;
-  height: 8px;
+.status-pulse-dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #10b981;
-  animation: pulse-ring 2s infinite;
+  background: #059669;
 }
 
-.monitor-title {
-  font-size: 24px;
+.monitor-heading {
+  font-size: 26px;
   font-weight: 800;
   color: var(--mau-chu);
   margin-bottom: 14px;
+  line-height: 1.3;
 }
 
-.monitor-desc {
-  font-size: 14px;
+.monitor-paragraph {
+  font-size: 14.5px;
   line-height: 1.7;
   color: var(--mau-chu-phu);
   margin-bottom: 24px;
 }
 
-.monitor-highlights {
+.monitor-features-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
-.m-highlight-item {
+.m-feature-row {
   display: flex;
   align-items: flex-start;
   gap: 12px;
 }
 
-.h-icon {
-  font-size: 20px;
-}
-
-.m-highlight-item strong {
+.m-feature-row strong {
   font-size: 14px;
   color: var(--mau-chu);
 }
 
-.m-highlight-item p {
+.m-feature-row p {
   font-size: 12.5px;
   color: var(--mau-chu-phu);
   margin: 2px 0 0 0;
 }
 
-.formula-box {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
-  border-radius: 16px;
-  padding: 24px;
+.formula-box-inner {
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
 }
 
-.formula-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--mau-chu);
-  margin-bottom: 12px;
+.formula-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--nevio-orange);
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
 }
 
-.formula-latex {
+.formula-head h4 {
   font-size: 16px;
-  background: var(--mau-nen-the);
+  font-weight: 800;
+  color: var(--mau-chu);
+  margin-bottom: 14px;
+}
+
+.formula-math-display {
+  font-size: 15px;
+  background: var(--nevio-card-bg);
+  border: 1px dashed var(--nevio-border);
+  border-radius: var(--radius-sm);
   padding: 14px;
-  border-radius: 8px;
-  border: 1px dashed var(--duong-vien);
   text-align: center;
   margin-bottom: 14px;
   overflow-x: auto;
 }
 
-.formula-legend {
+.formula-parameters {
   font-size: 12px;
   color: var(--mau-chu-phu);
   display: flex;
@@ -1156,127 +1406,99 @@ onMounted(async () => {
   margin-bottom: 14px;
 }
 
-.formula-rule {
-  font-size: 12px;
-  line-height: 1.6;
+.formula-verdict-box {
   background: rgba(2, 132, 199, 0.08);
-  padding: 10px 14px;
-  border-radius: 8px;
   border-left: 3px solid #0284c7;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 /* =================================================== */
-/* 5. REVIEWS STREAM                                   */
+/* 7. TESTIMONIALS                                     */
 /* =================================================== */
-.section-reviews {
-  padding: 20px 0 60px 0;
-}
-
-.btn-view-all-reviews {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  color: var(--mau-chu);
-  padding: 10px 20px;
-  border-radius: 9999px;
-  font-size: 13.5px;
-  font-weight: 700;
-  transition: all 0.2s;
-  box-shadow: var(--bong-nhe);
-}
-
-.btn-view-all-reviews:hover {
-  background: #0f172a;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .btn-view-all-reviews:hover {
-  background: #38bdf8;
-  color: #0b1120;
-}
-
-.reviews-grid {
+.testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 24px;
+  margin-top: 36px;
 }
 
-.review-testimonial-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: var(--bong-the);
+.testimonial-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-subtle);
   display: flex;
   flex-direction: column;
 }
 
-.review-head {
+.test-card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.reviewer-info {
+.reviewer-badge-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.avatar-initials {
+.reviewer-initials-box {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0284c7, #10b981);
-  color: white;
+  background: var(--nevio-dark);
+  color: var(--nevio-yellow);
+  font-weight: 800;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
 }
 
-.reviewer-name {
-  font-size: 14px;
+.reviewer-fullname {
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--mau-chu);
 }
 
-.reviewer-location {
+.reviewer-country {
   font-size: 11.5px;
   color: var(--mau-chu-mo);
 }
 
-.review-stars {
+.review-star-rating {
   display: flex;
   gap: 2px;
 }
 
-.star {
-  color: #cbd5e1;
-  font-size: 15px;
+.star-icon {
+  color: #d6d3d1;
 }
 
-.star.filled {
-  color: #f59e0b;
-}
-
-.review-dest-tag {
+.dest-tag-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: #0284c7;
   margin-bottom: 8px;
 }
 
-.review-title {
+.review-card-title {
   font-size: 15px;
   font-weight: 700;
   color: var(--mau-chu);
   margin-bottom: 6px;
-  line-height: 1.3;
 }
 
-.review-body {
+.review-card-body {
   font-size: 13.5px;
   line-height: 1.6;
   color: var(--mau-chu-phu);
@@ -1284,124 +1506,119 @@ onMounted(async () => {
   flex: 1;
 }
 
-.review-aspect-tags {
+.aspect-labels-cluster {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.tag-chip {
+.sentiment-chip {
   font-size: 11px;
   font-weight: 600;
   padding: 3px 8px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-.chip-tich_cuc {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
+.sent-tich_cuc { background: #ecfdf5; color: #047857; }
+.sent-trung_tinh { background: #f5f5f4; color: #57534e; }
+.sent-tieu_cuc { background: #fff1f2; color: #be123c; }
 
-.chip-trung_tinh {
-  background: rgba(100, 116, 139, 0.12);
-  color: #475569;
-  border: 1px solid rgba(100, 116, 139, 0.25);
-}
-
-.chip-tieu_cuc {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
-
-/* Voucher Toast */
-.voucher-toast {
+/* Toast */
+.nevio-toast {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 1000;
-  background: var(--mau-nen-the);
-  border: 1px solid #10b981;
-  border-radius: 14px;
+  background: var(--nevio-card-bg);
+  border: 1px solid #059669;
+  border-radius: var(--radius-md);
   padding: 16px 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
   display: flex;
   align-items: center;
   gap: 16px;
-  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-toast 0.3s ease;
 }
 
-@keyframes slide-up {
+@keyframes slide-toast {
   from { transform: translateY(40px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-.toast-content {
+.toast-inner {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.toast-icon {
-  font-size: 26px;
-}
-
-.toast-content h4 {
-  font-size: 14px;
-  font-weight: 700;
+.toast-inner h4 {
+  font-size: 13.5px;
+  font-weight: 800;
   color: #059669;
-  margin-bottom: 2px;
 }
 
-.toast-content p {
+.toast-inner p {
   font-size: 12.5px;
   color: var(--mau-chu-phu);
 }
 
-.toast-link {
+.toast-action-link {
   font-size: 13px;
   font-weight: 700;
-  color: #0284c7;
+  color: var(--nevio-dark);
   text-decoration: underline;
   white-space: nowrap;
 }
 
+.empty-state-card {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--nevio-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--nevio-border);
+}
+
+.btn-reset-dark {
+  background: var(--nevio-dark);
+  color: var(--nevio-white);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 14px;
+}
+
 @media (max-width: 1024px) {
-  .hero-stats-grid {
+  .hero-content-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .stats-grid-wrapper {
     grid-template-columns: repeat(2, 1fr);
   }
-  .monitor-card {
+  .monitor-split-card {
     grid-template-columns: 1fr;
-    gap: 24px;
   }
 }
 
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 30px;
+  .section.hero-section {
+    margin: 8px 8px 0 8px;
+    height: auto;
+    min-height: 580px;
+    padding-bottom: 50px;
   }
-  .hero-search-card {
+  .floating-search-bar {
     flex-direction: column;
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 20px;
   }
-  .search-divider {
+  .bar-divider {
     display: none;
   }
-  .search-field {
-    width: 100%;
-  }
-  .btn-reset-filter {
-    width: 100%;
-  }
-  .hero-stats-grid {
+  .stats-grid-wrapper {
     grid-template-columns: 1fr;
   }
-  .dest-grid {
-    grid-template-columns: 1fr;
-  }
-  .reviews-grid {
+  .destinations-cards-grid {
     grid-template-columns: 1fr;
   }
 }

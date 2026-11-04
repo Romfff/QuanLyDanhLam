@@ -5,11 +5,12 @@
         <!-- Brand Header -->
         <div class="login-header">
           <div class="brand-logo-circle">
-            🧭
+            <Compass :size="28" class="text-dark" />
           </div>
-          <h1 class="login-title">Cổng Đăng Nhập Hệ Thống</h1>
+          <span class="nevio-label center">(CỔNG XÁC THỰC DU LỊCH)</span>
+          <h1 class="login-title">Đăng Nhập Hệ Thống Nevio ĐT-12</h1>
           <p class="login-subtitle">
-            Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến <strong>(ĐT-12)</strong>
+            Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến
           </p>
         </div>
 
@@ -26,7 +27,7 @@
           <div class="form-group">
             <label for="email" class="form-label">Địa chỉ Email:</label>
             <div class="input-wrap">
-              <span class="input-icon">✉️</span>
+              <Mail :size="16" class="input-icon text-muted" />
               <input 
                 id="email" 
                 type="email" 
@@ -41,7 +42,7 @@
           <div class="form-group">
             <label for="mat_khau" class="form-label">Mật khẩu:</label>
             <div class="input-wrap">
-              <span class="input-icon">🔒</span>
+              <Lock :size="16" class="input-icon text-muted" />
               <input 
                 id="mat_khau" 
                 type="password" 
@@ -53,15 +54,16 @@
             </div>
           </div>
 
-          <button type="submit" :disabled="dangXuLy" class="btn-submit-login">
-            {{ dangXuLy ? 'Đang xác thực hệ thống...' : 'Đăng Nhập Khám Phá' }}
+          <button type="submit" :disabled="dangXuLy" class="nevio-btn-yellow w-full-center">
+            <span class="button-text">{{ dangXuLy ? 'Đang xác thực hệ thống...' : 'Đăng Nhập Khám Phá' }}</span>
+            <div class="btn-icon-circle"><ArrowRight :size="16" /></div>
           </button>
         </form>
 
-        <!-- Quick 5 Role Test Buttons -->
+        <!-- Quick 5 Role Test Buttons with Lucide Icons -->
         <div class="quick-roles-section">
           <div class="quick-title">
-            <span>⚡ Kiểm thử nhanh 5 vai trò hệ thống:</span>
+            <span>Kiểm thử nhanh 5 vai trò hệ thống:</span>
           </div>
           <div class="quick-grid">
             <button 
@@ -69,35 +71,40 @@
               class="btn-quick-role" 
               @click="dienTaiKhoan('admin@demo.test', 'Admin@123456', 'admin', 'Quản trị viên trưởng')"
             >
-              👑 Quản trị viên (Admin)
+              <ShieldCheck :size="15" class="role-icon-inline" />
+              <span>Quản trị viên (Admin)</span>
             </button>
             <button 
               type="button" 
               class="btn-quick-role" 
               @click="dienTaiKhoan('analyst@demo.test', 'Analyst@123456', 'nha_phan_tich', 'Chuyên viên ABSA')"
             >
-              📊 Nhà phân tích (Analyst)
+              <BarChart3 :size="15" class="role-icon-inline" />
+              <span>Nhà phân tích (Analyst)</span>
             </button>
             <button 
               type="button" 
               class="btn-quick-role" 
               @click="dienTaiKhoan('partner@demo.test', 'Partner@123456', 'doi_tac', 'Đối tác Du lịch')"
             >
-              🏨 Đối tác điểm đến (Partner)
+              <Briefcase :size="15" class="role-icon-inline" />
+              <span>Đối tác điểm đến (Partner)</span>
             </button>
             <button 
               type="button" 
               class="btn-quick-role" 
               @click="dienTaiKhoan('moderator@demo.test', 'Mod@123456', 'kiem_duyet', 'Kiểm duyệt viên')"
             >
-              🛡️ Kiểm duyệt (Mod)
+              <UserCheck :size="15" class="role-icon-inline" />
+              <span>Kiểm duyệt viên (Mod)</span>
             </button>
             <button 
               type="button" 
               class="btn-quick-role" 
               @click="dienTaiKhoan('tourist@demo.test', 'User@123456', 'du_khach', 'Nguyễn Trung Hiếu')"
             >
-              🧳 Du khách trải nghiệm (Tourist)
+              <User :size="15" class="role-icon-inline" />
+              <span>Du khách trải nghiệm (Tourist)</span>
             </button>
           </div>
         </div>
@@ -116,6 +123,17 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { 
+  Compass, 
+  Mail, 
+  Lock, 
+  ArrowRight, 
+  ShieldCheck, 
+  BarChart3, 
+  Briefcase, 
+  UserCheck, 
+  User 
+} from 'lucide-vue-next'
 import api from '../services/api'
 
 const router = useRouter()
@@ -159,7 +177,7 @@ async function dangNhap() {
     console.warn('API /auth/login chưa phản hồi, kích hoạt chế độ xác thực thông minh client.', e.message)
   }
 
-  // Chế độ mô phỏng khi backend offline / Vercel preview
+  // Fallback mô phỏng khi offline
   localStorage.setItem('token', 'demo_jwt_token_' + vaiTroChon.value)
   localStorage.setItem('vai_tro', vaiTroChon.value)
   localStorage.setItem('ho_ten', hoTenChon.value)
@@ -177,21 +195,21 @@ async function dangNhap() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
-  background: radial-gradient(circle at 50% 30%, rgba(2, 132, 199, 0.08) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 80%);
+  padding: 60px 20px;
+  background: var(--nevio-light-grey);
 }
 
 .login-container {
   width: 100%;
-  max-width: 520px;
+  max-width: 500px;
 }
 
 .login-card {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 24px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-xl);
   padding: 40px 36px;
-  box-shadow: var(--bong-noi);
+  box-shadow: var(--shadow-card);
 }
 
 .login-header {
@@ -200,17 +218,14 @@ async function dangNhap() {
 }
 
 .brand-logo-circle {
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(2, 132, 199, 0.2));
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  font-size: 26px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--nevio-yellow);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px auto;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
 }
 
 .login-title {
@@ -223,15 +238,14 @@ async function dangNhap() {
 .login-subtitle {
   font-size: 13.5px;
   color: var(--mau-chu-phu);
-  line-height: 1.5;
 }
 
 .alert-error {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   margin-bottom: 20px;
 }
@@ -241,7 +255,7 @@ async function dangNhap() {
   color: #047857;
   border: 1px solid #a7f3d0;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   margin-bottom: 20px;
 }
@@ -269,21 +283,14 @@ async function dangNhap() {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
   padding: 10px 14px;
-  border-radius: 12px;
-  transition: border-color 0.2s;
+  border-radius: var(--radius-sm);
 }
 
 .input-wrap:focus-within {
-  border-color: #0284c7;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
-.input-icon {
-  font-size: 16px;
-  opacity: 0.7;
+  border-color: var(--nevio-dark);
 }
 
 .form-input {
@@ -296,28 +303,15 @@ async function dangNhap() {
   font-family: inherit;
 }
 
-.btn-submit-login {
-  background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
-  color: white;
-  border: none;
-  padding: 14px 20px;
-  border-radius: 9999px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
-  transition: all 0.2s;
-  margin-top: 6px;
+.w-full-center {
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.btn-submit-login:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4);
-}
-
-/* Quick Roles Section */
 .quick-roles-section {
-  border-top: 1px solid var(--duong-vien);
+  border-top: 1px solid var(--nevio-border);
   padding-top: 20px;
   margin-bottom: 20px;
 }
@@ -336,11 +330,14 @@ async function dangNhap() {
 }
 
 .btn-quick-role {
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
   color: var(--mau-chu);
   padding: 9px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
   text-align: left;
@@ -349,9 +346,13 @@ async function dangNhap() {
 }
 
 .btn-quick-role:hover {
-  background: var(--mau-nhan-sang, rgba(2, 132, 199, 0.1));
-  border-color: #0284c7;
-  color: #0284c7;
+  background: var(--nevio-card-bg);
+  border-color: var(--nevio-orange);
+  color: var(--nevio-orange);
+}
+
+.role-icon-inline {
+  color: var(--nevio-orange);
 }
 
 .login-footer {
@@ -363,10 +364,9 @@ async function dangNhap() {
   font-weight: 600;
   color: var(--mau-chu-phu);
   text-decoration: none;
-  transition: color 0.2s;
 }
 
 .link-back-home:hover {
-  color: #0284c7;
+  color: var(--nevio-dark);
 }
 </style>

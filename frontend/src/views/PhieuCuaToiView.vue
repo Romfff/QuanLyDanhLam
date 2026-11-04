@@ -3,7 +3,7 @@
     <div class="nevio-container">
       <!-- 1. Header Section -->
       <div class="page-header">
-        <div class="nevio-eyebrow emerald">VÍ PHIẾU BẢO HÀNH DANH TIẾNG</div>
+        <span class="nevio-label center">(VÍ PHIẾU BẢO HÀNH DANH TIẾNG)</span>
         <h1 class="page-title">Phiếu Ưu Đãi &amp; Đặt Tour Của Tôi</h1>
         <p class="page-subtitle">
           Danh sách phiếu giảm giá và hỗ trợ đặt dịch vụ tour được hệ thống kích hoạt tự động cho các điểm đến đạt chuẩn <strong>"Điểm sáng du lịch"</strong> theo công thức Wilson Score.
@@ -12,11 +12,10 @@
 
       <!-- Loading State -->
       <div v-if="dangTai" class="loading-state">
-        <span class="spinner"></span>
         <p>Đang tải ví phiếu ưu đãi của bạn...</p>
       </div>
 
-      <!-- 2. Vouchers List (Boarding Pass / Luxury Ticket Style) -->
+      <!-- 2. Vouchers List -->
       <div v-else-if="danhSachPhieu.length > 0" class="vouchers-list">
         <div 
           v-for="phieu in danhSachPhieu" 
@@ -35,8 +34,14 @@
           <!-- Main Ticket Body -->
           <div class="ticket-body">
             <div class="ticket-top">
-              <span class="dest-location-pill">📍 {{ phieu.tinh_thanh || 'Việt Nam' }}</span>
-              <span class="status-verified-pill">✓ Bảo chứng Wilson Score</span>
+              <span class="dest-location-pill">
+                <MapPin :size="12" />
+                <span>{{ phieu.tinh_thanh || 'Việt Nam' }}</span>
+              </span>
+              <span class="status-verified-pill">
+                <CheckCircle2 :size="12" />
+                <span>Bảo chứng Wilson Score</span>
+              </span>
             </div>
 
             <h3 class="ticket-dest-name">{{ phieu.diem_den }}</h3>
@@ -48,7 +53,9 @@
                 <div class="code-copy-wrap">
                   <span class="meta-code">{{ phieu.ma_tham_chieu }}</span>
                   <button @click="saoChepMa(phieu.ma_tham_chieu)" class="btn-copy" title="Sao chép mã">
-                    {{ daSaoChep === phieu.ma_tham_chieu ? '✓ Đã chép' : '📋 Chép' }}
+                    <Check v-if="daSaoChep === phieu.ma_tham_chieu" :size="12" />
+                    <Copy v-else :size="12" />
+                    <span>{{ daSaoChep === phieu.ma_tham_chieu ? 'Đã chép' : 'Chép' }}</span>
                   </button>
                 </div>
               </div>
@@ -69,7 +76,7 @@
             </p>
           </div>
 
-          <!-- Right Action Stub (QR/Barcode Visual + CTA) -->
+          <!-- Right Action Stub -->
           <div class="ticket-right-stub">
             <div class="barcode-visual">
               <div class="bar-lines"></div>
@@ -81,7 +88,8 @@
               class="btn-use-ticket"
               title="Mở trang đối tác để áp dụng mã"
             >
-              🚀 Sử Dụng Phiếu →
+              <span>Sử Dụng Phiếu</span>
+              <ExternalLink :size="13" />
             </button>
           </div>
         </div>
@@ -89,13 +97,14 @@
 
       <!-- Empty State -->
       <div v-else class="empty-state-box">
-        <span class="empty-icon">🎟️</span>
+        <Ticket :size="40" class="text-muted mb-2" />
         <h3>Ví phiếu của bạn hiện đang trống</h3>
         <p>
           Hãy khám phá các điểm đến được vinh danh <strong>"Điểm sáng du lịch"</strong> để nhận phiếu ưu đãi tour độc quyền!
         </p>
-        <router-link to="/dashboard" class="btn-explore">
-          Khám phá Điểm sáng du lịch ngay →
+        <router-link to="/dashboard" class="nevio-btn-yellow">
+          <span class="button-text">Khám Phá Điểm Sáng Ngay</span>
+          <div class="btn-icon-circle"><ArrowRight :size="16" /></div>
         </router-link>
       </div>
     </div>
@@ -104,6 +113,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { 
+  MapPin, 
+  CheckCircle2, 
+  Copy, 
+  Check, 
+  ExternalLink, 
+  Ticket, 
+  ArrowRight 
+} from 'lucide-vue-next'
 import { DataService } from '../services/dataService'
 
 const danhSachPhieu = ref([])
@@ -149,7 +167,7 @@ onMounted(() => {
 }
 
 .page-title {
-  font-size: 34px;
+  font-size: clamp(26px, 3.5vw, 36px);
   font-weight: 800;
   color: var(--mau-chu);
   margin-bottom: 12px;
@@ -161,9 +179,6 @@ onMounted(() => {
   color: var(--mau-chu-phu);
 }
 
-/* =================================================== */
-/* BOARDING PASS / TICKET CARDS                        */
-/* =================================================== */
 .vouchers-list {
   display: flex;
   flex-direction: column;
@@ -174,23 +189,22 @@ onMounted(() => {
 
 .voucher-ticket-card {
   display: flex;
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
-  border-radius: 20px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--bong-the);
+  box-shadow: var(--shadow-subtle);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
 }
 
 .voucher-ticket-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--bong-noi);
+  box-shadow: var(--shadow-hover);
 }
 
-/* Left Stub */
 .ticket-left-stub {
-  background: linear-gradient(180deg, #059669 0%, #0284c7 100%);
+  background: var(--nevio-dark);
   color: white;
   padding: 24px 18px;
   display: flex;
@@ -200,7 +214,13 @@ onMounted(() => {
   gap: 12px;
   min-width: 120px;
   text-align: center;
-  border-right: 2px dashed rgba(255, 255, 255, 0.4);
+  border-right: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .ticket-left-stub {
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  border-right-color: rgba(48, 48, 48, 0.3);
 }
 
 .discount-badge {
@@ -229,7 +249,6 @@ onMounted(() => {
   opacity: 0.7;
 }
 
-/* Ticket Body */
 .ticket-body {
   padding: 24px 28px;
   flex: 1;
@@ -245,21 +264,27 @@ onMounted(() => {
 }
 
 .dest-location-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   font-weight: 600;
   color: #0284c7;
   background: rgba(2, 132, 199, 0.1);
   padding: 3px 10px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 .status-verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 11.5px;
   font-weight: 700;
   color: #059669;
   background: #ecfdf5;
   padding: 3px 10px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 }
 
 .ticket-dest-name {
@@ -280,10 +305,10 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  background: var(--mau-nen);
-  border: 1px solid var(--duong-vien);
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   margin-bottom: 14px;
 }
 
@@ -314,18 +339,16 @@ onMounted(() => {
 }
 
 .btn-copy {
-  background: var(--mau-nen-the);
-  border: 1px solid var(--duong-vien);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 4px;
   cursor: pointer;
   color: var(--mau-chu);
-}
-
-.btn-copy:hover {
-  background: #0284c7;
-  color: white;
 }
 
 .meta-val {
@@ -344,10 +367,9 @@ onMounted(() => {
   line-height: 1.4;
 }
 
-/* Right Stub */
 .ticket-right-stub {
-  background: var(--mau-nen);
-  border-left: 2px dashed var(--duong-vien);
+  background: var(--nevio-light-grey);
+  border-left: 2px dashed var(--nevio-border);
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
@@ -388,69 +410,33 @@ onMounted(() => {
 }
 
 .btn-use-ticket {
-  background: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-dark);
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
   white-space: nowrap;
 }
 
 [data-theme="dark"] .btn-use-ticket {
-  background: #38bdf8;
-  color: #0b1120;
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
 }
 
-.btn-use-ticket:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3);
-}
-
-/* Empty State */
 .empty-state-box, .loading-state {
   text-align: center;
   padding: 60px 20px;
-  background: var(--mau-nen-the);
-  border-radius: 20px;
-  border: 1px dashed var(--duong-vien);
+  background: var(--nevio-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--nevio-border);
   max-width: 600px;
   margin: 0 auto;
-}
-
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 14px;
-  display: block;
-}
-
-.empty-state-box h3 {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--mau-chu);
-  margin-bottom: 8px;
-}
-
-.empty-state-box p {
-  font-size: 14px;
-  color: var(--mau-chu-phu);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-.btn-explore {
-  background: linear-gradient(135deg, #059669, #0284c7);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 9999px;
-  font-size: 14px;
-  font-weight: 700;
-  display: inline-block;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
 }
 
 @media (max-width: 768px) {
@@ -459,7 +445,7 @@ onMounted(() => {
   }
   .ticket-left-stub {
     border-right: none;
-    border-bottom: 2px dashed rgba(255, 255, 255, 0.4);
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
     min-width: 100%;
     flex-direction: row;
     justify-content: space-between;
@@ -469,7 +455,7 @@ onMounted(() => {
   }
   .ticket-right-stub {
     border-left: none;
-    border-top: 2px dashed var(--duong-vien);
+    border-top: 2px dashed var(--nevio-border);
     min-width: 100%;
   }
 }
