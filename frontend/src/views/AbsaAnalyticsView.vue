@@ -149,7 +149,7 @@
             <span class="nevio-label">HỆ THỐNG CẢNH BÁO SỚM DANH TIẾNG</span>
             <h3 class="crisis-title">Cơ Chế Giám Sát Khủng Hoảng Truyền Thông</h3>
             <p class="crisis-desc">
-              Hệ thống theo dõi liên tục tỷ lệ sắc thái tiêu cực trên từng khía cạnh độc lập. Khi một khía cạnh (như Vệ sinh hoặc Giá cả) xuất hiện tỷ lệ phàn nàn vượt ngưỡng 15% trong vòng 7 ngày, thuật toán tự động gắn cờ cảnh báo rủi ro danh tiếng cho nhà quản lý và tạm hoãn cấp voucher ưu đãi.
+              Hệ thống theo dõi liên tục tỷ lệ sắc thái tiêu cực trên từng khía cạnh độc lập. Khi một khía cạnh (như Vệ sinh hoặc Giá cả) xuất hiện tỷ lệ phàn nàn vượt ngưỡng 15% trong vòng 7 ngày, thuật toán tự động gắn cờ cảnh báo rủi ro danh tiếng trên bảng điều khiển quản trị và tạm dừng đề xuất Travelers' Choice.
             </p>
             <div class="crisis-actions">
               <router-link to="/danh-sach-danh-gia" class="btn-inspect-reviews">

@@ -342,7 +342,7 @@ const khiaCanh = ref({
 
 const tieuDe = ref('')
 const noiDung = ref('')
-const hoTen = ref(localStorage.getItem('ten_nguoi_dung') || '')
+const hoTen = ref(localStorage.getItem('ho_ten') || localStorage.getItem('ten_nguoi_dung') || '')
 const diaPhuong = ref('Việt Nam')
 const xacNhan = ref(true)
 const dangGui = ref(false)
