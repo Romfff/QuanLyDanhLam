@@ -12,7 +12,7 @@
             {{ cheDoAuth === 'dang_nhap' ? 'Đăng Nhập Khám Phá' : 'Đăng Ký Tài Khoản Mới' }}
           </h1>
           <p class="login-subtitle">
-            Hệ thống phân tích ý kiến du khách &amp; bảo chứng danh tiếng điểm đến
+            Hệ thống phân tích ý kiến du khách &amp; bảo chứng danh tiếng điểm đến TripAdvisor
           </p>
         </div>
 
@@ -71,7 +71,7 @@
                 id="mat_khau" 
                 :type="hienMatKhau ? 'text' : 'password'" 
                 v-model="matKhau" 
-                placeholder="••••••••" 
+                placeholder="•••••••••" 
                 required 
                 class="form-input"
               />
@@ -184,7 +184,7 @@
               </div>
               <div class="role-text-meta">
                 <strong>Quản trị viên (Admin)</strong>
-                <span>Thêm/Sửa/Xóa địa điểm, gom đánh giá &amp; tính Wilson</span>
+                <span>Thêm/Sửa/Xóa điểm đến, gom đánh giá &amp; tính Wilson</span>
               </div>
             </button>
 
@@ -198,7 +198,7 @@
               </div>
               <div class="role-text-meta">
                 <strong>Du khách (Tourist)</strong>
-                <span>Tra cứu điểm đến, xem review thật, nhận voucher</span>
+                <span>Tra cứu điểm đến, xem review thật, viết bài đánh giá</span>
               </div>
             </button>
           </div>
@@ -391,19 +391,25 @@ async function dangKy() {
     email: emailMoi,
     mat_khau: formDangKy.value.mat_khau,
     vai_tro: 'du_khach',
-    ngay_tao: new Date().toISOString().split('T')[0]
+    ngay_tao: new Date().toISOString()
+  }
+
+  try {
+    await api.post('/auth/register', userMoi)
+  } catch (e) {
+    // Lưu local
   }
 
   dsNguoiDung.push(userMoi)
   localStorage.setItem('dt12_users', JSON.stringify(dsNguoiDung))
 
-  // Tự động đăng nhập
-  localStorage.setItem('token', 'jwt_user_' + userMoi.id)
+  dangXuLy.value = false
+  thongBaoThanhCong.value = 'Đăng ký tài khoản thành công! Tự động đăng nhập vào hệ thống...'
+
+  // Đăng nhập tự động
+  localStorage.setItem('token', 'jwt_du_khach_' + Date.now())
   localStorage.setItem('vai_tro', 'du_khach')
   localStorage.setItem('ho_ten', userMoi.ho_ten)
-  localStorage.setItem('user_info', JSON.stringify(userMoi))
-
-  thongBaoThanhCong.value = `Đăng ký thành công! Đang chuyển hướng bạn tới trang trải nghiệm...`
 
   setTimeout(() => {
     router.push('/dashboard')
@@ -413,12 +419,15 @@ async function dangKy() {
 
 <style scoped>
 .nevio-login-page {
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  background: var(--nevio-light-grey);
+  padding: 40px 20px;
+  background-color: var(--nevio-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(253, 221, 98, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(24, 24, 27, 0.04) 0px, transparent 50%);
 }
 
 .login-container {
@@ -430,8 +439,8 @@ async function dangKy() {
   background: var(--nevio-card-bg);
   border: 1px solid var(--nevio-border);
   border-radius: var(--radius-xl);
-  padding: 40px 36px;
-  box-shadow: var(--shadow-card);
+  padding: 36px;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.08);
 }
 
 .login-header {
@@ -440,115 +449,117 @@ async function dangKy() {
 }
 
 .brand-logo-circle {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-md);
-  background: var(--nevio-yellow);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background-color: #fddd62;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px auto;
-  box-shadow: 0 4px 16px rgba(253, 221, 98, 0.4);
+  margin: 0 auto 14px auto;
+  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.4);
 }
 
-.text-dark {
-  color: #303030;
+.nevio-label.center {
+  display: block;
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--mau-chu-mo);
 }
 
 .login-title {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 900;
   color: var(--mau-chu);
   margin-bottom: 6px;
+  letter-spacing: -0.02em;
 }
 
 .login-subtitle {
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--mau-chu-phu);
+  line-height: 1.45;
 }
 
-/* Tabs Switcher */
+/* Tabs Bar */
 .auth-tabs-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   background: var(--nevio-light-grey);
   border: 1px solid var(--nevio-border);
-  border-radius: var(--radius-full);
   padding: 4px;
-  margin-bottom: 24px;
+  border-radius: var(--radius-lg);
+  gap: 4px;
+  margin-bottom: 22px;
 }
 
 .auth-tab-btn {
-  flex: 1;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
-  font-size: 13.5px;
-  font-weight: 700;
+  padding: 10px;
+  border-radius: var(--radius-md);
   border: none;
-  background: none;
+  background: transparent;
   color: var(--mau-chu-phu);
-  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
+}
+
+.auth-tab-btn:hover {
+  color: var(--mau-chu);
 }
 
 .auth-tab-btn.active {
-  background: var(--nevio-card-bg);
-  color: var(--mau-chu);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  color: #18181b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="dark"] .auth-tab-btn.active {
-  background: var(--nevio-yellow);
+  background: #fddd62;
   color: #18181b;
 }
 
 /* Alerts */
 .alert-error {
-  background: #fff1f2;
-  color: #be123c;
-  border: 1px solid #fecdd3;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-[data-theme="dark"] .alert-error {
-  background: rgba(225, 29, 72, 0.15);
-  color: #fda4af;
-  border-color: rgba(225, 29, 72, 0.4);
+  gap: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12.5px;
+  margin-bottom: 18px;
 }
 
 .alert-success {
-  background: #ecfdf5;
-  color: #047857;
-  border: 1px solid #a7f3d0;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-[data-theme="dark"] .alert-success {
-  background: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
-  border-color: rgba(16, 185, 129, 0.4);
+  gap: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12.5px;
+  margin-bottom: 18px;
 }
 
 /* Form */
 .nevio-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .form-group {
@@ -558,7 +569,7 @@ async function dangKy() {
 }
 
 .form-label {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--mau-chu);
 }
@@ -571,8 +582,31 @@ async function dangKy() {
 
 .input-icon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 40px 11px 36px;
+  background: var(--nevio-input-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  color: var(--mau-chu);
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  border-color: #fddd62;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(253, 221, 98, 0.25);
+}
+
+[data-theme="dark"] .form-input:focus {
+  background: #27272a;
 }
 
 .btn-toggle-pw {
@@ -582,135 +616,148 @@ async function dangKy() {
   border: none;
   color: var(--mau-chu-mo);
   cursor: pointer;
-  padding: 4px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 14px 12px 42px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--nevio-border);
-  background: var(--nevio-bg);
-  color: var(--mau-chu);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.form-input:focus {
-  border-color: var(--nevio-yellow);
-  box-shadow: 0 0 0 3px rgba(253, 221, 98, 0.25);
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 .form-terms-row {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 12.5px;
+  gap: 8px;
+  font-size: 12px;
   color: var(--mau-chu-phu);
-  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .terms-label {
-  line-height: 1.5;
   cursor: pointer;
 }
 
 .w-full-center {
   width: 100%;
-  justify-content: center;
-  padding: 14px 24px;
-  font-size: 15px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 800;
   margin-top: 6px;
 }
 
-/* Quick Roles Section */
+/* Quick Roles */
 .quick-roles-section {
-  margin-top: 30px;
-  padding-top: 24px;
   border-top: 1px dashed var(--nevio-border);
+  padding-top: 20px;
+  margin-bottom: 20px;
 }
 
 .quick-title {
   font-size: 12px;
-  font-weight: 700;
-  color: var(--mau-chu-mo);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 14px;
+  font-weight: 800;
+  color: var(--mau-chu-phu);
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .quick-grid.two-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .btn-quick-role {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
   background: var(--nevio-light-grey);
   border: 1px solid var(--nevio-border);
-  border-radius: var(--radius-md);
-  padding: 14px;
-  text-align: left;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  text-align: left;
   transition: all 0.2s ease;
 }
 
-.btn-quick-role:hover, .btn-quick-role.active {
-  border-color: var(--nevio-yellow);
-  background: var(--nevio-card-bg);
-  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.2);
-  transform: translateY(-2px);
+.btn-quick-role:hover {
+  border-color: #fddd62;
+  transform: translateY(-1px);
+}
+
+.btn-quick-role.active {
+  background: #ffffff;
+  border-color: #e5be29;
+  box-shadow: 0 4px 12px rgba(253, 221, 98, 0.25);
+}
+
+[data-theme="dark"] .btn-quick-role.active {
+  background: #27272a;
 }
 
 .role-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.role-icon-box.bg-gold {
+  background: #fddd62;
+  color: #18181b;
+}
+
+.role-icon-box.bg-white {
+  background: #18181b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .role-icon-box.bg-white {
+  background: #3f3f46;
+}
+
+.role-text-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .role-text-meta strong {
-  display: block;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--mau-chu);
-  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .role-text-meta span {
-  font-size: 11.5px;
-  color: var(--mau-chu-phu);
-  line-height: 1.4;
-  display: block;
+  font-size: 10.5px;
+  color: var(--mau-chu-mo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Footer */
 .login-footer {
   text-align: center;
-  margin-top: 24px;
+  border-top: 1px solid var(--nevio-border);
+  padding-top: 16px;
 }
 
 .link-back-home {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12.5px;
+  font-weight: 700;
   color: var(--mau-chu-phu);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.15s;
 }
 
 .link-back-home:hover {
-  color: var(--nevio-yellow);
+  color: var(--mau-chu);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 540px) {
   .login-card {
-    padding: 28px 20px;
+    padding: 24px 18px;
   }
   .quick-grid.two-cols {
     grid-template-columns: 1fr;

@@ -554,9 +554,9 @@
             <label>URL Hình ảnh đại diện</label>
             <input v-model="formDiemDen.hinh_anh" type="url" placeholder="https://images.unsplash.com/photo-..." class="form-input" />
             <div class="quick-sample-imgs">
-              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 1: Resort Biển</button>
+              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 1: Resort Biển</button>
               <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 2: Di Sản</button>
-              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 3: Du Thuyền</button>
+              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1528649659491-23edddd0b98a?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 3: Du Thuyền</button>
             </div>
           </div>
 
