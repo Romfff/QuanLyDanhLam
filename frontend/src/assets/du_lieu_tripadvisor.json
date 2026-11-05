@@ -1,0 +1,522 @@
+{
+  "phien_ban": "2.0.0-production",
+  "thoi_gian_cap_nhat": "2026-11-05 11:43:26",
+  "tong_so_diem_den": 7,
+  "tong_so_danh_gia": 874,
+  "diem_den": [
+    {
+      "id": 1,
+      "ten": "Ambassador Cruise - Halong Bay",
+      "ten_rut_gon": "Du thuyền Ambassador Hạ Long",
+      "danh_muc": "cruises",
+      "danh_muc_ten": "Du thuyền nghỉ dưỡng & Ẩm thực 5 sao",
+      "loai_hinh": "Du thuyền nghỉ dưỡng & Ẩm thực 5 sao",
+      "tinh_thanh": "Quảng Ninh",
+      "dia_chi": "Cảng tàu khách quốc tế Hạ Long, Bãi Cháy, TP. Hạ Long, Quảng Ninh",
+      "tripadvisor_url": "https://www.tripadvisor.com/Attraction_Review-g293923-d23300210-Reviews-Ambassador_Cruise_Halong_Bay-H_Long_Bay_Quang_Ninh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1528649659491-23edddd0b98a?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1528649659491-23edddd0b98a?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1669819894338-53ab7afc6958?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Du thuyền ẩm thực & nghỉ dưỡng 5 sao lớn nhất trên Vịnh Hạ Long với sức chứa 500 khách. Sở hữu boong tắm nắng đôi 500m², cầu kính vô cực, bể sục Jacuzzi ngoài trời và tiệc buffet hải sản tôm hùm thượng hạng chuẩn Michelin.",
+      "danh_hieu": "Travelers' Choice Best of the Best 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #1 trên 124 Tour du thuyền tại Vịnh Hạ Long",
+      "thong_tin_lien_he": {
+        "website": "https://ambassadorcruise.com",
+        "hotline": "1900 3045",
+        "gio_mo_cua": "07:30 - 20:30 Hàng ngày",
+        "khoang_gia": "3.450.000₫ - 6.200.000₫ / khách"
+      },
+      "diem_danh_tieng_tb": 5.0,
+      "tong_luot_danh_gia": 164,
+      "ty_le_tich_cuc": 100.0,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.977 - 1.000",
+      "wilson_lower": 0.9771,
+      "wilson_upper": 1.0,
+      "rating_histogram": {
+        "xuat_sac": 160,
+        "rat_tot": 4,
+        "trung_binh": 0,
+        "kem": 0,
+        "toi_te": 0
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        },
+        "am_thuc": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        }
+      }
+    },
+    {
+      "id": 2,
+      "ten": "Melia Vinpearl Phu Quoc",
+      "ten_rut_gon": "Melia Vinpearl Phú Quốc Resort",
+      "danh_muc": "hotels",
+      "danh_muc_ten": "Khu nghỉ dưỡng & Khách sạn biển 5 sao",
+      "loai_hinh": "Khu nghỉ dưỡng biển cao cấp",
+      "tinh_thanh": "Kiên Giang",
+      "dia_chi": "Khu Bãi Dài, Xã Gành Dầu, TP. Phú Quốc, Kiên Giang",
+      "tripadvisor_url": "https://www.tripadvisor.com/Hotel_Review-g12666019-d12311302-Reviews-Melia_Vinpearl_Phu_Quoc-Ganh_Dau_Phu_Quoc_Island_Kien_Giang_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Khu nghỉ dưỡng 5 sao biệt lập bên bờ biển Bãi Dài ngắm hoàng hôn đẹp nhất đảo ngọc Phú Quốc. Toàn bộ là biệt thự sang trọng có hồ bơi riêng, vườn nhiệt đới, dịch vụ YHI Spa chuẩn Tây Ban Nha và chuỗi nhà hàng Địa Trung Hải đẳng cấp.",
+      "danh_hieu": "Travelers' Choice 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #3 trên 86 Khu nghỉ dưỡng tại Bãi Dài Phú Quốc",
+      "thong_tin_lien_he": {
+        "website": "https://melia.com/vinpearl-phu-quoc",
+        "hotline": "0297 362 5555",
+        "gio_mo_cua": "Mở cửa 24/7",
+        "khoang_gia": "4.800.000₫ - 15.000.000₫ / đêm"
+      },
+      "diem_danh_tieng_tb": 5.0,
+      "tong_luot_danh_gia": 160,
+      "ty_le_tich_cuc": 98.8,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.956 - 0.997",
+      "wilson_lower": 0.9556,
+      "wilson_upper": 0.9966,
+      "rating_histogram": {
+        "xuat_sac": 157,
+        "rat_tot": 1,
+        "trung_binh": 1,
+        "kem": 0,
+        "toi_te": 1
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "am_thuc": {
+          "diem": 4.9,
+          "tich_cuc": 97,
+          "tieu_cuc": 0,
+          "trung_tinh": 3
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        }
+      }
+    },
+    {
+      "id": 4,
+      "ten": "Vinpearl Resort & Spa Ha Long",
+      "ten_rut_gon": "Vinpearl Resort & Spa Hạ Long",
+      "danh_muc": "hotels",
+      "danh_muc_ten": "Khu nghỉ dưỡng Đảo biệt lập 5 sao",
+      "loai_hinh": "Khu nghỉ dưỡng đảo biệt lập",
+      "tinh_thanh": "Quảng Ninh",
+      "dia_chi": "Đảo Rều, Bãi Cháy, TP. Hạ Long, Quảng Ninh",
+      "tripadvisor_url": "https://www.tripadvisor.com/Hotel_Review-g293923-d8595372-Reviews-Vinpearl_Resort_Spa_Ha_Long-H_Long_Bay_Quang_Ninh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Khu nghỉ dưỡng biệt lập 4 mặt hướng biển độc nhất vô nhị tọa lạc trọn vẹn trên đảo Rều. Thiết kế bán nguyệt mang phong cách tân cổ điển tráng lệ lấy cảm hứng từ nhà hát Rennes (Pháp) với bể bơi ngoài trời 1.200m² nhìn thẳng ra vịnh di sản.",
+      "danh_hieu": "Travelers' Choice 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #2 trên 89 Khách sạn cao cấp tại TP. Hạ Long",
+      "thong_tin_lien_he": {
+        "website": "https://vinpearl.com/vi/hotels/vinpearl-resort-spa-ha-long",
+        "hotline": "0203 355 6868",
+        "gio_mo_cua": "Mở cửa 24/7 (Cano trung chuyển đưa đón 24/7)",
+        "khoang_gia": "3.100.000₫ - 8.500.000₫ / đêm"
+      },
+      "diem_danh_tieng_tb": 4.8,
+      "tong_luot_danh_gia": 140,
+      "ty_le_tich_cuc": 96.4,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.919 - 0.985",
+      "wilson_lower": 0.9191,
+      "wilson_upper": 0.9847,
+      "rating_histogram": {
+        "xuat_sac": 129,
+        "rat_tot": 6,
+        "trung_binh": 1,
+        "kem": 0,
+        "toi_te": 4
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "am_thuc": {
+          "diem": 4.9,
+          "tich_cuc": 96,
+          "tieu_cuc": 0,
+          "trung_tinh": 4
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 4.9,
+          "tich_cuc": 96,
+          "tieu_cuc": 0,
+          "trung_tinh": 4
+        }
+      }
+    },
+    {
+      "id": 3,
+      "ten": "Halong Bay",
+      "ten_rut_gon": "Vịnh Hạ Long",
+      "danh_muc": "attractions",
+      "danh_muc_ten": "Di sản Thiên nhiên Thế giới UNESCO",
+      "loai_hinh": "Di sản Thiên nhiên Thế giới UNESCO",
+      "tinh_thanh": "Quảng Ninh",
+      "dia_chi": "TP. Hạ Long, Tỉnh Quảng Ninh, Việt Nam",
+      "tripadvisor_url": "https://www.tripadvisor.com/Attraction_Review-g293923-d1968469-Reviews-Halong_Bay-H_Long_Bay_Quang_Ninh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1669819894338-53ab7afc6958?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1528649659491-23edddd0b98a?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Kỳ quan thiên nhiên thế giới 2 lần được UNESCO công nhận với hơn 1.600 hòn đảo đá vôi kỳ vĩ nhô lên giữa làn nước xanh lục bảo. Điểm đến du lịch biểu tượng số 1 Việt Nam với trải nghiệm chèo thuyền kayak qua hang Luồn, hang Sửng Sốt và ngắm toàn cảnh vịnh từ đỉnh Ti Tốp.",
+      "danh_hieu": "Travelers' Choice Best of the Best 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #1 trên 152 Địa điểm tham quan tại Quảng Ninh",
+      "thong_tin_lien_he": {
+        "website": "https://halongbay.gov.vn",
+        "hotline": "0203 384 6564",
+        "gio_mo_cua": "06:30 - 18:30 Hàng ngày",
+        "khoang_gia": "290.000₫ - 1.200.000₫ / vé tham quan"
+      },
+      "diem_danh_tieng_tb": 4.8,
+      "tong_luot_danh_gia": 144,
+      "ty_le_tich_cuc": 95.8,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.912 - 0.981",
+      "wilson_lower": 0.9121,
+      "wilson_upper": 0.9808,
+      "rating_histogram": {
+        "xuat_sac": 122,
+        "rat_tot": 16,
+        "trung_binh": 3,
+        "kem": 2,
+        "toi_te": 1
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 4.8,
+          "tich_cuc": 89,
+          "tieu_cuc": 0,
+          "trung_tinh": 11
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "am_thuc": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 1,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        }
+      }
+    },
+    {
+      "id": 5,
+      "ten": "Trang An Grottoes",
+      "ten_rut_gon": "Quần thể Danh thắng Tràng An",
+      "danh_muc": "attractions",
+      "danh_muc_ten": "Di sản Thế giới Kép UNESCO",
+      "loai_hinh": "Di sản thế giới kép UNESCO",
+      "tinh_thanh": "Ninh Bình",
+      "dia_chi": "Tràng An, Huyện Hoa Lư, Tỉnh Ninh Bình, Việt Nam",
+      "tripadvisor_url": "https://www.tripadvisor.com/Attraction_Review-g303945-d2484803-Reviews-Trang_An_Grottoes-Ninh_Binh_Ninh_Binh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1571406252288-cc9c25bb4a44?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1571406252288-cc9c25bb4a44?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1721543548574-2ee84281a19e?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1741320130708-7a91adf5fc4e?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Di sản văn hóa và thiên nhiên thế giới kép đầu tiên tại Đông Nam Á. Tuyến thuyền tay truyền thống lướt êm đềm qua hệ thống 31 thung lũng, 48 hang động xuyên thủy kỳ ảo, đền thờ tâm linh cổ kính và phim trường Kong: Skull Island giữa non nước Ninh Bình.",
+      "danh_hieu": "Travelers' Choice Best of the Best 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #1 trên 98 Địa điểm tham quan tại Ninh Bình",
+      "thong_tin_lien_he": {
+        "website": "https://trangandanhthang.vn",
+        "hotline": "0229 362 0335",
+        "gio_mo_cua": "07:00 - 17:00 Hàng ngày",
+        "khoang_gia": "250.000₫ / người lớn, 120.000₫ / trẻ em"
+      },
+      "diem_danh_tieng_tb": 4.6,
+      "tong_luot_danh_gia": 128,
+      "ty_le_tich_cuc": 93.0,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.872 - 0.963",
+      "wilson_lower": 0.8718,
+      "wilson_upper": 0.9626,
+      "rating_histogram": {
+        "xuat_sac": 95,
+        "rat_tot": 24,
+        "trung_binh": 6,
+        "kem": 1,
+        "toi_te": 2
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 4.8,
+          "tich_cuc": 88,
+          "tieu_cuc": 0,
+          "trung_tinh": 12
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 1,
+          "trung_tinh": 0
+        },
+        "am_thuc": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 1,
+          "trung_tinh": 1
+        }
+      }
+    },
+    {
+      "id": 7,
+      "ten": "Van Long Nature Reserve",
+      "ten_rut_gon": "Đầm Vân Long",
+      "danh_muc": "attractions",
+      "danh_muc_ten": "Khu bảo tồn Thiên nhiên Đất ngập nước",
+      "loai_hinh": "Khu bảo tồn thiên nhiên ngập nước",
+      "tinh_thanh": "Ninh Bình",
+      "dia_chi": "Xã Gia Vân, Huyện Gia Viễn, Tỉnh Ninh Bình, Việt Nam",
+      "tripadvisor_url": "https://www.tripadvisor.com/Attraction_Review-g303945-d2044218-Reviews-Van_Long_Nature_Reserve-Ninh_Binh_Ninh_Binh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1768158186882-9e7e15e53532?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1768158186882-9e7e15e53532?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1571406252288-cc9c25bb4a44?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1721543548574-2ee84281a19e?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Vùng đất ngập nước nội địa lớn nhất đồng bằng Bắc Bộ, mệnh danh là 'vịnh không sóng'. Nơi cư trú của đàn Voọc mông trắng quý hiếm lớn nhất thế giới, nổi tiếng với sự thanh bình tuyệt đối khi xuôi thuyền nan giữa đầm sen, lau sậy và những vách núi đá vôi sừng sững.",
+      "danh_hieu": "Travelers' Choice 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #3 trên 98 Điểm sinh thái tại Ninh Bình",
+      "thong_tin_lien_he": {
+        "website": "https://ninhbinh.gov.vn/vanlong",
+        "hotline": "0229 386 8798",
+        "gio_mo_cua": "07:30 - 18:00 Hàng ngày",
+        "khoang_gia": "100.000₫ / vé đò tham quan"
+      },
+      "diem_danh_tieng_tb": 4.6,
+      "tong_luot_danh_gia": 45,
+      "ty_le_tich_cuc": 93.3,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.821 - 0.977",
+      "wilson_lower": 0.8214,
+      "wilson_upper": 0.9771,
+      "rating_histogram": {
+        "xuat_sac": 29,
+        "rat_tot": 13,
+        "trung_binh": 3,
+        "kem": 0,
+        "toi_te": 0
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 4.8,
+          "tich_cuc": 89,
+          "tieu_cuc": 0,
+          "trung_tinh": 11
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "am_thuc": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "ten": "Mua Caves",
+      "ten_rut_gon": "Hang Múa (Núi Ngọa Long)",
+      "danh_muc": "attractions",
+      "danh_muc_ten": "Tuyệt đỉnh Danh thắng & Check-in",
+      "loai_hinh": "Danh lam thắng cảnh & Leo núi ngắm cảnh",
+      "tinh_thanh": "Ninh Bình",
+      "dia_chi": "Thôn Khê Đầu Hạ, Xã Ninh Xuân, Huyện Hoa Lư, Ninh Bình",
+      "tripadvisor_url": "https://www.tripadvisor.com/Attraction_Review-g303945-d5321519-Reviews-Mua_Caves-Ninh_Binh_Ninh_Binh_Province.html",
+      "hinh_anh": "https://images.unsplash.com/photo-1677684509677-2bb3d1337e51?auto=format&fit=crop&w=1200&q=80",
+      "anh_gallery": [
+        "https://images.unsplash.com/photo-1677684509677-2bb3d1337e51?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1571406252288-cc9c25bb4a44?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1741320130708-7a91adf5fc4e?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "mo_ta": "Được mệnh danh là 'Vạn Lý Trường Thành thu nhỏ' với gần 500 bậc thang đá uốn lượn dẫn lên đỉnh núi Ngọa Long. Từ tượng rồng đá trên đỉnh, du khách có tầm nhìn panorama 360 độ ngắm trọn thung lũng Tam Cốc và cánh đồng lúa chín vàng thơ mộng.",
+      "danh_hieu": "Travelers' Choice 2026",
+      "xep_hang_dia_phuong": "Xếp hạng #2 trên 98 Điểm ngắm cảnh tại Ninh Bình",
+      "thong_tin_lien_he": {
+        "website": "https://hangmua.com.vn",
+        "hotline": "0229 361 8686",
+        "gio_mo_cua": "06:00 - 19:00 Hàng ngày",
+        "khoang_gia": "100.000₫ / người lớn"
+      },
+      "diem_danh_tieng_tb": 4.5,
+      "tong_luot_danh_gia": 93,
+      "ty_le_tich_cuc": 89.2,
+      "trang_thai_wilson": "diem_sang",
+      "nhan_trang_thai": "Điểm sáng du lịch (Travelers' Choice)",
+      "khoang_tin_cay_wilson": "0.813 - 0.941",
+      "wilson_lower": 0.8133,
+      "wilson_upper": 0.9405,
+      "rating_histogram": {
+        "xuat_sac": 66,
+        "rat_tot": 17,
+        "trung_binh": 5,
+        "kem": 3,
+        "toi_te": 2
+      },
+      "khia_canh": {
+        "canh_quan": {
+          "diem": 4.8,
+          "tich_cuc": 91,
+          "tieu_cuc": 0,
+          "trung_tinh": 9
+        },
+        "dich_vu": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "am_thuc": {
+          "diem": 5.0,
+          "tich_cuc": 100,
+          "tieu_cuc": 0,
+          "trung_tinh": 0
+        },
+        "ve_sinh": {
+          "diem": 5.0,
+          "tich_cuc": 99,
+          "tieu_cuc": 0,
+          "trung_tinh": 1
+        },
+        "gia_ca": {
+          "diem": 5.0,
+          "tich_cuc": 98,
+          "tieu_cuc": 0,
+          "trung_tinh": 2
+        }
+      }
+    }
+  ]
+}
