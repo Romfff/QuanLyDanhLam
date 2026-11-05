@@ -433,14 +433,18 @@ async function dangKy() {
 .login-container {
   width: 100%;
   max-width: 520px;
+  box-sizing: border-box;
 }
 
 .login-card {
   background: var(--nevio-card-bg);
   border: 1px solid var(--nevio-border);
   border-radius: var(--radius-xl);
-  padding: 36px;
+  padding: 36px 32px;
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
 }
 
 .login-header {
@@ -588,6 +592,8 @@ async function dangKy() {
 
 .form-input {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 11px 40px 11px 36px;
   background: var(--nevio-input-bg);
   border: 1px solid var(--nevio-border);
@@ -636,6 +642,11 @@ async function dangKy() {
 
 .w-full-center {
   width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   padding: 12px 20px;
   font-size: 14px;
   font-weight: 800;
@@ -647,6 +658,8 @@ async function dangKy() {
   border-top: 1px dashed var(--nevio-border);
   padding-top: 20px;
   margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .quick-title {
@@ -659,8 +672,10 @@ async function dangKy() {
 
 .quick-grid.two-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-quick-role {
@@ -674,6 +689,9 @@ async function dangKy() {
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .btn-quick-role:hover {
@@ -718,6 +736,9 @@ async function dangKy() {
 .role-text-meta {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
   overflow: hidden;
 }
 
@@ -732,9 +753,12 @@ async function dangKy() {
 .role-text-meta span {
   font-size: 10.5px;
   color: var(--mau-chu-mo);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .login-footer {
