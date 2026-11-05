@@ -1,13 +1,17 @@
 <template>
   <header class="nevio-navbar-wrap">
     <div class="nevio-navbar-inner">
-      <!-- 1. Brand Logo: TripAdvisor Intelligence -->
+      <!-- 1. Brand Logo: DuLichSo - ĐT-12 -->
       <router-link to="/dashboard" class="nevio-brand">
-        <div class="nevio-logo-icon tripadvisor-owl-badge">
-          <span style="font-size: 20px;">🦉</span>
+        <div class="nevio-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L4 5.5V11.5C4 16.8 7.4 21.6 12 23C16.6 21.6 20 16.8 20 11.5V5.5L12 2Z" fill="#18181b"/>
+            <path d="M12 6.2L13.65 9.55L17.35 10.08L14.67 12.69L15.3 16.37L12 14.63L8.7 16.37L9.33 12.69L6.65 10.08L10.35 9.55L12 6.2Z" fill="#fddd62"/>
+          </svg>
         </div>
         <div class="nevio-brand-text">
-          <span class="nevio-brand-title">TripAdvisor <span class="tag-dt12">AI Verified</span></span>
+          <span class="nevio-brand-title">DuLichSo <span class="tag-dt12">ĐT-12</span></span>
+          <span class="nevio-brand-sub">Giám Sát Danh Tiếng Điểm Đến</span>
         </div>
       </router-link>
 
@@ -219,32 +223,49 @@ onMounted(() => {
 }
 
 .nevio-logo-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: #fddd62;
+  border: 1px solid #e5be29;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.nevio-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
 .nevio-brand-title {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 900;
   color: var(--mau-chu, #000);
   letter-spacing: -0.03em;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nevio-brand-sub {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--mau-chu-phu, #52525b);
+  white-space: nowrap;
 }
 
 .tag-dt12 {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   background: #fddd62;
   color: #18181b;
   padding: 2px 7px;
   border-radius: 9999px;
-  margin-left: 3px;
-  vertical-align: middle;
+  border: 1px solid #e5be29;
 }
 
 .nevio-nav-links {
