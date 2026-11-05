@@ -27,8 +27,7 @@ const routes = [
   },
   {
     path: '/phieu-cua-toi',
-    name: 'PhieuCuaToi',
-    component: () => import('../views/PhieuCuaToiView.vue')
+    redirect: '/diem-den'
   },
   {
     path: '/danh-sach-danh-gia',

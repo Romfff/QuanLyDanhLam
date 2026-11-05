@@ -20,20 +20,17 @@
           <span>Khám Phá</span>
         </router-link>
         <router-link to="/diem-den" class="nevio-link">
-          <span>Điểm Đến</span>
+          <span>Điểm Đến &amp; Xếp Hạng</span>
         </router-link>
         <router-link to="/absa" class="nevio-link">
-          <span>Phân Tích ABSA</span>
+          <span>Phân Tích PhoBERT</span>
         </router-link>
         <router-link to="/danh-sach-danh-gia" class="nevio-link">
-          <span>874 Đánh Giá TripAdvisor</span>
-        </router-link>
-        <router-link to="/phieu-cua-toi" class="nevio-link">
-          <span>Ví Phiếu Của Tôi</span>
+          <span>Cộng Đồng Đánh Giá</span>
         </router-link>
         <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="nevio-link admin-nav-link">
           <ShieldCheck :size="15" />
-          <span>Quản Trị Admin</span>
+          <span>Quản Trị Hệ Thống</span>
         </router-link>
       </nav>
 
@@ -78,16 +75,13 @@
         Khám Phá
       </router-link>
       <router-link to="/diem-den" class="mobile-nav-item" @click="moMenuMobile = false">
-        Danh Sách 7 Điểm Đến
+        Điểm Đến &amp; Xếp Hạng
       </router-link>
       <router-link to="/absa" class="mobile-nav-item" @click="moMenuMobile = false">
-        Phân Tích 5 Khía Cạnh ABSA
+        Phân Tích Cảm Xúc PhoBERT
       </router-link>
       <router-link to="/danh-sach-danh-gia" class="mobile-nav-item" @click="moMenuMobile = false">
-        874 Đánh Giá TripAdvisor
-      </router-link>
-      <router-link to="/phieu-cua-toi" class="mobile-nav-item" @click="moMenuMobile = false">
-        Ví Phiếu Của Tôi
+        Cộng Đồng Đánh Giá TripAdvisor
       </router-link>
       <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="mobile-nav-item admin-mobile-item" @click="moMenuMobile = false">
         👑 Quản Trị Hệ Thống Admin
