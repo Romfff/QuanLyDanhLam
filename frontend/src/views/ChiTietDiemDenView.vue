@@ -570,6 +570,12 @@ const conLai = ref(900)
 let timer = null
 
 const danhGiaCuaDiemDen = ref([])
+const votesMap = ref(JSON.parse(localStorage.getItem('dt12_helpful_votes') || '{}'))
+function laySoLuotHuuIch(reviewId) { return votesMap.value[reviewId] || 0 }
+function voteHuuIch(reviewId) {
+  const newVal = DataService.tangLuotHuuIch(reviewId)
+  votesMap.value = { ...votesMap.value, [reviewId]: newVal }
+}
 const soLuongHienThi = ref(6)
 const locSaoHienTai = ref(0) // 0: Tất cả, 5: 5 sao, 4: 4 sao, 3: 3 sao, 1: 1-2 sao
 
@@ -1740,7 +1746,6 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
 }
-</style>
 
 /* TripAdvisor Official Booking Widget */
 .widget-booking-official {
@@ -1899,3 +1904,4 @@ onUnmounted(() => {
   border-color: #facc15;
   transform: translateY(-1px);
 }
+</style>
