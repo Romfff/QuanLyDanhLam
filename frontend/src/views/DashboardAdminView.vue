@@ -162,6 +162,13 @@
                       <ExternalLink :size="15" />
                     </router-link>
                     <button 
+                      @click="moModalThemDanhGiaChoDiem(dest)" 
+                      class="btn-icon-action" 
+                      :title="'Thêm bài đánh giá cho ' + dest.ten"
+                    >
+                      <MessageSquare :size="15" />
+                    </button>
+                    <button 
                       @click="gomDanhGiaChoDiem(dest)" 
                       :disabled="dangGomDiemId === dest.id"
                       class="btn-icon-action text-warning" 
@@ -317,17 +324,29 @@
       <div v-if="tabHienTai === 'danh_gia'" class="tab-panel anim-fade-in">
         <div class="panel-header-row">
           <div>
-            <h3 class="panel-title">Kiểm Duyệt &amp; Quản Lý 874 Đánh Giá TripAdvisor</h3>
-            <p class="panel-desc">Theo dõi các phản hồi nguyên văn, kiểm tra sắc thái và loại bỏ các bài viết spam.</p>
+            <h3 class="panel-title">Kiểm Duyệt &amp; Quản Lý {{ tongSoDanhGia }} Đánh Giá TripAdvisor</h3>
+            <p class="panel-desc">Theo dõi phản hồi nguyên văn, thêm đánh giá mới cho địa điểm, kiểm tra sắc thái PhoBERT và ẩn đánh giá spam.</p>
           </div>
-          <div class="search-mini-wrap">
-            <Search :size="15" class="text-muted" />
-            <input 
-              v-model="tuKhoaDanhGia" 
-              type="text" 
-              placeholder="Tìm kiếm nội dung đánh giá..." 
-              class="input-search-mini"
-            />
+          <div class="review-mod-controls">
+            <select v-model="locDiemDenDanhGia" class="select-filter-mini">
+              <option value="">Tất cả điểm đến ({{ dsDiemDen.length }})</option>
+              <option v-for="d in dsDiemDen" :key="d.id" :value="d.id">
+                {{ d.ten_rut_gon || d.ten }} ({{ d.tong_luot_danh_gia }})
+              </option>
+            </select>
+            <div class="search-mini-wrap">
+              <Search :size="15" class="text-muted" />
+              <input 
+                v-model="tuKhoaDanhGia" 
+                type="text" 
+                placeholder="Tìm nội dung đánh giá..." 
+                class="input-search-mini"
+              />
+            </div>
+            <button @click="moModalThemDanhGiaChoDiem(null)" class="btn-action-primary">
+              <Plus :size="15" />
+              <span>Thêm Đánh Giá</span>
+            </button>
           </div>
         </div>
 
@@ -509,6 +528,46 @@
             </div>
           </div>
         </div>
+
+        <!-- Cloud Integration Card: Supabase & Cloudinary Connector -->
+        <div class="guide-card cloud-connector-card" style="margin-top: 24px;">
+          <div class="guide-head">
+            <Cloud :size="20" class="text-sky" />
+            <h3>Cấu Hình Đám Mây Supabase &amp; Cloudinary (Triển Khai Vercel Production)</h3>
+            <span class="cloud-status-pill" :class="daKetNoiCloud ? 'connected' : 'hybrid'">
+              {{ daKetNoiCloud ? '☁️ Đã kết nối Cloud (Supabase/Cloudinary)' : '⚡ Chế độ Hybrid Zero-Config (Sẵn sàng trên Vercel)' }}
+            </span>
+          </div>
+          <p class="guide-text">
+            Hệ thống ĐT-12 được thiết kế theo kiến trúc <strong>Hybrid Persistence</strong>: khi deploy lên <strong>Vercel</strong>, quản trị viên có thể <strong>thêm điểm đến mới, tải ảnh trực tiếp từ máy tính (nén chuẩn Canvas JPEG/WebP) và gom/thêm đánh giá ngay lập tức mà KHÔNG bắt buộc phải cấu hình Supabase hay Cloudinary</strong>. Nếu muốn đồng bộ dữ liệu đa thiết bị qua đám mây, hãy điền thông tin kết nối dưới đây:
+          </p>
+
+          <form @submit.prevent="luuCauHinhDamMay" class="cloud-config-grid">
+            <div class="form-group">
+              <label>Supabase Project URL (VITE_SUPABASE_URL)</label>
+              <input v-model="formCloud.supabaseUrl" type="url" placeholder="https://xyzcompany.supabase.co" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Supabase Anon Public Key (VITE_SUPABASE_ANON_KEY)</label>
+              <input v-model="formCloud.supabaseAnonKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..." class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Cloudinary Cloud Name (VITE_CLOUDINARY_CLOUD_NAME)</label>
+              <input v-model="formCloud.cloudinaryCloudName" type="text" placeholder="Ví dụ: dxyz12345" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Cloudinary Unsigned Upload Preset (VITE_CLOUDINARY_UPLOAD_PRESET)</label>
+              <input v-model="formCloud.cloudinaryUploadPreset" type="text" placeholder="Ví dụ: tripadvisor_unsigned" class="form-input" />
+            </div>
+            <div class="cloud-config-actions">
+              <span v-if="thongBaoCloud" class="cloud-msg-ok">{{ thongBaoCloud }}</span>
+              <button type="submit" class="nevio-btn-yellow">
+                <Check :size="15" />
+                <span class="button-text">Lưu Cấu Hình Cloud Connector</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -524,12 +583,12 @@
           <div class="form-grid-2">
             <div class="form-group">
               <label>Tên điểm đến đầy đủ *</label>
-              <input v-model="formDiemDen.ten" type="text" required placeholder="Ví dụ: Bà Nà Hills - Sun World Đà Nẵng" class="form-input" />
+              <input v-model="formDiemDen.ten" type="text" required placeholder="Ví dụ: Sun World Bà Nà Hills Đà Nẵng" class="form-input" />
             </div>
 
             <div class="form-group">
               <label>Tên rút gọn *</label>
-              <input v-model="formDiemDen.ten_rut_gon" type="text" required placeholder="Ví dụ: Bà Nà Hills Đà Nẵng" class="form-input" />
+              <input v-model="formDiemDen.ten_rut_gon" type="text" required placeholder="Ví dụ: Bà Nà Hills" class="form-input" />
             </div>
           </div>
 
@@ -541,7 +600,7 @@
 
             <div class="form-group">
               <label>Loại hình du lịch *</label>
-              <input v-model="formDiemDen.loai_hinh" type="text" required placeholder="Ví dụ: Khu du lịch sinh thái &amp; Cáp treo 5 sao" class="form-input" />
+              <input v-model="formDiemDen.loai_hinh" type="text" required placeholder="Ví dụ: Khu nghỉ dưỡng &amp; Di sản" class="form-input" />
             </div>
           </div>
 
@@ -551,24 +610,122 @@
           </div>
 
           <div class="form-group">
-            <label>URL Hình ảnh đại diện</label>
-            <input v-model="formDiemDen.hinh_anh" type="url" placeholder="https://images.unsplash.com/photo-..." class="form-input" />
-            <div class="quick-sample-imgs">
-              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 1: Resort Biển</button>
-              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 2: Di Sản</button>
-              <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1528649659491-23edddd0b98a?auto=format&fit=crop&w=800&q=80'" class="btn-sample-img">Mẫu 3: Du Thuyền</button>
+            <label>Hình ảnh đại diện (Tải ảnh từ máy tính / Cloudinary hoặc dán URL)</label>
+            <div class="upload-img-row">
+              <img :src="formDiemDen.hinh_anh" alt="Preview" class="modal-img-preview" @error="xuLyLoiImg" />
+              <div class="upload-img-controls">
+                <input v-model="formDiemDen.hinh_anh" type="text" placeholder="Dán URL hình ảnh hoặc bấm Tải ảnh bên dưới..." class="form-input" />
+                <div class="upload-btns-bar">
+                  <label class="btn-upload-file">
+                    <Upload :size="14" />
+                    <span>{{ dangUploadAnh ? 'Đang xử lý ảnh...' : 'Tải ảnh từ máy (Cloudinary / Base64)' }}</span>
+                    <input type="file" accept="image/*" @change="xuLyUploadFileAnh" hidden />
+                  </label>
+                  <span v-if="cheDoAnhVuaTai" class="upload-mode-tag">{{ cheDoAnhVuaTai }}</span>
+                </div>
+                <div class="quick-sample-imgs">
+                  <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=1000&q=85'" class="btn-sample-img">Mẫu 1: Vịnh Đảo</button>
+                  <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1000&q=85'" class="btn-sample-img">Mẫu 2: Resort 5 Sao</button>
+                  <button type="button" @click="formDiemDen.hinh_anh = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85'" class="btn-sample-img">Mẫu 3: Di Sản Tràng An</button>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label>Mô tả giới thiệu</label>
-            <textarea v-model="formDiemDen.mo_ta" rows="3" placeholder="Nhập tóm tắt trải nghiệm, điểm nổi bật của địa danh..." class="form-textarea"></textarea>
+            <label>Mô tả giới thiệu điểm đến</label>
+            <textarea v-model="formDiemDen.mo_ta" rows="3" placeholder="Nhập tóm tắt trải nghiệm, kiến trúc, cảnh sắc nổi bật của địa danh..." class="form-textarea"></textarea>
+          </div>
+
+          <!-- Tùy chọn khởi tạo đánh giá ngay khi thêm địa điểm mới -->
+          <div v-if="!dangSuaId" class="init-reviews-box">
+            <label class="checkbox-init-row">
+              <input type="checkbox" v-model="formDiemDen.tu_dong_gom_danh_gia" />
+              <span>⚡ <strong>Tự động gom 30 đánh giá TripAdvisor &amp; chạy PhoBERT + Wilson Score (95% CI)</strong> ngay sau khi tạo địa điểm</span>
+            </label>
+            <div class="init-first-review-fields">
+              <span class="init-sub-title">✍️ Hoặc đính kèm thêm 1 bài đánh giá thực tế đầu tiên (Tùy chọn):</span>
+              <div class="form-grid-2">
+                <input v-model="formDiemDen.danh_gia_dau_tien_tieu_de" type="text" placeholder="Tiêu đề đánh giá (VD: Kỳ nghỉ tuyệt vời...)" class="form-input" />
+                <select v-model="formDiemDen.danh_gia_dau_tien_sao" class="form-input">
+                  <option :value="5">⭐⭐⭐⭐⭐ 5 Sao (Xuất sắc)</option>
+                  <option :value="4">⭐⭐⭐⭐ 4 Sao (Rất tốt)</option>
+                  <option :value="3">⭐⭐⭐ 3 Sao (Trung bình)</option>
+                </select>
+              </div>
+              <textarea v-model="formDiemDen.danh_gia_dau_tien_noi_dung" rows="2" placeholder="Nội dung đánh giá chi tiết của du khách cho địa điểm mới này..." class="form-textarea"></textarea>
+            </div>
           </div>
 
           <div class="modal-foot">
             <button type="button" @click="dongModal" class="btn-cancel">Hủy Bỏ</button>
             <button type="submit" class="nevio-btn-yellow">
               <span class="button-text">{{ dangSuaId ? 'Cập Nhật Điểm Đến' : 'Lưu Điểm Đến Mới' }}</span>
+              <div class="btn-icon-circle"><Check :size="16" /></div>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= MODAL: THÊM ĐÁNH GIÁ CHO ĐIỂM ĐẾN ================= -->
+    <div v-if="moModalThemDanhGia" class="nevio-modal-overlay">
+      <div class="nevio-modal-card anim-scale-up">
+        <div class="modal-head">
+          <h3>✍️ Thêm Đánh Giá Mới &amp; Phân Tích PhoBERT</h3>
+          <button @click="moModalThemDanhGia = false" class="btn-close-modal">✕</button>
+        </div>
+
+        <form @submit.prevent="luuDanhGiaMoiAdmin" class="modal-form">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Chọn Điểm Đến *</label>
+              <select v-model="formDanhGiaMoi.diem_den_id" required class="form-input">
+                <option v-for="d in dsDiemDen" :key="d.id" :value="d.id">{{ d.ten }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Mức Điểm Xếp Hạng *</label>
+              <select v-model="formDanhGiaMoi.diem_so" required class="form-input">
+                <option :value="5">⭐⭐⭐⭐⭐ 5.0 - Xuất sắc</option>
+                <option :value="4">⭐⭐⭐⭐ 4.0 - Rất tốt</option>
+                <option :value="3">⭐⭐⭐ 3.0 - Trung bình</option>
+                <option :value="2">⭐⭐ 2.0 - Kém</option>
+                <option :value="1">⭐ 1.0 - Tồi tệ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Tên du khách đánh giá *</label>
+              <input v-model="formDanhGiaMoi.ho_ten" type="text" required placeholder="Ví dụ: Nguyễn Minh Quân" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Hình thức chuyến đi</label>
+              <select v-model="formDanhGiaMoi.loai_chuyen_di" class="form-input">
+                <option value="Gia đình">Đi cùng Gia đình</option>
+                <option value="Cặp đôi">Cặp đôi / Trăng mật</option>
+                <option value="Bạn bè">Nhóm bạn bè</option>
+                <option value="Một mình">Du lịch một mình</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tiêu đề bài đánh giá *</label>
+            <input v-model="formDanhGiaMoi.tieu_de" type="text" required placeholder="Ví dụ: Cảnh sắc ngoạn mục, dịch vụ chu đáo 5 sao!" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label>Nội dung trải nghiệm chi tiết *</label>
+            <textarea v-model="formDanhGiaMoi.noi_dung" rows="3" required placeholder="Chia sẻ chi tiết về cảnh quan, dịch vụ, ẩm thực, vệ sinh và giá cả..." class="form-textarea"></textarea>
+          </div>
+
+          <div class="modal-foot">
+            <button type="button" @click="moModalThemDanhGia = false" class="btn-cancel">Hủy Bỏ</button>
+            <button type="submit" class="nevio-btn-yellow">
+              <span class="button-text">Đăng Đánh Giá &amp; Cập Nhật Wilson Score</span>
               <div class="btn-icon-circle"><Check :size="16" /></div>
             </button>
           </div>
@@ -602,28 +759,59 @@ import {
   FileSpreadsheet, 
   FileJson, 
   Server, 
-  FolderCheck 
+  FolderCheck,
+  Download,
+  RotateCcw,
+  CheckCircle2,
+  Upload,
+  Cloud
 } from 'lucide-vue-next'
 import { DataService, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
 const tabHienTai = ref('diem_den') // 'diem_den' | 'tinh_toan' | 'danh_gia' | 'database'
 
 const dsDiemDen = ref([])
+const dsDanhGiaToanBo = ref([...DANH_SACH_DANH_GIA_TRIPADVISOR])
 const tongSoDanhGia = ref(DANH_SACH_DANH_GIA_TRIPADVISOR.length)
 const tuKhoaDanhGia = ref('')
+const locDiemDenDanhGia = ref('')
 
-// Modal state
+// Cloud Config State
+const formCloud = ref(DataService.layCauHinhCloud())
+const thongBaoCloud = ref('')
+const daKetNoiCloud = computed(() => {
+  return !!(formCloud.value.supabaseUrl && formCloud.value.supabaseAnonKey) || !!(formCloud.value.cloudinaryCloudName && formCloud.value.cloudinaryUploadPreset)
+})
+
+// Modal Điểm Đến state
 const moModalThemDiemDen = ref(false)
 const dangSuaId = ref(null)
+const dangUploadAnh = ref(false)
+const cheDoAnhVuaTai = ref('')
 const formDiemDen = ref({
   ten: '',
   ten_rut_gon: '',
   tinh_thanh: '',
   loai_hinh: '',
   dia_chi: '',
-  hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80',
+  hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85',
   mo_ta: '',
-  diem_danh_tieng_tb: 4.5
+  diem_danh_tieng_tb: 4.7,
+  tu_dong_gom_danh_gia: true,
+  danh_gia_dau_tien_tieu_de: '',
+  danh_gia_dau_tien_sao: 5,
+  danh_gia_dau_tien_noi_dung: ''
+})
+
+// Modal Thêm Đánh Giá state
+const moModalThemDanhGia = ref(false)
+const formDanhGiaMoi = ref({
+  diem_den_id: 1,
+  ho_ten: 'Nguyễn Minh Quân',
+  loai_chuyen_di: 'Gia đình',
+  diem_so: 5,
+  tieu_de: '',
+  noi_dung: ''
 })
 
 // Calculation Engine State
@@ -637,39 +825,71 @@ const daHoanTatTinhToan = ref(false)
 const ketQuaTinhToan = ref([])
 
 const danhGiaHienThiAdmin = computed(() => {
-  let list = DANH_SACH_DANH_GIA_TRIPADVISOR
+  let list = dsDanhGiaToanBo.value
+  if (locDiemDenDanhGia.value) {
+    list = list.filter(r => Number(r.diem_den_id) === Number(locDiemDenDanhGia.value))
+  }
   if (tuKhoaDanhGia.value) {
     const kw = tuKhoaDanhGia.value.toLowerCase()
-    list = list.filter(r => r.tieu_de.toLowerCase().includes(kw) || r.noi_dung.toLowerCase().includes(kw) || r.ten_diem_den.toLowerCase().includes(kw))
+    list = list.filter(r => 
+      (r.tieu_de && r.tieu_de.toLowerCase().includes(kw)) || 
+      (r.noi_dung && r.noi_dung.toLowerCase().includes(kw)) || 
+      (r.ten_diem_den && r.ten_diem_den.toLowerCase().includes(kw))
+    )
   }
-  return list.slice(0, 15)
+  return list.slice(0, 25)
 })
 
 async function loadDiemDen() {
   dsDiemDen.value = await DataService.layDanhSachDiemDen()
+  const resRev = await DataService.layDanhSachDanhGia({}, 1, 3000)
+  dsDanhGiaToanBo.value = resRev.danh_sach
+  tongSoDanhGia.value = resRev.meta.tong_ban_ghi
 }
 
 function xuLyLoiImg(e) {
-  e.target.src = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80'
+  e.target.src = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85'
+}
+
+async function xuLyUploadFileAnh(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  dangUploadAnh.value = true
+  cheDoAnhVuaTai.value = ''
+  try {
+    const kq = await DataService.uploadAnhDiemDen(file)
+    formDiemDen.value.hinh_anh = kq.url
+    cheDoAnhVuaTai.value = kq.mode === 'cloudinary' ? '☁️ Đã tải lên Cloudinary CDN' : '⚡ Đã nén chuẩn JPEG/Base64 (Zero-Config)'
+  } catch (err) {
+    alert('Không thể xử lý tệp ảnh: ' + err.message)
+  } finally {
+    dangUploadAnh.value = false
+  }
 }
 
 function dongModal() {
   moModalThemDiemDen.value = false
   dangSuaId.value = null
+  cheDoAnhVuaTai.value = ''
   formDiemDen.value = {
     ten: '',
     ten_rut_gon: '',
     tinh_thanh: '',
     loai_hinh: '',
     dia_chi: '',
-    hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80',
+    hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85',
     mo_ta: '',
-    diem_danh_tieng_tb: 4.5
+    diem_danh_tieng_tb: 4.7,
+    tu_dong_gom_danh_gia: true,
+    danh_gia_dau_tien_tieu_de: '',
+    danh_gia_dau_tien_sao: 5,
+    danh_gia_dau_tien_noi_dung: ''
   }
 }
 
 function moModalSua(dest) {
   dangSuaId.value = dest.id
+  cheDoAnhVuaTai.value = ''
   formDiemDen.value = { ...dest }
   moModalThemDiemDen.value = true
 }
@@ -684,6 +904,24 @@ async function luuDiemDen() {
   dongModal()
 }
 
+function moModalThemDanhGiaChoDiem(dest) {
+  formDanhGiaMoi.value = {
+    diem_den_id: dest ? dest.id : (dsDiemDen.value[0]?.id || 1),
+    ho_ten: 'Nguyễn Minh Quân',
+    loai_chuyen_di: 'Gia đình',
+    diem_so: 5,
+    tieu_de: '',
+    noi_dung: ''
+  }
+  moModalThemDanhGia.value = true
+}
+
+async function luuDanhGiaMoiAdmin() {
+  await DataService.guiDanhGiaNguoiDung(formDanhGiaMoi.value)
+  await loadDiemDen()
+  moModalThemDanhGia.value = false
+}
+
 async function xacNhanXoa(dest) {
   if (confirm(`Bạn có chắc chắn muốn xóa điểm đến "${dest.ten}" khỏi hệ thống?`)) {
     await DataService.xoaDiemDen(dest.id)
@@ -691,9 +929,10 @@ async function xacNhanXoa(dest) {
   }
 }
 
-function anDanhGia(id) {
-  if (confirm(`Ẩn đánh giá #${id} khỏi giao diện du khách?`)) {
-    alert(`Đã ẩn bài đánh giá #${id} thành công!`)
+async function anDanhGia(id) {
+  if (confirm(`Ẩn / xóa bài đánh giá #${id} và tính toán lại Wilson Score?`)) {
+    await DataService.xoaDanhGia(id)
+    await loadDiemDen()
   }
 }
 
@@ -702,12 +941,57 @@ async function gomDanhGiaChoDiem(dest) {
   try {
     const res = await DataService.gomDanhGiaTripAdvisorChoDiemDen(dest.id, 30)
     await loadDiemDen()
-    tongSoDanhGia.value = (await DataService.layDanhSachDanhGia()).length
     alert(`Đã hoàn tất gom ${res.so_luong_gom} đánh giá TripAdvisor cho "${dest.ten}"!\nCận dưới Wilson mới: ${res.w_lower.toFixed(3)} · ${res.is_diem_sang ? 'Đạt chuẩn Điểm sáng du lịch 🌟' : 'Trạng thái ổn định'}`)
   } catch (err) {
     alert('Lỗi khi gom dữ liệu: ' + err.message)
   } finally {
     dangGomDiemId.value = null
+  }
+}
+
+function luuCauHinhDamMay() {
+  DataService.luuCauHinhCloud(formCloud.value)
+  thongBaoCloud.value = '✅ Đã lưu cấu hình kết nối đám mây thành công!'
+  setTimeout(() => { thongBaoCloud.value = '' }, 4000)
+}
+
+function xuatDuLieuJSON() {
+  const payload = {
+    exported_at: new Date().toISOString(),
+    tong_diem_den: dsDiemDen.value.length,
+    tong_danh_gia: tongSoDanhGia.value,
+    diem_den: dsDiemDen.value,
+    danh_gia_custom: JSON.parse(localStorage.getItem('dt12_custom_reviews') || '[]')
+  }
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `dt12_tripadvisor_backup_${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+async function taiDongBoWilsonToanHeThong() {
+  for (const d of dsDiemDen.value) {
+    await DataService.capNhatThongKeWilsonChoDiemDen(d.id)
+  }
+  await loadDiemDen()
+  alert('Đã tái đồng bộ khoảng tin cậy Wilson Score 95% cho toàn bộ điểm đến!')
+}
+
+function kiemTraSucKhoeHeThong() {
+  alert(`Trạng thái hệ thống ĐT-12:\n• Frontend SPA & Hybrid Data Engine: HOẠT ĐỘNG TỐT (100%)\n• Kho dữ liệu: ${dsDiemDen.value.length} điểm đến & ${tongSoDanhGia.value} đánh giá\n• Chế độ lưu trữ: ${daKetNoiCloud.value ? 'Cloud Connected (Supabase/Cloudinary)' : 'Hybrid LocalStorage + Pre-bundled Dataset'}`)
+}
+
+async function xoaCacheHeThong() {
+  if (confirm('Khôi phục dữ liệu điểm đến và đánh giá về trạng thái gốc (874 đánh giá chuẩn TripAdvisor)?')) {
+    localStorage.removeItem('dt12_custom_destinations_v2')
+    localStorage.removeItem('dt12_deleted_destinations')
+    localStorage.removeItem('dt12_custom_reviews')
+    localStorage.removeItem('dt12_deleted_reviews')
+    await loadDiemDen()
+    alert('Đã làm sạch bộ nhớ đệm và khôi phục dữ liệu chuẩn!')
   }
 }
 
@@ -752,7 +1036,6 @@ function chayQuyTrinhTinhToan() {
         // Gom dữ liệu thực tế cho riêng điểm đến này
         const res = await DataService.gomDanhGiaTripAdvisorChoDiemDen(targetDest.id, 30)
         await loadDiemDen()
-        tongSoDanhGia.value = (await DataService.layDanhSachDanhGia()).length
 
         ketQuaTinhToan.value = [
           {
@@ -1728,6 +2011,204 @@ onMounted(async () => {
   font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* Review Moderation Controls */
+.review-mod-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.select-filter-mini {
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-light-grey);
+  color: var(--mau-chu);
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Ops Tools List & Cloud Connector */
+.ops-tools-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ops-tool-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.ops-tool-info strong {
+  font-size: 13px;
+  display: block;
+  color: var(--mau-chu);
+}
+
+.ops-tool-info p {
+  font-size: 11.5px;
+  color: var(--mau-chu-phu);
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
+
+.btn-ops-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--nevio-border);
+  background: var(--nevio-light-grey);
+  color: var(--mau-chu);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-ops-action:hover {
+  background: #fddd62;
+  color: #18181b;
+  border-color: #e5be29;
+}
+
+.cloud-status-pill {
+  margin-left: auto;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+.cloud-status-pill.hybrid {
+  background: #fef9c3;
+  color: #854d0e;
+  border: 1px solid #fde047;
+}
+
+.cloud-status-pill.connected {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.cloud-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.cloud-config-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.cloud-msg-ok {
+  font-size: 13px;
+  font-weight: 700;
+  color: #059669;
+}
+
+/* Upload Image Row in Modal */
+.upload-img-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.modal-img-preview {
+  width: 110px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--nevio-border);
+  flex-shrink: 0;
+}
+
+.upload-img-controls {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-btns-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-upload-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #18181b;
+  color: #ffffff !important;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.upload-mode-tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #059669;
+}
+
+/* Init Reviews Box in Add Destination Modal */
+.init-reviews-box {
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkbox-init-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.init-first-review-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px dashed var(--nevio-border);
+  padding-top: 10px;
+}
+
+.init-sub-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mau-chu-phu);
 }
 
 /* Animations */
