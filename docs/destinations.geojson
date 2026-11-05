@@ -1,0 +1,124 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "project": "DuLichSo - ĐT-12: Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến",
+    "course": "CSE703073 - Lập trình ứng dụng web trong du lịch 2 - Đại học Phenikaa",
+    "group": "Nhóm 03 - DuLichSo",
+    "standard": "GeoJSON RFC 7946 + schema.org/TouristAttraction",
+    "total_reviews_analyzed": 874
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": { "type": "Point", "coordinates": [107.0448, 20.9515] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Du thuyền Ambassador Hạ Long",
+        "addressLocality": "Quảng Ninh",
+        "category": "Du thuyền 5 sao",
+        "ratingValue": 4.8,
+        "reviewCount": 164,
+        "wilsonLowerBound95": 0.884,
+        "wilsonUpperBound95": 0.957
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": { "type": "Point", "coordinates": [103.9840, 10.1285] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "Resort",
+        "name": "Melia Vinpearl Phú Quốc",
+        "addressLocality": "Kiên Giang",
+        "category": "Khu nghỉ dưỡng biển",
+        "ratingValue": 4.7,
+        "reviewCount": 89,
+        "wilsonLowerBound95": 0.805,
+        "wilsonUpperBound95": 0.935
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": { "type": "Point", "coordinates": [107.0733, 20.9101] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Vịnh Hạ Long",
+        "addressLocality": "Quảng Ninh",
+        "category": "Di sản Thiên nhiên UNESCO",
+        "ratingValue": 4.9,
+        "reviewCount": 144,
+        "wilsonLowerBound95": 0.908,
+        "wilsonUpperBound95": 0.978
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": { "type": "Point", "coordinates": [107.0372, 20.9462] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "Resort",
+        "name": "Vinpearl Resort & Spa Hạ Long",
+        "addressLocality": "Quảng Ninh",
+        "category": "Khu nghỉ dưỡng đảo biệt lập",
+        "ratingValue": 4.7,
+        "reviewCount": 140,
+        "wilsonLowerBound95": 0.854,
+        "wilsonUpperBound95": 0.948
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": { "type": "Point", "coordinates": [105.9136, 20.2506] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Quần thể Danh thắng Tràng An",
+        "addressLocality": "Ninh Bình",
+        "category": "Di sản Thế giới Kép UNESCO",
+        "ratingValue": 4.8,
+        "reviewCount": 128,
+        "wilsonLowerBound95": 0.869,
+        "wilsonUpperBound95": 0.956
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": { "type": "Point", "coordinates": [105.9369, 20.2314] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Hang Múa (Mua Caves Ecolodge)",
+        "addressLocality": "Ninh Bình",
+        "category": "Thắng cảnh & Sinh thái",
+        "ratingValue": 4.6,
+        "reviewCount": 116,
+        "wilsonLowerBound95": 0.818,
+        "wilsonUpperBound95": 0.928
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "geometry": { "type": "Point", "coordinates": [105.8753, 20.3689] },
+      "properties": {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        "name": "Khu Bảo tồn Thiên nhiên Đầm Vân Long",
+        "addressLocality": "Ninh Bình",
+        "category": "Khu dự trữ sinh quyển ngập nước",
+        "ratingValue": 4.6,
+        "reviewCount": 93,
+        "wilsonLowerBound95": 0.796,
+        "wilsonUpperBound95": 0.929
+      }
+    }
+  ]
+}
