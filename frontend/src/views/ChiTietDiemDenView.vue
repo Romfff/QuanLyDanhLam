@@ -317,7 +317,7 @@
           <!-- Wilson Reputation Rating Widget -->
           <div class="sidebar-widget widget-wilson">
             <div class="widget-head">
-              <ShieldCheck :size="22" class="text-emerald" />
+              <ShieldCheck :size="22" class="text-yellow" />
               <div>
                 <h3 class="widget-title">Định Tuyến Wilson Score</h3>
                 <span class="widget-sub">Khoảng tin cậy chuẩn 95%</span>
@@ -434,7 +434,7 @@
           <!-- Safety Widget -->
           <div class="sidebar-widget widget-safety">
             <div class="safety-indicator safe">
-              <ShieldCheck :size="24" class="text-emerald" />
+              <ShieldCheck :size="24" class="text-yellow" />
               <div>
                 <h4>Chỉ Số An Toàn Danh Tiếng</h4>
                 <p>Không ghi nhận bất kỳ đột biến tiêu cực nào trong 30 ngày qua.</p>
@@ -739,11 +739,17 @@ onUnmounted(() => {
 }
 
 .badge-diem_sang {
-  background: #059669;
+  background: #fddd62;
+  color: #18181b;
+  font-weight: 700;
+  border: 1px solid #facc15;
 }
 
 .badge-binh_thuong {
-  background: #0284c7;
+  background: #ffffff;
+  color: #18181b;
+  font-weight: 700;
+  border: 1px solid #e4e4e7;
 }
 
 .badge-canh_bao {
@@ -1299,15 +1305,20 @@ onUnmounted(() => {
 
 /* Voucher Widget */
 .voucher-badge-promo {
-  background: rgba(5, 150, 105, 0.1);
-  border: 1px solid rgba(5, 150, 105, 0.25);
+  background: rgba(253, 221, 98, 0.15);
+  border: 1px solid rgba(253, 221, 98, 0.4);
   padding: 12px;
   border-radius: 12px;
   font-size: 13.5px;
   font-weight: 700;
-  color: #059669;
+  color: #92400e;
   text-align: center;
   margin-bottom: 12px;
+}
+
+[data-theme="dark"] .voucher-badge-promo {
+  color: #fddd62;
+  border-color: #fddd62;
 }
 
 .voucher-limit-text {
@@ -1319,28 +1330,30 @@ onUnmounted(() => {
 
 .btn-claim-voucher {
   width: 100%;
-  background: #059669;
-  color: white;
-  border: none;
+  background: #fddd62;
+  color: #18181b;
+  border: 1px solid #e5be29;
   padding: 12px 20px;
   border-radius: var(--radius-full);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.35);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: all 0.2s ease;
 }
 
 .btn-claim-voucher:hover {
-  background: #047857;
+  background: #facc15;
+  transform: translateY(-1px);
 }
 
 .claimed-box {
   background: var(--nevio-light-grey);
-  border: 1px solid #059669;
+  border: 1px solid #fddd62;
   border-radius: var(--radius-md);
   padding: 16px;
   display: flex;
