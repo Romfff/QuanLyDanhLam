@@ -47,6 +47,8 @@
               <li><router-link to="/danh-sach-danh-gia">Kho dữ liệu 874 đánh giá thực tế</router-link></li>
               <li><router-link to="/viet-danh-gia">Gửi bài đánh giá trải nghiệm mới</router-link></li>
               <li><router-link to="/dang-nhap">Cổng xác thực &amp; Phân quyền RBAC</router-link></li>
+              <li><a href="/openapi.json" target="_blank" rel="noopener">Tài liệu OpenAPI 3.0 &amp; Chuẩn dữ liệu mở ↗</a></li>
+              <li><a href="/destinations.geojson" target="_blank" rel="noopener">Dữ liệu không gian GeoJSON &amp; Schema.org ↗</a></li>
             </ul>
           </div>
 
