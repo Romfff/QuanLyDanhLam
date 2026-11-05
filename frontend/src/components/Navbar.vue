@@ -50,10 +50,10 @@
         <!-- Auth Section: Role Badge + Logout when logged in, or Login Pill -->
         <div v-if="daDangNhap" class="user-authenticated-box">
           <div class="user-role-chip" :title="'Tài khoản: ' + tenNguoiDung">
-            <component :is="iconVaiTro" :size="14" class="role-icon-svg" />
+            <component :is="iconVaiTro" :size="13" class="role-icon-svg" />
             <span class="role-text">{{ nhanVaiTro }}</span>
           </div>
-          <span class="user-display-name">{{ tenNguoiDung }}</span>
+          <span class="user-display-name" :title="tenNguoiDung">{{ tenHienThiGon }}</span>
           <button @click="dangXuat" class="btn-logout-circle" title="Đăng xuất khỏi hệ thống">
             <LogOut :size="14" />
           </button>
@@ -143,7 +143,14 @@ const iconVaiTro = computed(() => {
 })
 
 const nhanVaiTro = computed(() => {
-  return vaiTroHienTai.value === 'admin' ? 'Quản trị viên (Admin)' : 'Du khách trải nghiệm'
+  return vaiTroHienTai.value === 'admin' ? 'Admin' : 'Du khách'
+})
+
+const tenHienThiGon = computed(() => {
+  const raw = (tenNguoiDung.value || 'Khách').trim()
+  if (raw.toLowerCase().includes('quản trị viên')) return 'Quản trị viên'
+  if (raw.toLowerCase().includes('du khách')) return 'Du khách'
+  return raw
 })
 
 function toggleTheme() {
@@ -187,18 +194,20 @@ onMounted(() => {
   z-index: 100;
   background: var(--nevio-card-bg, #fff);
   border-bottom: 1px solid var(--nevio-border, #e0e0e0);
-  padding: 10px 24px;
+  padding: 10px 20px;
+  box-sizing: border-box;
 }
 
 .nevio-navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   min-height: 48px;
+  box-sizing: border-box;
 }
 
 .nevio-brand {
@@ -210,8 +219,8 @@ onMounted(() => {
 }
 
 .nevio-logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: #fddd62;
   display: flex;
@@ -220,38 +229,41 @@ onMounted(() => {
 }
 
 .nevio-brand-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--mau-chu, #000);
   letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 
 .tag-dt12 {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 800;
   background: #fddd62;
   color: #18181b;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 9999px;
-  margin-left: 4px;
+  margin-left: 3px;
   vertical-align: middle;
 }
 
 .nevio-nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .nevio-link {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--mau-chu, #000);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: 5px;
+  padding: 7px 11px;
   border-radius: 9999px;
   transition: background-color 0.15s ease;
   white-space: nowrap;
@@ -294,34 +306,39 @@ onMounted(() => {
 .user-authenticated-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   border: 1px solid var(--nevio-border, #e0e0e0);
-  padding: 4px 6px 4px 10px;
+  padding: 3px 5px 3px 6px;
   border-radius: 9999px;
   color: var(--mau-chu, #000);
+  background: var(--nevio-card-bg, #fff);
+  max-width: 240px;
 }
 
 .user-role-chip {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   background: #fddd62;
   color: #18181b;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 9999px;
   font-size: 11.5px;
   font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .role-icon-svg {
   color: #18181b;
+  flex-shrink: 0;
 }
 
 .user-display-name {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--mau-chu, #000);
-  max-width: 120px;
+  max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -428,7 +445,7 @@ onMounted(() => {
   margin: 4px 0;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .nevio-nav-links {
     display: none;
   }
