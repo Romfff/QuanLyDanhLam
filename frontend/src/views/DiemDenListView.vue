@@ -63,17 +63,146 @@
         </div>
       </div>
 
-      <!-- 3. Result Meta Summary Ribbon -->
+      <!-- 3. Result Meta Summary Ribbon & View Mode Toggle -->
       <div class="result-summary-bar">
         <span>Hiển thị <strong>{{ danhSachLoc.length }} / {{ dsDiemDen.length }}</strong> điểm đến được kiểm chứng</span>
-        <div class="status-legend">
-          <span class="legend-pill pill-bright"><Sparkles :size="12" /> Điểm sáng du lịch</span>
-          <span class="legend-pill pill-stable">● Ổn định</span>
+        <div class="summary-right-actions">
+          <div class="status-legend">
+            <span class="legend-pill pill-bright"><Sparkles :size="12" /> Điểm sáng du lịch</span>
+            <span class="legend-pill pill-stable">● Ổn định</span>
+          </div>
+
+          <!-- View Mode Toggle (Stacked List vs Grid) -->
+          <div class="view-mode-toggles">
+            <button 
+              @click="cheDoHienThi = 'xep_chong'" 
+              :class="['btn-toggle-mode', { active: cheDoHienThi === 'xep_chong' }]"
+              title="Chế độ Xếp Chồng UX Danh Tiếng (Mặc định)"
+            >
+              <Layers :size="14" />
+              <span>Xếp chồng</span>
+            </button>
+            <button 
+              @click="cheDoHienThi = 'luoi'" 
+              :class="['btn-toggle-mode', { active: cheDoHienThi === 'luoi' }]"
+              title="Chế độ Lưới truyền thống"
+            >
+              <LayoutGrid :size="14" />
+              <span>Lưới</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- 4. Destinations Cards Grid -->
-      <div class="destinations-grid">
+            <!-- ================= 4A. DANH SÁCH XẾP CHỒNG (STACKED LEADERBOARD UX MẶC ĐỊNH) ================= -->
+      <div v-if="danhSachLoc.length > 0 && cheDoHienThi === 'xep_chong'" class="destinations-stacked-list">
+        <article 
+          v-for="(dest, index) in danhSachLoc" 
+          :key="dest.id" 
+          class="stacked-dest-card anim-hover-lift"
+        >
+          <!-- 1. Rank & Medal Column -->
+          <div class="stacked-rank-col">
+            <div :class="['rank-badge-box', { 'rank-gold': index === 0, 'rank-silver': index === 1, 'rank-bronze': index === 2 }]">
+              <Crown v-if="index === 0" :size="18" class="rank-crown-icon" />
+              <span class="rank-digits">{{ (index + 1) < 10 ? '0' + (index + 1) : (index + 1) }}</span>
+            </div>
+            <span class="rank-caption">{{ index === 0 ? 'Top 1 Uy Tín' : 'Hạng ' + (index + 1) }}</span>
+          </div>
+
+          <!-- 2. Thumbnail Column -->
+          <div class="stacked-image-wrap">
+            <img :src="dest.hinh_anh" :alt="dest.ten" class="stacked-dest-img" loading="lazy" @error="xuLyLoiAnh($event, dest.id)" />
+            <div class="stacked-img-overlay"></div>
+            <div class="stacked-location-pill">
+              <MapPin :size="12" />
+              <span>{{ dest.tinh_thanh }}</span>
+            </div>
+          </div>
+
+          <!-- 3. Main Info & 5 Aspect Ratings -->
+          <div class="stacked-info-col">
+            <div class="stacked-top-meta">
+              <span class="stacked-category-pill">{{ dest.loai_hinh }}</span>
+              <span :class="['stacked-wilson-pill', 'status-' + (dest.trang_thai_wilson || 'binh_thuong')]">
+                <Sparkles v-if="dest.trang_thai_wilson === 'diem_sang'" :size="12" />
+                <span>{{ dest.trang_thai_wilson === 'diem_sang' ? 'Điểm Sáng Du Lịch' : 'Hoạt Động Ổn Định' }}</span>
+              </span>
+            </div>
+
+            <h3 class="stacked-title">
+              <router-link :to="'/diem-den/' + dest.id">
+                {{ dest.ten }}
+              </router-link>
+            </h3>
+            <p class="stacked-desc">{{ dest.mo_ta }}</p>
+
+            <!-- 5 Aspect Chips (Vàng & Trắng) -->
+            <div v-if="dest.khia_canh" class="stacked-aspects-grid">
+              <div class="aspect-chip" title="Cảnh quan & Không gian">
+                <span class="asp-lbl">Cảnh quan</span>
+                <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.canh_quan?.diem || 4.8 }}/5</span>
+              </div>
+              <div class="aspect-chip" title="Chất lượng phục vụ">
+                <span class="asp-lbl">Dịch vụ</span>
+                <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.dich_vu?.diem || 4.7 }}/5</span>
+              </div>
+              <div class="aspect-chip" title="Ẩm thực & Đặc sản">
+                <span class="asp-lbl">Ẩm thực</span>
+                <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.am_thuc?.diem || 4.6 }}/5</span>
+              </div>
+              <div class="aspect-chip" title="Vệ sinh & Môi trường">
+                <span class="asp-lbl">Vệ sinh</span>
+                <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.ve_sinh?.diem || 4.9 }}/5</span>
+              </div>
+              <div class="aspect-chip" title="Giá cả & Minh bạch">
+                <span class="asp-lbl">Giá cả</span>
+                <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.gia_ca?.diem || 4.5 }}/5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Rating & Actions Column -->
+          <div class="stacked-action-col">
+            <div class="stacked-rating-card">
+              <div class="score-display-row">
+                <span class="score-big">{{ dest.diem_danh_tieng_tb }}</span>
+                <span class="score-max">/ 5.0</span>
+              </div>
+              <div class="score-stars">
+                <Star v-for="s in 5" :key="s" :size="13" class="fill-yellow" />
+              </div>
+              <div class="score-subtext">
+                <router-link :to="'/danh-sach-danh-gia?diem_den_id=' + dest.id" class="stacked-rev-link" :title="'Xem riêng ' + dest.tong_luot_danh_gia + ' đánh giá TripAdvisor'">
+                  <strong>{{ dest.tong_luot_danh_gia }}</strong> đánh giá TripAdvisor
+                </router-link>
+              </div>
+              <div class="wilson-stat-tag">
+                <span>Wilson: <strong>{{ dest.khoang_tin_cay_wilson || '0.884 - 0.957' }}</strong></span>
+              </div>
+            </div>
+
+            <div class="stacked-buttons-wrap">
+              <router-link :to="'/diem-den/' + dest.id" class="stacked-btn-primary">
+                <span>Chi Tiết</span>
+                <ArrowRight :size="15" />
+              </router-link>
+              <button 
+                v-if="dest.trang_thai_wilson === 'diem_sang'"
+                @click="nhanVoucher(dest)"
+                class="stacked-btn-voucher"
+                title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
+              >
+                <Gift :size="14" />
+                <span>Nhận ưu đãi 15%</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 4B. Destinations Cards Grid (KHI CHỌN LƯỚI) -->
+      <div v-if="danhSachLoc.length > 0 && cheDoHienThi === 'luoi'" class="destinations-grid">
         <article 
           v-for="d in danhSachLoc" 
           :key="d.id" 
@@ -151,7 +280,7 @@
               <div class="stat-divider"></div>
               <div class="stat-item">
                 <span class="stat-lbl">Tỷ lệ hài lòng</span>
-                <strong class="stat-num text-emerald">{{ d.ty_le_tich_cuc }}%</strong>
+                <strong class="stat-num text-yellow">{{ d.ty_le_tich_cuc }}%</strong>
               </div>
             </div>
 
@@ -215,7 +344,7 @@
                     {{ item.tong_luot_danh_gia }} review
                   </router-link>
                 </td>
-                <td><strong class="text-emerald">{{ item.ty_le_tich_cuc }}%</strong></td>
+                <td><strong class="text-yellow">{{ item.ty_le_tich_cuc }}%</strong></td>
                 <td><code class="code-wilson">{{ item.khoang_tin_cay_wilson }}</code></td>
                 <td>
                   <span :class="['table-status-pill', 'pill-' + item.trang_thai_wilson]">
@@ -264,6 +393,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { 
+  Crown, 
+  Layers, 
+  LayoutGrid, 
+  Star, 
   Search, 
   MapPin, 
   Sparkles, 
@@ -277,6 +410,7 @@ import {
 import { DataService } from '../services/dataService'
 
 const dsDiemDen = ref([])
+const cheDoHienThi = ref('xep_chong')
 const tuKhoa = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
@@ -747,7 +881,7 @@ onMounted(async () => {
 }
 
 .text-yellow { color: #b45309; }
-.text-emerald { color: #059669; }
+.text-emerald { color: #b45309; } [data-theme="dark"] .text-emerald { color: #fddd62; }
 
 .stat-num-link {
   text-decoration: none;
@@ -1054,3 +1188,426 @@ onMounted(async () => {
   cursor: pointer;
 }
 </style>
+
+/* ================= STACKED LEADERBOARD UX STYLES ================= */
+.summary-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.view-mode-toggles {
+  display: inline-flex;
+  align-items: center;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+.btn-toggle-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mau-chu-phu);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-mode:hover {
+  color: var(--mau-chu);
+}
+
+.btn-toggle-mode.active {
+  background: #ffffff;
+  color: #18181b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .btn-toggle-mode.active {
+  background: #fddd62;
+  color: #18181b;
+}
+
+.destinations-stacked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.stacked-dest-card {
+  display: grid;
+  grid-template-columns: 80px 240px 1fr 220px;
+  gap: 20px;
+  align-items: center;
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-xl);
+  padding: 16px 20px;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-subtle);
+}
+
+.stacked-dest-card:hover {
+  border-color: #fddd62;
+  box-shadow: 0 12px 32px -4px rgba(253, 221, 98, 0.12), 0 8px 16px -2px rgba(0, 0, 0, 0.04);
+}
+
+.stacked-rank-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.rank-badge-box {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  color: var(--mau-chu-phu);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.rank-digits {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.rank-crown-icon {
+  color: #f59e0b;
+  margin-bottom: -2px;
+}
+
+.rank-badge-box.rank-gold {
+  background: #fef3c7;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+[data-theme="dark"] .rank-badge-box.rank-gold {
+  background: rgba(253, 221, 98, 0.15);
+  border-color: #fddd62;
+  color: #fddd62;
+}
+
+.rank-caption {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mau-chu-mo);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stacked-image-wrap {
+  width: 100%;
+  height: 140px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.stacked-dest-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.stacked-dest-card:hover .stacked-dest-img {
+  transform: scale(1.05);
+}
+
+.stacked-location-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(24, 24, 27, 0.75);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stacked-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stacked-top-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stacked-category-pill {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mau-chu-mo);
+}
+
+.stacked-wilson-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.stacked-wilson-pill.status-diem_sang {
+  background: rgba(253, 221, 98, 0.18);
+  color: #92400e;
+  border: 1px solid rgba(253, 221, 98, 0.4);
+}
+
+[data-theme="dark"] .stacked-wilson-pill.status-diem_sang {
+  color: #fddd62;
+  border-color: #fddd62;
+}
+
+.stacked-wilson-pill.status-binh_thuong {
+  background: rgba(24, 24, 27, 0.06);
+  color: var(--mau-chu-phu);
+}
+
+.stacked-title {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.stacked-title a {
+  color: var(--mau-chu);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.stacked-title a:hover {
+  color: #b45309;
+}
+
+[data-theme="dark"] .stacked-title a:hover {
+  color: #fddd62;
+}
+
+.stacked-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mau-chu-phu);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.stacked-aspects-grid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.aspect-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  color: var(--mau-chu);
+}
+
+.asp-lbl {
+  color: var(--mau-chu-mo);
+}
+
+.asp-val {
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.fill-yellow {
+  fill: #fddd62;
+  color: #fddd62;
+}
+
+.stacked-action-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 12px;
+  border-left: 1px dashed var(--nevio-border);
+}
+
+.stacked-rating-card {
+  text-align: center;
+}
+
+.score-display-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+}
+
+.score-big {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--mau-chu);
+}
+
+.score-max {
+  font-size: 12px;
+  color: var(--mau-chu-mo);
+}
+
+.score-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 2px 0 4px 0;
+}
+
+.score-subtext {
+  font-size: 11px;
+  color: var(--mau-chu-phu);
+}
+
+.stacked-rev-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.wilson-stat-tag {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--mau-chu-mo);
+}
+
+.stacked-buttons-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stacked-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--nevio-dark);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.stacked-btn-primary:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .stacked-btn-primary {
+  background: #ffffff;
+  color: #18181b;
+}
+
+.stacked-btn-voucher {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fddd62;
+  color: #18181b;
+  border: 1px solid #e5be29;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stacked-btn-voucher:hover {
+  background: #facc15;
+  transform: translateY(-1px);
+}
+
+/* Responsive Stacked List for Mobile */
+@media (max-width: 992px) {
+  .stacked-dest-card {
+    grid-template-columns: 60px 180px 1fr;
+  }
+  .stacked-action-col {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px dashed var(--nevio-border);
+    padding-left: 0;
+    padding-top: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stacked-buttons-wrap {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .stacked-dest-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .stacked-rank-col {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .stacked-image-wrap {
+    height: 180px;
+  }
+  .stacked-action-col {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .stacked-buttons-wrap {
+    flex-direction: column;
+  }
+}
