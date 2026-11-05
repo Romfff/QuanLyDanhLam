@@ -384,7 +384,31 @@ const cheDoHienThi = ref('xep_chong')
 const tuKhoa = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
+const laAdmin = computed(() => localStorage.getItem('vai_tro') === 'admin')
 
+const danhSachLoc = computed(() => {
+  return dsDiemDen.value.filter(d => {
+    if (tuKhoa.value) {
+      const kw = tuKhoa.value.toLowerCase()
+      const matchTen = d.ten.toLowerCase().includes(kw) || (d.ten_rut_gon && d.ten_rut_gon.toLowerCase().includes(kw))
+      const matchDiaChi = d.dia_chi && d.dia_chi.toLowerCase().includes(kw)
+      if (!matchTen && !matchDiaChi) return false
+    }
+    if (locTinhThanh.value && d.tinh_thanh !== locTinhThanh.value) {
+      return false
+    }
+    if (locTrangThai.value && d.trang_thai_wilson !== locTrangThai.value) {
+      return false
+    }
+    return true
+  })
+})
+
+function datLaiBoLoc() {
+  tuKhoa.value = ''
+  locTinhThanh.value = ''
+  locTrangThai.value = ''
+}
 
 onMounted(async () => {
   dsDiemDen.value = await DataService.layDanhSachDiemDen()
