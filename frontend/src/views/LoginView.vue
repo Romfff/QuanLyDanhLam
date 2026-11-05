@@ -5,14 +5,17 @@
         <!-- Brand Header -->
         <div class="login-header">
           <div class="brand-logo-circle">
-            <Compass :size="28" class="text-dark" />
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L4 5.5V11.5C4 16.8 7.4 21.6 12 23C16.6 21.6 20 16.8 20 11.5V5.5L12 2Z" fill="#18181b"/>
+              <path d="M12 6.2L13.65 9.55L17.35 10.08L14.67 12.69L15.3 16.37L12 14.63L8.7 16.37L9.33 12.69L6.65 10.08L10.35 9.55L12 6.2Z" fill="#fddd62"/>
+            </svg>
           </div>
-          <span class="nevio-label center">CỔNG XÁC THỰC DU LỊCH ĐT-12</span>
+          <span class="nevio-label center">DULICHSO · CỔNG XÁC THỰC ĐỀ TÀI ĐT-12</span>
           <h1 class="login-title">
             {{ cheDoAuth === 'dang_nhap' ? 'Đăng Nhập Khám Phá' : 'Đăng Ký Tài Khoản Mới' }}
           </h1>
           <p class="login-subtitle">
-            Hệ thống phân tích ý kiến du khách &amp; bảo chứng danh tiếng điểm đến TripAdvisor
+            Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến (CSE703073 – Nhóm 03)
           </p>
         </div>
 
@@ -312,7 +315,7 @@ async function dangNhap() {
   let roleHopLe = null
   let hoTenHopLe = ''
 
-  if (inputEmail === 'admin@toursentiment.vn') {
+  if (inputEmail === 'admin@toursentiment.vn' || inputEmail === 'admin@demo.test') {
     if (inputPassword === 'Admin@123456') {
       roleHopLe = 'admin'
       hoTenHopLe = 'Quản trị viên (Admin)'
@@ -321,15 +324,24 @@ async function dangNhap() {
       thongBaoLoi.value = 'Mật khẩu quản trị viên không chính xác. Mặc định: Admin@123456'
       return
     }
-  } else if (inputEmail === 'khachhang@toursentiment.vn') {
-    if (inputPassword === 'Khach@123456') {
+  } else if (inputEmail === 'khachhang@toursentiment.vn' || inputEmail === 'tourist@demo.test') {
+    if (inputPassword === 'Khach@123456' || inputPassword === 'User@123456') {
       roleHopLe = 'du_khach'
       hoTenHopLe = 'Du khách trải nghiệm'
     } else {
       dangXuLy.value = false
-      thongBaoLoi.value = 'Mật khẩu du khách mẫu không chính xác. Mặc định: Khach@123456'
+      thongBaoLoi.value = 'Mật khẩu du khách mẫu không chính xác. Mặc định: Khach@123456 hoặc User@123456'
       return
     }
+  } else if (inputEmail === 'analyst@demo.test' && inputPassword === 'Analyst@123456') {
+    roleHopLe = 'admin'
+    hoTenHopLe = 'Chuyên viên phân tích (Analyst)'
+  } else if (inputEmail === 'partner@demo.test' && inputPassword === 'Partner@123456') {
+    roleHopLe = 'du_khach'
+    hoTenHopLe = 'Chủ cơ sở đối tác (Partner)'
+  } else if (inputEmail === 'moderator@demo.test' && inputPassword === 'Mod@123456') {
+    roleHopLe = 'admin'
+    hoTenHopLe = 'Kiểm duyệt viên (Moderator)'
   } else if (userTimThay) {
     if (userTimThay.mat_khau === inputPassword) {
       roleHopLe = userTimThay.vai_tro || 'du_khach'
