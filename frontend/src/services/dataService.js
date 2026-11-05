@@ -343,7 +343,12 @@ export const DataService = {
     dsCustom.forEach(c => {
       const idx = danhSach.findIndex(d => Number(d.id) === Number(c.id))
       if (idx !== -1) {
-        danhSach[idx] = { ...c, ...danhSach[idx], tong_luot_danh_gia: c.tong_luot_danh_gia || danhSach[idx].tong_luot_danh_gia, diem_danh_tieng_tb: c.diem_danh_tieng_tb || danhSach[idx].diem_danh_tieng_tb, khoang_tin_cay_wilson: c.khoang_tin_cay_wilson || danhSach[idx].khoang_tin_cay_wilson }
+        danhSach[idx] = {
+          ...danhSach[idx],
+          ...c,
+          hinh_anh: c.hinh_anh || danhSach[idx].hinh_anh,
+          anh_gallery: c.anh_gallery?.length ? c.anh_gallery : danhSach[idx].anh_gallery
+        }
       } else {
         danhSach.push(c)
       }
@@ -455,7 +460,28 @@ export const DataService = {
     const dsCustom = JSON.parse(localStorage.getItem('dt12_custom_destinations_v2') || '[]')
     dsCustom.push(diemMoi)
     localStorage.setItem('dt12_custom_destinations_v2', JSON.stringify(dsCustom))
-    return diemMoi
+
+    // Đồng bộ lên Supabase nếu đã cấu hình Cloud
+    await this.dongBoSupabase('diem_den', diemMoi)
+
+    // Nếu Admin chọn tự động gom đánh giá TripAdvisor ngay khi tạo
+    if (duLieuMoi.tu_dong_gom_danh_gia) {
+      await this.gomDanhGiaTripAdvisorChoDiemDen(idMoi, Number(duLieuMoi.so_luong_gom || 30))
+    }
+
+    // Nếu Admin nhập kèm 1 bài đánh giá thực tế đầu tiên khi tạo địa điểm
+    if (duLieuMoi.danh_gia_dau_tien_tieu_de && duLieuMoi.danh_gia_dau_tien_noi_dung) {
+      await this.guiDanhGiaNguoiDung({
+        diem_den_id: idMoi,
+        ho_ten: duLieuMoi.danh_gia_dau_tien_tac_gia || 'Du khách TripAdvisor',
+        diem_so: Number(duLieuMoi.danh_gia_dau_tien_sao || 5),
+        loai_chuyen_di: 'Gia đình',
+        tieu_de: duLieuMoi.danh_gia_dau_tien_tieu_de,
+        noi_dung: duLieuMoi.danh_gia_dau_tien_noi_dung
+      })
+    }
+
+    return await this.layChiTietDiemDen(idMoi)
   },
 
   // 2.2 Xóa điểm đến (Dành cho Admin)
@@ -505,7 +531,10 @@ export const DataService = {
     }
 
     const customReviews = JSON.parse(localStorage.getItem('dt12_custom_reviews') || '[]')
-    let ketQua = [...customReviews, ...DANH_SACH_DANH_GIA_TRIPADVISOR]
+    const deletedReviewIds = JSON.parse(localStorage.getItem('dt12_deleted_reviews') || '[]')
+    let ketQua = [...customReviews, ...DANH_SACH_DANH_GIA_TRIPADVISOR].filter(
+      r => !deletedReviewIds.includes(Number(r.id))
+    )
 
     if (boLoc.tu_khoa) {
       const kw = boLoc.tu_khoa.toLowerCase()
@@ -553,9 +582,68 @@ export const DataService = {
   // 3.1 Lấy toàn bộ đánh giá của riêng 1 điểm đến
   async layTatCaDanhGiaCuaDiemDen(diemDenId) {
     const customReviews = JSON.parse(localStorage.getItem('dt12_custom_reviews') || '[]')
-    const defaultReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(r => Number(r.diem_den_id) === Number(diemDenId))
-    const targetCustom = customReviews.filter(r => Number(r.diem_den_id) === Number(diemDenId))
+    const deletedReviewIds = JSON.parse(localStorage.getItem('dt12_deleted_reviews') || '[]')
+    const defaultReviews = DANH_SACH_DANH_GIA_TRIPADVISOR.filter(
+      r => Number(r.diem_den_id) === Number(diemDenId) && !deletedReviewIds.includes(Number(r.id))
+    )
+    const targetCustom = customReviews.filter(
+      r => Number(r.diem_den_id) === Number(diemDenId) && !deletedReviewIds.includes(Number(r.id))
+    )
     return [...targetCustom, ...defaultReviews]
+  },
+
+  // 3.2 Xóa / Ẩn đánh giá (Dành cho Admin kiểm duyệt)
+  async xoaDanhGia(danhGiaId) {
+    const idNum = Number(danhGiaId)
+    let customReviews = JSON.parse(localStorage.getItem('dt12_custom_reviews') || '[]')
+    const targetRev = customReviews.find(r => Number(r.id) === idNum) || DANH_SACH_DANH_GIA_TRIPADVISOR.find(r => Number(r.id) === idNum)
+    customReviews = customReviews.filter(r => Number(r.id) !== idNum)
+    localStorage.setItem('dt12_custom_reviews', JSON.stringify(customReviews))
+
+    const deletedReviewIds = JSON.parse(localStorage.getItem('dt12_deleted_reviews') || '[]')
+    if (!deletedReviewIds.includes(idNum)) {
+      deletedReviewIds.push(idNum)
+      localStorage.setItem('dt12_deleted_reviews', JSON.stringify(deletedReviewIds))
+    }
+
+    if (targetRev?.diem_den_id) {
+      await this.capNhatThongKeWilsonChoDiemDen(targetRev.diem_den_id)
+    }
+    return true
+  },
+
+  // 3.3 Tính toán lại điểm TB & Wilson Score 95% cho 1 điểm đến
+  async capNhatThongKeWilsonChoDiemDen(diemDenId) {
+    const allReviews = await this.layTatCaDanhGiaCuaDiemDen(diemDenId)
+    const n = allReviews.length
+    if (n === 0) {
+      await this.capNhatDiemDen(diemDenId, {
+        tong_luot_danh_gia: 0,
+        ty_le_tich_cuc: 0,
+        khoang_tin_cay_wilson: '0.000 - 0.000',
+        trang_thai_wilson: 'binh_thuong',
+        nhan_trang_thai: 'Chưa có đánh giá'
+      })
+      return
+    }
+    const diemTb = (allReviews.reduce((sum, r) => sum + Number(r.diem_so || 5), 0) / n).toFixed(1)
+    const posCount = allReviews.filter(r => r.sac_thai === 'tich_cuc' || Number(r.diem_so || 5) >= 4).length
+    const p_hat = posCount / n
+    const z = 1.96
+    const z2 = z * z
+    const numerator = p_hat + z2 / (2 * n) - z * Math.sqrt((p_hat * (1 - p_hat)) / n + z2 / (4 * n * n))
+    const denominator = 1 + z2 / n
+    const w_lower = Math.max(0, numerator / denominator)
+    const isDiemSang = w_lower >= 0.70
+
+    await this.capNhatDiemDen(diemDenId, {
+      tong_luot_danh_gia: n,
+      diem_danh_tieng_tb: diemTb,
+      ty_le_tich_cuc: Number((p_hat * 100).toFixed(1)),
+      khoang_tin_cay_wilson: `${w_lower.toFixed(3)} - ${Math.min(1, w_lower + 0.08).toFixed(3)}`,
+      trang_thai_wilson: isDiemSang ? 'diem_sang' : 'binh_thuong',
+      nhan_trang_thai: isDiemSang ? "Điểm sáng du lịch (Travelers' Choice)" : 'Hoạt động ổn định'
+    })
   },
 
   // 4. DU KHÁCH VIẾT ĐÁNH GIÁ MỚI (WRITE A REVIEW FLOW - CHUẨN TRIPADVISOR)
@@ -706,6 +794,96 @@ export const DataService = {
       tong_danh_gia_moi: n,
       w_lower,
       is_diem_sang: isDiemSang
+    }
+  },
+
+  // 7. CẤU HÌNH & ĐỒNG BỘ ĐÁM MÂY (SUPABASE REST + CLOUDINARY UPLOAD + LOCALSTORAGE HYBRID)
+  layCauHinhCloud() {
+    const saved = JSON.parse(localStorage.getItem('dt12_cloud_config') || '{}')
+    return {
+      supabaseUrl: saved.supabaseUrl || import.meta.env.VITE_SUPABASE_URL || '',
+      supabaseAnonKey: saved.supabaseAnonKey || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+      cloudinaryCloudName: saved.cloudinaryCloudName || import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '',
+      cloudinaryUploadPreset: saved.cloudinaryUploadPreset || import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || ''
+    }
+  },
+
+  luuCauHinhCloud(config) {
+    localStorage.setItem('dt12_cloud_config', JSON.stringify(config))
+    return this.layCauHinhCloud()
+  },
+
+  // Upload ảnh: Tự động đẩy lên Cloudinary nếu có cấu hình, hoặc nén chuẩn WebP/JPEG DataURL ngay trên trình duyệt (Zero-config trên Vercel)
+  async uploadAnhDiemDen(file) {
+    const cfg = this.layCauHinhCloud()
+    if (cfg.cloudinaryCloudName && cfg.cloudinaryUploadPreset) {
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', cfg.cloudinaryUploadPreset)
+        const resp = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudinaryCloudName}/image/upload`, {
+          method: 'POST',
+          body: formData
+        })
+        if (resp.ok) {
+          const data = await resp.json()
+          if (data.secure_url) {
+            return { url: data.secure_url, mode: 'cloudinary' }
+          }
+        }
+      } catch (e) {
+        // Fallback sang nén Base64 nội bộ nếu Cloudinary lỗi
+      }
+    }
+
+    // Nén ảnh thông minh trên Client qua HTML5 Canvas (không cần tài khoản ngoài, chạy trực tiếp trên Vercel)
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          const maxWidth = 960
+          let width = img.width
+          let height = img.height
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width)
+            width = maxWidth
+          }
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+          resolve({ url: dataUrl, mode: 'client_compressed' })
+        }
+        img.onerror = reject
+        img.src = event.target.result
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+  },
+
+  // Đồng bộ bản ghi lên Supabase PostgREST nếu người dùng cấu hình Supabase
+  async dongBoSupabase(table, record) {
+    const cfg = this.layCauHinhCloud()
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return { synced: false, reason: 'local_only' }
+    try {
+      const baseUrl = cfg.supabaseUrl.replace(/\/$/, '')
+      const resp = await fetch(`${baseUrl}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: cfg.supabaseAnonKey,
+          Authorization: `Bearer ${cfg.supabaseAnonKey}`,
+          Prefer: 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify(record)
+      })
+      return { synced: resp.ok, status: resp.status }
+    } catch (e) {
+      return { synced: false, error: e.message }
     }
   }
 }
