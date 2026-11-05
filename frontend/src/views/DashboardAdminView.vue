@@ -575,20 +575,67 @@
     <div v-if="moModalThemDiemDen" class="nevio-modal-overlay">
       <div class="nevio-modal-card anim-scale-up">
         <div class="modal-head">
-          <h3>{{ dangSuaId ? 'Chỉnh Sửa Thông Tin Điểm Đến' : 'Thêm Địa Điểm Du Lịch Mới' }}</h3>
+          <h3>{{ dangSuaId ? 'Chỉnh Sửa Thông Tin Điểm Đến' : 'Thêm Địa Điểm Du Lịch Mới (Ràng Buộc Xác Thực TripAdvisor)' }}</h3>
           <button @click="dongModal" class="btn-close-modal">✕</button>
         </div>
 
         <form @submit.prevent="luuDiemDen" class="modal-form">
+          <!-- BƯỚC 1: RÀNG BUỘC ĐỊA ĐIỂM TỒN TẠI TRÊN TRIPADVISOR -->
+          <div class="init-reviews-box" style="margin-bottom: 14px; border-color: #0284c7; background: #f0f9ff;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+              <strong style="color: #0369a1; font-size: 0.9rem;">
+                🛡️ Ràng Buộc Toàn Vẹn Dữ Liệu: Địa điểm bắt buộc phải có thực trên TripAdvisor
+              </strong>
+              <span v-if="trangThaiXacThucTA.hop_le" style="background: #dcfce7; color: #15803d; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;">
+                ✅ Đã xác thực TripAdvisor ({{ trangThaiXacThucTA.location_id }})
+              </span>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label style="color: #0f172a; font-weight: 600;">Cách 1: Chọn nhanh từ Danh bạ Địa danh TripAdvisor Việt Nam đã xác thực</label>
+              <select v-model="diaDiemMauChon" @change="chonTuDanhBaTripAdvisor" class="form-input">
+                <option value="">-- Chọn địa danh thực tế trên TripAdvisor để tự động đồng bộ thông tin &amp; URL gốc --</option>
+                <option v-for="item in danhBaTripAdvisor" :key="item.location_id" :value="item.location_id">
+                  ✅ [{{ item.location_id }}] {{ item.ten_rut_gon }} ({{ item.ten }}) — {{ item.tinh_thanh }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 4px;">
+              <label style="color: #0f172a; font-weight: 600;">Cách 2: Dán đường dẫn URL thực tế trên TripAdvisor *</label>
+              <div style="display: flex; gap: 8px;">
+                <input
+                  v-model="formDiemDen.tripadvisor_url"
+                  @input="kiemTraUrlTripAdvisorTucThi"
+                  type="url"
+                  required
+                  placeholder="https://www.tripadvisor.com.vn/Attraction_Review-g298085-d2255351-Reviews-Sun_World_Ba_Na_Hills-Da_Nang.html"
+                  class="form-input"
+                  style="flex: 1;"
+                />
+                <button type="button" @click="kiemTraVaBocTachUrlTA" class="btn-upload-file" style="white-space: nowrap;">
+                  <Search :size="14" />
+                  <span>Kiểm Tra URL</span>
+                </button>
+              </div>
+              <p v-if="loiXacThucTA" style="color: #dc2626; font-size: 0.82rem; font-weight: 600; margin-top: 6px; margin-bottom: 0;">
+                {{ loiXacThucTA }}
+              </p>
+              <p v-else style="color: #475569; font-size: 0.78rem; margin-top: 4px; margin-bottom: 0;">
+                * Hệ thống chỉ cho phép thêm địa điểm có URL thực tế trên <code>tripadvisor.com(.vn)</code> (chứa mã <code>-g[MãVùng]-d[MãĐịaĐiểm]-Reviews-</code>) để kéo đúng dữ liệu đánh giá thật.
+              </p>
+            </div>
+          </div>
+
           <div class="form-grid-2">
             <div class="form-group">
-              <label>Tên điểm đến đầy đủ *</label>
-              <input v-model="formDiemDen.ten" type="text" required placeholder="Ví dụ: Sun World Bà Nà Hills Đà Nẵng" class="form-input" />
+              <label>Tên điểm đến trên TripAdvisor *</label>
+              <input v-model="formDiemDen.ten" type="text" required placeholder="Ví dụ: Sun World Ba Na Hills" class="form-input" />
             </div>
 
             <div class="form-group">
-              <label>Tên rút gọn *</label>
-              <input v-model="formDiemDen.ten_rut_gon" type="text" required placeholder="Ví dụ: Bà Nà Hills" class="form-input" />
+              <label>Tên hiển thị tiếng Việt *</label>
+              <input v-model="formDiemDen.ten_rut_gon" type="text" required placeholder="Ví dụ: Bà Nà Hills &amp; Cầu Vàng Đà Nẵng" class="form-input" />
             </div>
           </div>
 
@@ -783,25 +830,75 @@ const daKetNoiCloud = computed(() => {
   return !!(formCloud.value.supabaseUrl && formCloud.value.supabaseAnonKey) || !!(formCloud.value.cloudinaryCloudName && formCloud.value.cloudinaryUploadPreset)
 })
 
-// Modal Điểm Đến state
+// Modal Điểm Đến state & Ràng buộc xác thực TripAdvisor
 const moModalThemDiemDen = ref(false)
 const dangSuaId = ref(null)
 const dangUploadAnh = ref(false)
 const cheDoAnhVuaTai = ref('')
+const danhBaTripAdvisor = ref(DataService.layDanhBaTripAdvisorXacThuc())
+const diaDiemMauChon = ref('')
+const loiXacThucTA = ref('')
+const trangThaiXacThucTA = ref({ hop_le: false, location_id: '' })
+
 const formDiemDen = ref({
   ten: '',
   ten_rut_gon: '',
   tinh_thanh: '',
   loai_hinh: '',
   dia_chi: '',
+  tripadvisor_url: '',
   hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85',
   mo_ta: '',
-  diem_danh_tieng_tb: 4.7,
+  diem_danh_tieng_tb: 4.8,
   tu_dong_gom_danh_gia: true,
   danh_gia_dau_tien_tieu_de: '',
   danh_gia_dau_tien_sao: 5,
   danh_gia_dau_tien_noi_dung: ''
 })
+
+function chonTuDanhBaTripAdvisor() {
+  const item = danhBaTripAdvisor.value.find(x => x.location_id === diaDiemMauChon.value)
+  if (!item) return
+  formDiemDen.value.ten = item.ten
+  formDiemDen.value.ten_rut_gon = item.ten_rut_gon
+  formDiemDen.value.tinh_thanh = item.tinh_thanh
+  formDiemDen.value.loai_hinh = item.loai_hinh
+  formDiemDen.value.dia_chi = item.dia_chi
+  formDiemDen.value.tripadvisor_url = item.tripadvisor_url
+  formDiemDen.value.hinh_anh = item.hinh_anh
+  formDiemDen.value.mo_ta = item.mo_ta
+  loiXacThucTA.value = ''
+  trangThaiXacThucTA.value = { hop_le: true, location_id: item.location_id }
+}
+
+function kiemTraUrlTripAdvisorTucThi() {
+  const kq = DataService.xacThucUrlTripAdvisor(formDiemDen.value.tripadvisor_url, formDiemDen.value.ten)
+  if (kq.hop_le) {
+    loiXacThucTA.value = ''
+    trangThaiXacThucTA.value = { hop_le: true, location_id: kq.location_id }
+  } else {
+    trangThaiXacThucTA.value = { hop_le: false, location_id: '' }
+  }
+}
+
+function kiemTraVaBocTachUrlTA() {
+  const kq = DataService.xacThucUrlTripAdvisor(formDiemDen.value.tripadvisor_url, formDiemDen.value.ten)
+  if (!kq.hop_le) {
+    loiXacThucTA.value = kq.loi
+    trangThaiXacThucTA.value = { hop_le: false, location_id: '' }
+    return
+  }
+  loiXacThucTA.value = ''
+  trangThaiXacThucTA.value = { hop_le: true, location_id: kq.location_id }
+  const m = kq.metadata
+  if (!formDiemDen.value.ten) formDiemDen.value.ten = m.ten
+  if (!formDiemDen.value.ten_rut_gon) formDiemDen.value.ten_rut_gon = m.ten_rut_gon
+  if (!formDiemDen.value.tinh_thanh) formDiemDen.value.tinh_thanh = m.tinh_thanh
+  if (!formDiemDen.value.loai_hinh) formDiemDen.value.loai_hinh = m.loai_hinh
+  if (!formDiemDen.value.dia_chi) formDiemDen.value.dia_chi = m.dia_chi
+  if (!formDiemDen.value.mo_ta) formDiemDen.value.mo_ta = m.mo_ta
+  if (m.hinh_anh) formDiemDen.value.hinh_anh = m.hinh_anh
+}
 
 // Modal Thêm Đánh Giá state
 const moModalThemDanhGia = ref(false)
@@ -871,15 +968,19 @@ function dongModal() {
   moModalThemDiemDen.value = false
   dangSuaId.value = null
   cheDoAnhVuaTai.value = ''
+  diaDiemMauChon.value = ''
+  loiXacThucTA.value = ''
+  trangThaiXacThucTA.value = { hop_le: false, location_id: '' }
   formDiemDen.value = {
     ten: '',
     ten_rut_gon: '',
     tinh_thanh: '',
     loai_hinh: '',
     dia_chi: '',
+    tripadvisor_url: '',
     hinh_anh: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=85',
     mo_ta: '',
-    diem_danh_tieng_tb: 4.7,
+    diem_danh_tieng_tb: 4.8,
     tu_dong_gom_danh_gia: true,
     danh_gia_dau_tien_tieu_de: '',
     danh_gia_dau_tien_sao: 5,
@@ -890,18 +991,25 @@ function dongModal() {
 function moModalSua(dest) {
   dangSuaId.value = dest.id
   cheDoAnhVuaTai.value = ''
+  loiXacThucTA.value = ''
   formDiemDen.value = { ...dest }
+  kiemTraUrlTripAdvisorTucThi()
   moModalThemDiemDen.value = true
 }
 
 async function luuDiemDen() {
-  if (dangSuaId.value) {
-    await DataService.capNhatDiemDen(dangSuaId.value, formDiemDen.value)
-  } else {
-    await DataService.themDiemDen(formDiemDen.value)
+  loiXacThucTA.value = ''
+  try {
+    if (dangSuaId.value) {
+      await DataService.capNhatDiemDen(dangSuaId.value, formDiemDen.value)
+    } else {
+      await DataService.themDiemDen(formDiemDen.value)
+    }
+    await loadDiemDen()
+    dongModal()
+  } catch (err) {
+    loiXacThucTA.value = err.message
   }
-  await loadDiemDen()
-  dongModal()
 }
 
 function moModalThemDanhGiaChoDiem(dest) {

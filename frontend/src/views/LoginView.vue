@@ -59,7 +59,7 @@
                 id="email" 
                 type="email" 
                 v-model="email" 
-                placeholder="admin@toursentiment.vn" 
+                placeholder="Nhập địa chỉ email của bạn..." 
                 required 
                 class="form-input"
               />
@@ -171,42 +171,6 @@
           </button>
         </form>
 
-        <!-- Quick 2 Role Test Buttons (Chỉ hiển thị khi ở tab Đăng Nhập) -->
-        <div v-if="cheDoAuth === 'dang_nhap'" class="quick-roles-section">
-          <div class="quick-title">
-            <span>Chọn nhanh 1 trong 2 vai trò chuẩn để kiểm thử:</span>
-          </div>
-          <div class="quick-grid two-cols">
-            <button 
-              type="button" 
-              :class="['btn-quick-role', { active: vaiTroChon === 'admin' }]" 
-              @click="dienTaiKhoan('admin@toursentiment.vn', 'Admin@123456', 'admin', 'Quản trị viên')"
-            >
-              <div class="role-icon-box bg-gold">
-                <ShieldCheck :size="20" class="role-icon-inline" />
-              </div>
-              <div class="role-text-meta">
-                <strong>Quản trị viên (Admin)</strong>
-                <span>Thêm/Sửa/Xóa điểm đến, gom đánh giá &amp; tính Wilson</span>
-              </div>
-            </button>
-
-            <button 
-              type="button" 
-              :class="['btn-quick-role', { active: vaiTroChon === 'du_khach' }]" 
-              @click="dienTaiKhoan('khachhang@toursentiment.vn', 'Khach@123456', 'du_khach', 'Du khách trải nghiệm')"
-            >
-              <div class="role-icon-box bg-white">
-                <Compass :size="20" class="role-icon-inline" />
-              </div>
-              <div class="role-text-meta">
-                <strong>Du khách (Tourist)</strong>
-                <span>Tra cứu điểm đến, xem review thật, viết bài đánh giá</span>
-              </div>
-            </button>
-          </div>
-        </div>
-
         <!-- Back to Dashboard -->
         <div class="login-footer">
           <router-link to="/dashboard" class="link-back-home">
@@ -222,12 +186,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { 
-  Compass, 
   Mail, 
   Lock, 
   User,
   ArrowRight, 
-  ShieldCheck, 
   Sparkles,
   AlertCircle,
   CheckCircle2,
@@ -243,10 +205,10 @@ const cheDoAuth = ref('dang_nhap') // 'dang_nhap' | 'dang_ky'
 const hienMatKhau = ref(false)
 
 // Form Đăng Nhập
-const email = ref('admin@toursentiment.vn')
-const matKhau = ref('Admin@123456')
-const vaiTroChon = ref('admin')
-const hoTenChon = ref('Quản trị viên')
+const email = ref('')
+const matKhau = ref('')
+const vaiTroChon = ref('du_khach')
+const hoTenChon = ref('Du khách trải nghiệm')
 
 // Form Đăng Ký
 const formDangKy = ref({
@@ -321,7 +283,7 @@ async function dangNhap() {
       hoTenHopLe = 'Quản trị viên (Admin)'
     } else {
       dangXuLy.value = false
-      thongBaoLoi.value = 'Mật khẩu quản trị viên không chính xác. Mặc định: Admin@123456'
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
       return
     }
   } else if (inputEmail === 'khachhang@toursentiment.vn' || inputEmail === 'tourist@demo.test') {
@@ -330,30 +292,48 @@ async function dangNhap() {
       hoTenHopLe = 'Du khách trải nghiệm'
     } else {
       dangXuLy.value = false
-      thongBaoLoi.value = 'Mật khẩu du khách mẫu không chính xác. Mặc định: Khach@123456 hoặc User@123456'
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
       return
     }
-  } else if (inputEmail === 'analyst@demo.test' && inputPassword === 'Analyst@123456') {
-    roleHopLe = 'admin'
-    hoTenHopLe = 'Chuyên viên phân tích (Analyst)'
-  } else if (inputEmail === 'partner@demo.test' && inputPassword === 'Partner@123456') {
-    roleHopLe = 'du_khach'
-    hoTenHopLe = 'Chủ cơ sở đối tác (Partner)'
-  } else if (inputEmail === 'moderator@demo.test' && inputPassword === 'Mod@123456') {
-    roleHopLe = 'admin'
-    hoTenHopLe = 'Kiểm duyệt viên (Moderator)'
+  } else if (inputEmail === 'analyst@demo.test') {
+    if (inputPassword === 'Analyst@123456') {
+      roleHopLe = 'admin'
+      hoTenHopLe = 'Chuyên viên phân tích (Analyst)'
+    } else {
+      dangXuLy.value = false
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
+      return
+    }
+  } else if (inputEmail === 'partner@demo.test') {
+    if (inputPassword === 'Partner@123456') {
+      roleHopLe = 'du_khach'
+      hoTenHopLe = 'Chủ cơ sở đối tác (Partner)'
+    } else {
+      dangXuLy.value = false
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
+      return
+    }
+  } else if (inputEmail === 'moderator@demo.test') {
+    if (inputPassword === 'Mod@123456') {
+      roleHopLe = 'admin'
+      hoTenHopLe = 'Kiểm duyệt viên (Moderator)'
+    } else {
+      dangXuLy.value = false
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
+      return
+    }
   } else if (userTimThay) {
     if (userTimThay.mat_khau === inputPassword) {
       roleHopLe = userTimThay.vai_tro || 'du_khach'
       hoTenHopLe = userTimThay.ho_ten
     } else {
       dangXuLy.value = false
-      thongBaoLoi.value = 'Mật khẩu tài khoản không chính xác. Vui lòng kiểm tra lại!'
+      thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại thông tin đăng nhập!'
       return
     }
   } else {
     dangXuLy.value = false
-    thongBaoLoi.value = 'Email chưa được đăng ký trong hệ thống. Bạn có thể bấm tab "Đăng Ký Du Khách" bên trên!'
+    thongBaoLoi.value = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại hoặc đăng ký tài khoản mới!'
     return
   }
 

@@ -1,0 +1,51 @@
+name: CI/CD Pipeline - DuLichSo DT-12 (CSE703073)
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  frontend-build-and-test:
+    name: Build & Verify Vue 3 SPA + Open Data
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Verify Production Build
+        run: npm run build
+
+      - name: Verify OpenAPI 3.0 & GeoJSON Open Data Artifacts
+        run: |
+          test -f dist/openapi.json
+          test -f dist/destinations.geojson
+
+  python-absa-verify:
+    name: Verify Python FastAPI ABSA & Wilson Score Engine
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Python Syntax & Dataset Integrity
+        run: |
+          python -m py_compile backend/tripadvisor_crawler.py
+          python -c "import csv; rows = list(csv.DictReader(open('backend/du_lieu_tho_tu_cao.csv', encoding='utf-8-sig'))); assert len(rows) >= 300, f'Expected >=300 records, got {len(rows)}'; print(f'Verified {len(rows)} tourism records')"
