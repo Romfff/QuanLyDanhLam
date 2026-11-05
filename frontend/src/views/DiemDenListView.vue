@@ -291,15 +291,10 @@
                 <ArrowRight :size="15" />
               </router-link>
 
-              <button 
-                @click="nhanVoucher(d)" 
-                :disabled="d.trang_thai_wilson !== 'diem_sang'"
-                :class="['btn-card-action', { 'btn-yellow': d.trang_thai_wilson === 'diem_sang', 'btn-disabled': d.trang_thai_wilson !== 'diem_sang' }]"
-                :title="d.trang_thai_wilson === 'diem_sang' ? 'Nhận mã ưu đãi bảo chứng' : 'Chỉ mở ưu đãi cho Điểm sáng du lịch'"
-              >
-                <Gift :size="15" />
-                <span>{{ d.trang_thai_wilson === 'diem_sang' ? 'Nhận Ưu Đãi' : 'Chưa Mở Khóa' }}</span>
-              </button>
+              <router-link :to="'/diem-den/' + d.id" class="btn-card-action btn-yellow">
+                <ExternalLink :size="14" />
+                <span>Xem Đánh Giá &amp; Đặt Chỗ</span>
+              </router-link>
             </div>
           </div>
         </article>
@@ -362,31 +357,6 @@
         </div>
       </section>
     </div>
-
-    <!-- Voucher Success Toast Modal -->
-    <div v-if="voucherToast" class="voucher-modal-overlay" @click.self="voucherToast = null">
-      <div class="voucher-modal-card anim-pop">
-        <div class="modal-icon-wrap">
-          <Sparkles :size="28" class="text-yellow" />
-        </div>
-        <h3 class="modal-title">Nhận Ưu Đãi Thành Công!</h3>
-        <p class="modal-dest">{{ voucherToast.diem_den }}</p>
-        <p class="modal-desc">{{ voucherToast.uu_dai_chi_tiet }}</p>
-        <div class="modal-code-box">
-          <span class="code-lbl">MÃ ƯU ĐÃI:</span>
-          <code class="code-val">{{ voucherToast.ma_tham_chieu }}</code>
-        </div>
-        <p class="modal-meta">Mã đã được lưu vào <strong>Ví Phiếu Của Tôi</strong>. Hiệu lực trong 15 phút.</p>
-        <div class="modal-actions">
-          <router-link to="/phieu-cua-toi" class="btn-goto-wallet">
-            Xem Ví Phiếu Của Tôi
-          </router-link>
-          <button @click="voucherToast = null" class="btn-close-modal">
-            Đóng
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -414,44 +384,7 @@ const cheDoHienThi = ref('xep_chong')
 const tuKhoa = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
-const voucherToast = ref(null)
-const laAdmin = computed(() => localStorage.getItem('vai_tro') === 'admin')
 
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=80'
-
-function xuLyLoiAnh(event, diemDenId) {
-  event.target.src = FALLBACK_IMAGE
-}
-
-const danhSachLoc = computed(() => {
-  return dsDiemDen.value.filter(d => {
-    if (tuKhoa.value) {
-      const kw = tuKhoa.value.toLowerCase()
-      const matchTen = d.ten.toLowerCase().includes(kw) || (d.ten_rut_gon && d.ten_rut_gon.toLowerCase().includes(kw))
-      const matchDiaChi = d.dia_chi && d.dia_chi.toLowerCase().includes(kw)
-      if (!matchTen && !matchDiaChi) return false
-    }
-    if (locTinhThanh.value && d.tinh_thanh !== locTinhThanh.value) {
-      return false
-    }
-    if (locTrangThai.value && d.trang_thai_wilson !== locTrangThai.value) {
-      return false
-    }
-    return true
-  })
-})
-
-function datLaiBoLoc() {
-  tuKhoa.value = ''
-  locTinhThanh.value = ''
-  locTrangThai.value = ''
-}
-
-async function nhanVoucher(diemDen) {
-  if (diemDen.trang_thai_wilson !== 'diem_sang') return
-  const phieu = await DataService.nhanUuDai(diemDen.id)
-  voucherToast.value = phieu
-}
 
 onMounted(async () => {
   dsDiemDen.value = await DataService.layDanhSachDiemDen()
