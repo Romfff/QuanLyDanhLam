@@ -187,15 +187,10 @@
                 <span>Chi Tiết</span>
                 <ArrowRight :size="15" />
               </router-link>
-              <button 
-                v-if="dest.trang_thai_wilson === 'diem_sang'"
-                @click="nhanVoucher(dest)"
-                class="stacked-btn-voucher"
-                title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
-              >
-                <Gift :size="14" />
-                <span>Nhận ưu đãi 15%</span>
-              </button>
+              <router-link :to="'/viet-danh-gia?diem_den_id=' + dest.id" class="stacked-btn-voucher" style="text-decoration:none">
+                <PenLine :size="14" />
+                <span>Viết Đánh Giá</span>
+              </router-link>
             </div>
           </div>
         </article>
@@ -375,7 +370,9 @@ import {
   Gift, 
   RotateCcw, 
   X, 
-  Award 
+  Award,
+  ExternalLink,
+  PenLine
 } from 'lucide-vue-next'
 import { DataService } from '../services/dataService'
 
@@ -385,6 +382,7 @@ const tuKhoa = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
 const laAdmin = computed(() => localStorage.getItem('vai_tro') === 'admin')
+function xuLyLoiAnh(e) { e.target.src = 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1000&q=80' }
 
 const danhSachLoc = computed(() => {
   return dsDiemDen.value.filter(d => {
@@ -1144,7 +1142,6 @@ onMounted(async () => {
   color: var(--mau-chu);
   cursor: pointer;
 }
-</style>
 
 /* ================= STACKED LEADERBOARD UX STYLES ================= */
 .summary-right-actions {
@@ -1568,3 +1565,4 @@ onMounted(async () => {
     flex-direction: column;
   }
 }
+</style>
