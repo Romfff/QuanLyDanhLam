@@ -4,8 +4,7 @@
       <!-- 1. Header Banner -->
       <div class="write-header">
         <div class="tripadvisor-badge-pill">
-          <span class="owl-icon">🦉</span>
-          <span>TRIPADVISOR CỘNG ĐỒNG ĐÁNH GIÁ CHÂN THỰC</span>
+          <span>🛡️ DULICHSO (ĐT-12) · CỘNG ĐỒNG ĐÁNH GIÁ CHÂN THỰC</span>
         </div>
         <h1 class="write-title">Viết Bài Đánh Giá Trải Nghiệm</h1>
         <p class="write-subtitle">
