@@ -1,0 +1,151 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DuLichSo ĐT-12 — OpenAPI Dữ Liệu Mở & Phân Tích Danh Tiếng Điểm Đến Du Lịch",
+    "version": "1.0.0",
+    "description": "Giao diện lập trình ứng dụng mở (OpenAPI 3.0) của Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến (Đề tài ĐT-12 - Học phần CSE703073 - Nhóm 03 DuLichSo - Đại học Phenikaa). Hỗ trợ khai thác dữ liệu điểm đến chuẩn schema.org/TouristAttraction, GeoJSON, chỉ số khoảng tin cậy dưới Wilson Score 95% CI và phân tích sắc thái 5 khía cạnh bằng PhoBERT ABSA.",
+    "contact": {
+      "name": "Nhóm 03 - DuLichSo (Trưởng nhóm: Nguyễn Trung Hiếu - 24108738)",
+      "email": "24108738@st.phenikaa-uni.edu.vn",
+      "url": "https://github.com/hieuxetawng/he-thong-phan-tich-danh-gia-diem-den_DT12"
+    },
+    "license": {
+      "name": "CC BY 4.0 / MIT Academic Open Data License",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Cổng API chính thức (RESTful API v1)"
+    },
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Máy chủ Laravel 11 cục bộ (Development)"
+    },
+    {
+      "url": "http://localhost:8001",
+      "description": "Dịch vụ vi mô Python FastAPI PhoBERT ABSA"
+    }
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "tags": ["Giám sát vận hành"],
+        "summary": "Kiểm tra trạng thái sức khỏe hệ thống (Healthcheck)",
+        "responses": {
+          "200": {
+            "description": "Hệ thống hoạt động bình thường",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "ok",
+                  "service": "DuLichSo-DT12-API",
+                  "database": "connected",
+                  "python_absa": "ready",
+                  "timestamp": "2026-11-05T12:00:00+07:00"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diem-den": {
+      "get": {
+        "tags": ["Điểm đến & Xếp hạng Wilson"],
+        "summary": "Lấy danh sách điểm đến kèm chỉ số Wilson Score 95% CI và điểm 5 khía cạnh",
+        "parameters": [
+          {
+            "name": "khu_vuc",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Lọc theo tỉnh/thành phố (Quảng Ninh, Ninh Bình, Kiên Giang...)"
+          },
+          {
+            "name": "tu_khoa",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Từ khóa tìm kiếm tên điểm đến hoặc đặc điểm"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Danh sách điểm đến chuẩn hóa theo schema.org/TouristAttraction"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Điểm đến & Xếp hạng Wilson"],
+        "summary": "Thêm mới điểm đến du lịch (Yêu cầu quyền Admin)",
+        "responses": {
+          "201": { "description": "Tạo điểm đến thành công" },
+          "403": { "description": "Không đủ thẩm quyền RBAC" }
+        }
+      }
+    },
+    "/diem-den/{id}": {
+      "get": {
+        "tags": ["Điểm đến & Xếp hạng Wilson"],
+        "summary": "Chi tiết điểm đến, phân bổ sao, điểm 5 khía cạnh ABSA và danh sách đánh giá thực tế",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Thông tin chi tiết điểm đến" },
+          "404": { "description": "Không tìm thấy điểm đến" }
+        }
+      }
+    },
+    "/danh-gia": {
+      "get": {
+        "tags": ["Đánh giá du khách & PhoBERT ABSA"],
+        "summary": "Truy vấn danh sách 874 đánh giá thực tế có phân trang và lọc theo khía cạnh/sắc thái",
+        "parameters": [
+          { "name": "diem_den_id", "in": "query", "schema": { "type": "integer" } },
+          { "name": "so_sao", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 5 } },
+          { "name": "sac_thai", "in": "query", "schema": { "type": "string", "enum": ["tich_cuc", "trung_tinh", "tieu_cuc"] } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } }
+        ],
+        "responses": {
+          "200": { "description": "Danh sách đánh giá đã kiểm chứng" }
+        }
+      },
+      "post": {
+        "tags": ["Đánh giá du khách & PhoBERT ABSA"],
+        "summary": "Gửi bài đánh giá mới, tự động kích hoạt PhoBERT ABSA và tính lại Wilson Score 95% CI",
+        "responses": {
+          "201": { "description": "Đã lưu đánh giá và cập nhật chỉ số danh tiếng" },
+          "422": { "description": "Dữ liệu đầu vào không hợp lệ" }
+        }
+      }
+    },
+    "/absa/analyze": {
+      "post": {
+        "tags": ["Dịch vụ Python PhoBERT ABSA"],
+        "summary": "Phân tích sắc thái văn bản tiếng Việt theo 5 khía cạnh du lịch kèm độ tin cậy",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "noi_dung": "Phong cảnh vịnh Hạ Long tuyệt đẹp, phòng sạch sẽ nhưng giá đồ uống hơi cao.",
+                "so_sao": 4
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Kết quả bóc tách khía cạnh, nhãn sắc thái và điểm tin cậy mô hình"
+          }
+        }
+      }
+    }
+  }
+}
