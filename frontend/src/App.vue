@@ -8,85 +8,89 @@
       <router-view />
     </main>
 
-    <!-- 3. Nevio Luxury Footer with Wave Top Shape -->
+    <!-- 3. Footer chuẩn học thuật Mục 2.4 Đề thi kết thúc học phần CSE703073 -->
     <footer class="nevio-footer">
-      <div class="footer-wave-wrap">
-        <img 
-          src="https://cdn.prod.website-files.com/6a5f49f597e097761e089dbc/6a61b42bcc08fce1801ad250_footer-wave.svg" 
-          alt="Footer wave shape" 
-          class="footer-wave-shape"
-        />
-      </div>
-
       <div class="nevio-container footer-content-wrap">
         <div class="footer-top-grid">
-          <!-- Col 1: Brand & Mission -->
+          <!-- Col 1: Brand & Mission (Đề tài ĐT-12) -->
           <div class="footer-brand-col">
             <div class="footer-brand-header">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="24" height="24" rx="7" fill="#303030"/>
-                <path d="M12 4.5L14.5 9.5L20 10.3L16 14.2L16.9 19.7L12 17.1L7.1 19.7L8 14.2L4 10.3L9.5 9.5L12 4.5Z" fill="#fddd62"/>
-              </svg>
-              <span class="footer-brand-title">TripAdvisor <span class="tag-accent">AI Verified</span></span>
+              <div class="footer-logo-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L4 5.5V11.5C4 16.8 7.4 21.6 12 23C16.6 21.6 20 16.8 20 11.5V5.5L12 2Z" fill="#18181b"/>
+                  <path d="M12 6.2L13.65 9.55L17.35 10.08L14.67 12.69L15.3 16.37L12 14.63L8.7 16.37L9.33 12.69L6.65 10.08L10.35 9.55L12 6.2Z" fill="#fddd62"/>
+                </svg>
+              </div>
+              <div class="footer-brand-titles">
+                <span class="footer-brand-title">DuLichSo <span class="tag-accent">ĐT-12</span></span>
+                <span class="footer-brand-subtitle">Hệ thống phân tích ý kiến du khách &amp; giám sát danh tiếng điểm đến</span>
+              </div>
             </div>
             <p class="footer-brand-desc">
-              Hệ thống trí tuệ nhân tạo giám sát danh tiếng điểm đến du lịch Việt Nam. Tự động trích xuất ý kiến từ 874 đánh giá TripAdvisor, phân loại 5 khía cạnh cốt lõi bằng PhoBERT kết hợp công thức khoảng tin cậy Wilson Score 95% công tâm, minh bạch.
+              Nền tảng phân tích sắc thái đa khía cạnh (ABSA) ứng dụng mô hình ngôn ngữ tiếng Việt <strong>PhoBERT</strong> kết hợp khoảng tin cậy thống kê <strong>Wilson Score 95%</strong> (z = 1.96) trên tập 874 bản ghi đánh giá du lịch thực tế, hỗ trợ cơ quan quản lý và du khách ra quyết định dựa trên dữ liệu kiểm chứng.
             </p>
             <div class="footer-feature-pills">
-              <span class="pill-chip">PhoBERT AI</span>
-              <span class="pill-chip">Wilson Score 95%</span>
-              <span class="pill-chip">TripAdvisor 874</span>
+              <span class="pill-chip">Đề tài ĐT-12</span>
+              <span class="pill-chip">PhoBERT ABSA</span>
+              <span class="pill-chip">Wilson Score 95% CI</span>
+              <span class="pill-chip">874 Bản Ghi Thực Tế</span>
             </div>
           </div>
 
           <!-- Col 2: Quick Links -->
           <div class="footer-nav-col">
-            <h4 class="footer-col-title">Khám Phá Nhanh</h4>
+            <h4 class="footer-col-title">Cấu Trúc Điều Hướng</h4>
             <ul class="footer-menu-list">
-              <li><router-link to="/dashboard">Khám phá tổng quan hệ thống</router-link></li>
-              <li><router-link to="/diem-den">Danh mục 7 điểm đến kiểm chứng</router-link></li>
-              <li><router-link to="/absa">Báo cáo phân tích 5 khía cạnh ABSA</router-link></li>
-              <li><router-link to="/danh-sach-danh-gia">Trung tâm 874 đánh giá TripAdvisor</router-link></li>
-              <li><router-link to="/viet-danh-gia">Viết đánh giá</router-link></li>
-              <li><router-link to="/dang-nhap">Đăng nhập / Đăng ký</router-link></li>
+              <li><router-link to="/dashboard">Trang chủ &amp; Tìm kiếm điểm đến</router-link></li>
+              <li><router-link to="/diem-den">Bảng xếp hạng &amp; Danh mục điểm đến</router-link></li>
+              <li><router-link to="/absa">Phân tích 5 khía cạnh dịch vụ (ABSA)</router-link></li>
+              <li><router-link to="/danh-sach-danh-gia">Kho dữ liệu 874 đánh giá thực tế</router-link></li>
+              <li><router-link to="/viet-danh-gia">Gửi bài đánh giá trải nghiệm mới</router-link></li>
+              <li><router-link to="/dang-nhap">Cổng xác thực &amp; Phân quyền RBAC</router-link></li>
             </ul>
           </div>
 
-          <!-- Col 3: Tech Stack -->
+          <!-- Col 3: Thông tin Học phần & Kiến trúc (Chuẩn Mục 2.2 & 2.4 Đề thi) -->
           <div class="footer-nav-col">
-            <h4 class="footer-col-title">Kiến Trúc Công Nghệ</h4>
-            <ul class="footer-menu-list">
-              <li><span>Python FastAPI Microservice (Port 8001)</span></li>
-              <li><span>Laravel 11.57 RESTful API (Port 8000)</span></li>
-              <li><span>Vue 3 Composition API &amp; Vite SPA</span></li>
-              <li><span>MySQL 15 Tables (Chuẩn hóa 3NF)</span></li>
-              <li><span>Thuật toán Wilson Score định tuyến</span></li>
+            <h4 class="footer-col-title">Thông Tin Học Phần</h4>
+            <ul class="footer-menu-list footer-academic-info">
+              <li><strong>Đơn vị:</strong> Khoa Hệ thống thông tin – Trường CNTT, Đại học Phenikaa</li>
+              <li><strong>Tên học phần:</strong> Lập trình ứng dụng web trong du lịch 2</li>
+              <li><strong>Mã học phần:</strong> <code>CSE703073</code> (HK I · 2026 – 2027)</li>
+              <li><strong>Tên nhóm:</strong> Nhóm 03 – <strong>DuLichSo</strong> (Đề tài <strong>ĐT-12</strong>)</li>
+              <li><strong>GV hướng dẫn:</strong> TS. Nguyễn Văn Tánh</li>
+              <li><strong>Kiến trúc:</strong> Vue 3 + Vite · Laravel 11 · Python FastAPI · MySQL 3NF</li>
             </ul>
           </div>
 
-          <!-- Col 4: Project Info & Authors -->
+          <!-- Col 4: Danh sách Thành viên Nhóm 03 - DuLichSo -->
           <div class="footer-nav-col">
-            <h4 class="footer-col-title">Đồ Án CSE703073</h4>
+            <h4 class="footer-col-title">Thành Viên Nhóm 03 (DuLichSo)</h4>
             <p class="footer-project-meta">
-              <strong>Học phần Phát Triển Ứng Dụng Web</strong><br/>
-              Nhóm 03 · Đề tài ĐT-12
+              Phân công 6 vai trò chuẩn theo Mục 4.1 Đề thi kết thúc học phần:
             </p>
             <div class="footer-authors-list">
-              <div class="author-row"><span>24108738</span> - Nguyễn Trung Hiếu (SV1)</div>
-              <div class="author-row"><span>24106135</span> - Hoàng Việt Anh (SV2)</div>
-              <div class="author-row"><span>24105686</span> - Nguyễn Việt Dũng (SV3)</div>
-              <div class="author-row"><span>24104760</span> - Phạm Tiến Nghĩa (SV4)</div>
-              <div class="author-row"><span>24108256</span> - Nguyễn Ngọc Lan (SV5)</div>
+              <div class="author-row"><span>24108738</span> – Nguyễn Trung Hiếu <em>(Trưởng nhóm · V1)</em></div>
+              <div class="author-row"><span>24106135</span> – Hoàng Việt Anh <em>(Kiến trúc dữ liệu · V2)</em></div>
+              <div class="author-row"><span>24105686</span> – Nguyễn Việt Dũng <em>(Lập trình Back-end · V3)</em></div>
+              <div class="author-row"><span>24104760</span> – Phạm Tiến Nghĩa <em>(Lập trình Front-end · V4)</em></div>
+              <div class="author-row"><span>24108256</span> – Nguyễn Ngọc Lan <em>(Kiểm thử &amp; Nghiệp vụ · V5, V6)</em></div>
             </div>
           </div>
         </div>
 
+        <!-- Bottom Bar: Ghi chú học thuật bắt buộc theo Mục 2.4 Đề thi -->
         <div class="footer-bottom-bar">
-          <div class="copyright-text">
-            © 2026 Nhóm 03 - ĐT12 TourSentiment.
+          <div class="copyright-block">
+            <div class="copyright-text">
+              © 2026 <strong>Nhóm 03 – DuLichSo</strong> · Học phần: <strong>Lập trình ứng dụng web trong du lịch 2</strong> (Mã học phần: <strong>CSE703073</strong>) – Đại học Phenikaa.
+            </div>
+            <div class="academic-mandatory-badge">
+              🎓 Sản phẩm học thuật – phục vụ mục đích đào tạo
+            </div>
           </div>
           <div class="model-disclaimer">
-            * Kết quả danh tiếng do mô hình PhoBERT AI tự động trích xuất. Du khách có thể đối soát nguyên văn đánh giá TripAdvisor để kiểm chứng.
+            * Tuyên bố minh bạch mô hình (Mục IX ĐT-12): Kết quả phân loại sắc thái và chỉ số danh tiếng do mô hình tự động trích xuất kèm mức độ tin cậy thống kê (Wilson 95% CI, F1 = 94.6%), đóng vai trò chỉ báo hỗ trợ ra quyết định, không trình bày như sự thật tuyệt đối.
           </div>
         </div>
       </div>
@@ -147,28 +151,60 @@ const route = useRoute()
 
 .footer-top-grid {
   display: grid;
-  grid-template-columns: 2fr 1.1fr 1.2fr 1.4fr;
-  gap: 40px;
-  margin-bottom: 40px;
+  grid-template-columns: 1.7fr 1.1fr 1.35fr 1.35fr;
+  gap: 32px;
+  margin-bottom: 36px;
 }
 
 .footer-brand-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.footer-logo-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #fddd62;
+  border: 1px solid #e5be29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.footer-brand-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .footer-brand-title {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 21px;
+  font-weight: 900;
   color: var(--mau-chu);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-brand-subtitle {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mau-chu-phu);
 }
 
 .tag-accent {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--nevio-orange);
+  font-size: 11px;
+  font-weight: 800;
+  background: #fddd62;
+  color: #18181b;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid #e5be29;
 }
 
 .footer-brand-desc {
@@ -247,21 +283,72 @@ const route = useRoute()
   color: var(--mau-chu);
 }
 
+.footer-academic-info li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mau-chu-phu);
+}
+
+.footer-academic-info li strong {
+  color: var(--mau-chu);
+}
+
+.footer-academic-info code {
+  background: #fef9c3;
+  color: #854d0e;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.author-row em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--mau-chu-mo);
+}
+
 .footer-bottom-bar {
   border-top: 1px solid var(--nevio-border);
   padding-top: 24px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 20px;
   font-size: 12.5px;
   color: var(--mau-chu-mo);
 }
 
+.copyright-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.copyright-text {
+  color: var(--mau-chu-phu);
+  font-size: 13px;
+}
+
+.academic-mandatory-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  background: #fef9c3;
+  color: #18181b;
+  border: 1px solid #fddd62;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .model-disclaimer {
-  max-width: 600px;
-  line-height: 1.5;
+  max-width: 580px;
+  line-height: 1.55;
+  font-size: 12px;
 }
 
 @media (max-width: 1024px) {
