@@ -26,6 +26,11 @@ const routes = [
     component: () => import('../views/AbsaAnalyticsView.vue')
   },
   {
+    path: '/viet-danh-gia',
+    name: 'WriteReview',
+    component: () => import('../views/WriteReviewView.vue')
+  },
+  {
     path: '/phieu-cua-toi',
     redirect: '/diem-den'
   },
