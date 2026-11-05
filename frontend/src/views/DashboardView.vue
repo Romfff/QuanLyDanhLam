@@ -530,7 +530,7 @@ const dsDiemDen = ref([])
 const tuKhoaTimKiem = ref('')
 const locDiaPhuong = ref('')
 const danhMucHienTai = ref('all')
-const cheDoXem = ref('luoi') // 'luoi' | 'xep_chong'
+const cheDoXem = ref('xep_chong') // 'luoi' | 'xep_chong'
 const hienSuggestions = ref(false)
 
 const danhSachTinhThanh = ['Quảng Ninh', 'Ninh Bình', 'Kiên Giang']
@@ -934,10 +934,10 @@ function datLaiBoLoc() {
 .ta-filter-ribbon {
   background: var(--nevio-card-bg);
   border-bottom: 1px solid var(--nevio-border);
-  padding: 12px 0;
-  position: sticky;
-  top: 70px;
-  z-index: 40;
+  padding: 16px 0;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 28px;
 }
 
 .ribbon-inner {
@@ -976,15 +976,19 @@ function datLaiBoLoc() {
 }
 
 .ribbon-pill.active {
-  background: #18181b;
-  color: #ffffff;
-  border-color: #18181b;
+  background: #fddd62 !important;
+  color: #18181b !important;
+  border-color: #e5be29 !important;
+  box-shadow: 0 4px 12px rgba(253, 221, 98, 0.35);
+  font-weight: 800;
 }
 
 [data-theme="dark"] .ribbon-pill.active {
-  background: #fddd62;
-  color: #18181b;
-  border-color: #fddd62;
+  background: #fddd62 !important;
+  color: #18181b !important;
+  border-color: #e5be29 !important;
+  box-shadow: 0 4px 12px rgba(253, 221, 98, 0.35);
+  font-weight: 800;
 }
 
 .ta-btn-write-review-pill {
