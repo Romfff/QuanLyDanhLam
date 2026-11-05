@@ -1,8 +1,8 @@
-# Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến — CSE703073 (ĐT-12)
+# Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến — TripAdvisor Intelligence Platform (ĐT-12)
 
 ## 1. Giới thiệu đề tài
 - **Mã đề tài:** ĐT-12
-- **Tên đề tài:** Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến
+- **Tên đề tài:** Hệ thống phân tích ý kiến du khách và giám sát danh tiếng điểm đến (TripAdvisor Intelligence Platform)
 - **Học phần:** CSE703073 – Lập trình ứng dụng web trong du lịch 2
 - **Lớp:** CSE703073
 
@@ -17,7 +17,7 @@
 
 ## 3. Kiến trúc hệ thống
 Hệ thống được thiết kế theo mô hình 3 tầng hiện đại:
-- **Front-end:** Vue 3 + Vite, chuyển đổi 2 chủ đề (Sáng / Tối), thiết kế đáp ứng 3 khổ màn hình.
+- **Front-end:** Vue 3 + Vite, giao diện thương mại chuẩn TripAdvisor Việt Nam kết hợp trí tuệ nhân tạo PhoBERT & Wilson Score 95%.
 - **Back-end:** Laravel 11 (PHP 8.3), kiến trúc RESTful API, phân quyền theo vai trò (RBAC), kiểm soát cookie bảo mật.
 - **Dịch vụ dữ liệu / AI:** FastAPI (Python 3.11+), mô hình ABSA (Aspect-Based Sentiment Analysis) phân tích sắc thái ý kiến du khách và phát hiện giả mạo/khủng hoảng.
 - **Cơ sở dữ liệu:** MySQL 8.0, hỗ trợ mã hóa UTF-8 đầy đủ (`utf8mb4_unicode_ci`).
