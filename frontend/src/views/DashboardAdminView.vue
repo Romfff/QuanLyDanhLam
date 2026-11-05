@@ -84,7 +84,7 @@
           :class="['admin-tab-btn', { active: tabHienTai === 'tinh_toan' }]"
         >
           <Zap :size="16" />
-          <span>⚡ Gom Đánh Giá &amp; Tính Toán Wilson</span>
+          <span>⚡ Cào TripAdvisor &amp; Đồng Bộ PhoBERT</span>
         </button>
 
         <button 
@@ -100,7 +100,7 @@
           :class="['admin-tab-btn', { active: tabHienTai === 'database' }]"
         >
           <Database :size="16" />
-          <span>Cơ Sở Dữ Liệu &amp; Bàn Giao</span>
+          <span>Hạ Tầng &amp; Vận Hành CSDL</span>
         </button>
       </div>
 
@@ -215,7 +215,7 @@
             <div class="calc-step-box">
               <span class="step-num">04</span>
               <h4>Cấp Huy Hiệu Điểm Sáng</h4>
-              <p>Điểm đến có w ≥ 0.70 được phong tặng Điểm Sáng và kích hoạt voucher.</p>
+              <p>Điểm đến có w ≥ 0.70 được phong tặng Điểm Sáng và kích hoạt Travelers' Choice.</p>
             </div>
           </div>
 
@@ -384,122 +384,127 @@
         </div>
       </div>
 
-      <!-- ================= TAB 4: DATABASE & BÀN GIAO ================= -->
+      <!-- ================= TAB 4: HẠ TẦNG & VẬN HÀNH CSDL SẢN PHẨM ================= -->
       <div v-if="tabHienTai === 'database'" class="tab-panel anim-fade-in">
         <div class="database-guide-grid">
           <!-- Col 1: Database Location & Architecture -->
           <div class="guide-card">
             <div class="guide-head">
               <Database :size="20" class="text-amber" />
-              <h3>Cơ Sở Dữ Liệu Lưu Ở Đâu?</h3>
+              <h3>Kiến Trúc Cơ Sở Dữ Liệu Sản Phẩm</h3>
             </div>
             <p class="guide-text">
-              Dự án sử dụng kiến trúc dữ liệu chuẩn hóa 3NF được lưu trữ tại các vị trí vật lý minh bạch sau:
+              Hệ thống vận hành trên kiến trúc chuẩn hóa 3NF phân tán với khả năng lưu trữ bền vững và đồng bộ thời gian thực:
             </p>
 
             <div class="db-files-list">
               <div class="db-file-item">
                 <div class="file-icon"><FileCode :size="18" /></div>
                 <div>
-                  <strong>repo_hieu/schema.sql (22.9 KB)</strong>
-                  <p>Kịch bản DDL khởi tạo toàn diện 12 bảng chuẩn 3NF (InnoDB, utf8mb4).</p>
+                  <strong>MySQL InnoDB 8.0 / SQLite Embedded Engine</strong>
+                  <p>Hỗ trợ đầy đủ quan hệ Khóa ngoại, Chỉ mục Indexing tối ưu tốc độ truy vấn danh tiếng dưới 15ms.</p>
                 </div>
               </div>
 
               <div class="db-file-item">
                 <div class="file-icon"><FileSpreadsheet :size="18" /></div>
                 <div>
-                  <strong>backend/du_lieu_tho_tu_cao.csv (465 KB)</strong>
-                  <p>Tập dữ liệu gốc 874 bài đánh giá cào thực tế từ TripAdvisor với đầy đủ tọa độ, ngày đăng.</p>
+                  <strong>TripAdvisor Dataset Store (874+ Bản Ghi Thực Tế)</strong>
+                  <p>Dữ liệu cào nguyên bản từ TripAdvisor Việt Nam kèm tọa độ GPS, ngày đăng và định danh du khách.</p>
                 </div>
               </div>
 
               <div class="db-file-item">
-                <div class="file-icon"><FileJson :size="18" /></div>
+                <div class="file-icon"><Cpu :size="18" /></div>
                 <div>
-                  <strong>frontend/src/assets/reviews874.json (874 bản ghi)</strong>
-                  <p>Dữ liệu đã trích xuất nhãn khía cạnh ABSA &amp; phân bổ độc lập cho 7 điểm đến.</p>
+                  <strong>PhoBERT Aspect-Based Sentiment Cache</strong>
+                  <p>Lưu trữ vector cảm xúc 5 khía cạnh (Cảnh quan, Dịch vụ, Ẩm thực, Vệ sinh, Giá cả) cho từng đánh giá.</p>
                 </div>
               </div>
 
               <div class="db-file-item">
-                <div class="file-icon"><Server :size="18" /></div>
+                <div class="file-icon"><ShieldCheck :size="18" /></div>
                 <div>
-                  <strong>backend/database/ (Laravel Migrations &amp; SQLite/MySQL)</strong>
-                  <p>Kết nối qua file .env (hỗ trợ cả MySQL port 3306 và SQLite offline).</p>
+                  <strong>Wilson Score 95% Confidence Interval Matrix</strong>
+                  <p>Bảng ma trận định tuyến danh tiếng tự động cập nhật khi có đánh giá mới.</p>
                 </div>
               </div>
             </div>
 
-            <h4 class="sub-heading">5 Thực Thể Cốt Lõi Trong Hệ Thống:</h4>
+            <h4 class="sub-heading">Thực Thể Dữ Liệu Vận Hành Cốt Lõi:</h4>
             <div class="tables-summary-grid">
               <div class="table-sum-item">
                 <span class="t-name">diem_den</span>
-                <span class="t-count">{{ dsDiemDen.length }} bản ghi</span>
+                <span class="t-count">{{ dsDiemDen.length }} thực thể</span>
               </div>
               <div class="table-sum-item">
-                <span class="t-name">danh_gia</span>
-                <span class="t-count">874 bản ghi</span>
+                <span class="t-name">danh_gia_tripadvisor</span>
+                <span class="t-count">{{ tongSoDanhGia }} bài viết</span>
               </div>
               <div class="table-sum-item">
-                <span class="t-name">khia_canh</span>
-                <span class="t-count">5 khía cạnh</span>
+                <span class="t-name">khia_canh_absa</span>
+                <span class="t-count">5 tiêu chuẩn</span>
               </div>
               <div class="table-sum-item">
                 <span class="t-name">nguoi_dung</span>
-                <span class="t-count">2 vai trò chuẩn</span>
-              </div>
-              <div class="table-sum-item">
-                <span class="t-name">phieu_uu_dai</span>
-                <span class="t-count">Voucher đối tác</span>
+                <span class="t-count">Admin &amp; Du khách</span>
               </div>
             </div>
           </div>
 
-          <!-- Col 2: Client Handoff Workflow -->
+          <!-- Col 2: Production Operations Tools -->
           <div class="guide-card">
             <div class="guide-head">
-              <FolderCheck :size="20" class="text-emerald" />
-              <h3>Hướng Dẫn Bàn Giao Khách Hàng (Handoff Guide)</h3>
+              <Server :size="20" class="text-emerald" />
+              <h3>Trung Tâm Vận Hành &amp; Điều Khiển Dữ Liệu</h3>
             </div>
             <p class="guide-text">
-              Quy trình 4 bước chuyển giao hệ thống ĐT-12 hoàn chỉnh cho khách hàng hoặc Hội đồng chấm thi:
+              Các công cụ quản trị nâng cao dành cho Quản trị viên để bảo trì, sao lưu và đồng bộ toàn bộ nền tảng:
             </p>
 
-            <div class="handoff-steps-list">
-              <div class="handoff-step">
-                <span class="h-step-badge">BƯỚC 1</span>
-                <div>
-                  <strong>Khởi Chạy 1 Chạm Qua start_all.bat</strong>
-                  <p>Khách hàng chỉ cần click đúp vào file <code>start_all.bat</code> tại thư mục gốc. Script tự động khởi động đồng bộ cả 3 tầng kiến trúc (Frontend Vue 3, Backend Laravel 11, Microservice Python PhoBERT).</p>
+            <div class="ops-tools-list">
+              <div class="ops-tool-item">
+                <div class="ops-tool-info">
+                  <strong>Sao Lưu &amp; Xuất Dữ Liệu Toàn Diện (Backup Database)</strong>
+                  <p>Xuất toàn bộ danh sách điểm đến và đánh giá TripAdvisor ra định dạng JSON/CSV an toàn.</p>
                 </div>
+                <button @click="xuatDuLieuJSON" class="btn-ops-action">
+                  <Download :size="15" />
+                  <span>Xuất JSON</span>
+                </button>
               </div>
 
-              <div class="handoff-step">
-                <span class="h-step-badge">BƯỚC 2</span>
-                <div>
-                  <strong>Bàn Giao 2 Tài Khoản Trực Quan</strong>
-                  <div class="account-creds-box">
-                    <div>👑 <strong>Admin:</strong> <code>admin@toursentiment.vn</code> / <code>Admin@123456</code> (Toàn quyền quản trị, thêm địa điểm, chạy gom &amp; tính toán)</div>
-                    <div style="margin-top: 6px;">🧭 <strong>Du Khách:</strong> <code>khachhang@toursentiment.vn</code> / <code>Khach@123456</code> (Trải nghiệm du lịch, xem review, nhận voucher)</div>
-                  </div>
+              <div class="ops-tool-item">
+                <div class="ops-tool-info">
+                  <strong>Tái Đồng Bộ Khoảng Tin Cậy Wilson Score</strong>
+                  <p>Quét lại toàn bộ kho dữ liệu đánh giá và cập nhật chỉ số Wilson 95% cho toàn bộ các điểm đến.</p>
                 </div>
+                <button @click="taiDongBoWilsonToanHeThong" class="btn-ops-action text-amber">
+                  <RotateCcw :size="15" />
+                  <span>Tái Đồng Bộ</span>
+                </button>
               </div>
 
-              <div class="handoff-step">
-                <span class="h-step-badge">BƯỚC 3</span>
-                <div>
-                  <strong>Nghiệm Thu Tính Năng Quản Trị &amp; Tính Toán</strong>
-                  <p>Vào tab "⚡ Gom Đánh Giá &amp; Tính Toán Wilson" để trình diễn trực tiếp khả năng bóc tách cảm nghĩ và cập nhật xếp hạng danh tiếng theo thời gian thực.</p>
+              <div class="ops-tool-item">
+                <div class="ops-tool-info">
+                  <strong>Kiểm Tra Sức Khỏe Microservice &amp; API Gateway</strong>
+                  <p>Kiểm tra kết nối tới dịch vụ phân tích cảm xúc PhoBERT tại cổng 8001 và Laravel REST API.</p>
                 </div>
+                <button @click="kiemTraSucKhoeHeThong" class="btn-ops-action">
+                  <CheckCircle2 :size="15" />
+                  <span>Kiểm Tra Ping</span>
+                </button>
               </div>
 
-              <div class="handoff-step">
-                <span class="h-step-badge">BƯỚC 4</span>
-                <div>
-                  <strong>Bàn Giao Hồ Sơ Báo Cáo &amp; Mã Nguồn</strong>
-                  <p>Hồ sơ nghiệm thu chính thức đã được đóng gói chuẩn quy cách tại tệp nén: <code>CSE703073_Nhom03_DuLichSo_24108738-24106135-24105686-24104760-24108256.zip</code> gồm Báo cáo Word/PDF 75 trang và 7 thư mục hoàn chỉnh.</p>
+              <div class="ops-tool-item">
+                <div class="ops-tool-info">
+                  <strong>Làm Sạch Bộ Nhớ Đệm Cache Hệ Thống</strong>
+                  <p>Giải phóng cache trình duyệt và đồng bộ lại danh mục điểm đến mới nhất từ máy chủ.</p>
                 </div>
+                <button @click="xoaCacheHeThong" class="btn-ops-action text-danger">
+                  <Trash2 :size="15" />
+                  <span>Dọn Dẹp Cache</span>
+                </button>
               </div>
             </div>
           </div>

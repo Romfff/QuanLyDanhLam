@@ -292,6 +292,23 @@
                     {{ tag.khia_canh }}: {{ tag.chi_tiet }}
                   </span>
                 </div>
+
+                <!-- Review Footer: Travel Type & Helpful Vote -->
+                <div class="rev-footer-toolbar">
+                  <span v-if="rev.loai_chuyen_di" class="rev-travel-type">
+                    <Users :size="12" />
+                    <span>Chuyến đi: <strong>{{ rev.loai_chuyen_di }}</strong></span>
+                  </span>
+                  <button 
+                    @click="voteHuuIch(rev.id)" 
+                    class="btn-helpful-vote"
+                    type="button"
+                    :title="'Bình chọn đánh giá này hữu ích'"
+                  >
+                    <ThumbsUp :size="13" />
+                    <span>Hữu ích ({{ laySoLuotHuuIch(rev.id) + (rev.luot_huu_ich || 0) }})</span>
+                  </button>
+                </div>
               </div>
 
               <div v-if="danhGiaHienThi.length === 0" class="no-star-reviews-alert">
@@ -356,78 +373,61 @@
             </p>
           </div>
 
-          <!-- Voucher & Tour Referral Booking Box -->
-          <div class="sidebar-widget widget-voucher">
+          <!-- Official Booking & TripAdvisor Intelligence Box -->
+          <div class="sidebar-widget widget-booking-official">
             <div class="widget-head">
-              <Ticket :size="22" class="text-amber" />
+              <Globe :size="22" class="text-amber" />
               <div>
-                <h3 class="widget-title">Ưu Đãi Đối Tác Du Lịch</h3>
-                <span class="widget-sub">Liên kết chính sách đối tác bảo chứng</span>
+                <h3 class="widget-title">Thông Tin Đặt Chỗ &amp; Liên Hệ</h3>
+                <span class="widget-sub">Thông tin chính thức từ TripAdvisor</span>
               </div>
             </div>
 
-            <!-- Case A: Qualified for Voucher ("Điểm sáng") -->
-            <div v-if="diemDen.trang_thai_wilson === 'diem_sang'" class="voucher-active-box">
-              <div class="voucher-badge-promo">
-                {{ diemDen.uu_dai?.tieu_de || 'Giảm 15% Vé Tham Quan & Dịch Vụ Tour' }}
+            <div class="booking-details-box">
+              <div class="booking-award-pill">
+                <Award :size="15" class="text-yellow" />
+                <span>{{ diemDen.danh_hieu_tripadvisor || "Travelers' Choice Best of the Best 2026" }}</span>
               </div>
-              <p class="voucher-limit-text">
-                Hôm nay còn <strong>38/50</strong> lượt ưu đãi dành cho du khách.
-              </p>
 
-              <!-- State 1: Before Claiming -->
-              <div v-if="!phieu">
-                <button 
-                  @click="nhanUuDai" 
-                  class="btn-claim-voucher"
-                  :disabled="dangXuLy"
+              <div class="booking-meta-rows">
+                <div class="b-meta-item">
+                  <span class="b-meta-label"><PhoneCall :size="13" /> Hotline tư vấn:</span>
+                  <strong class="b-meta-val">{{ diemDen.thong_tin_lien_he?.hotline || '1900 3045' }}</strong>
+                </div>
+                <div class="b-meta-item">
+                  <span class="b-meta-label"><Clock :size="13" /> Giờ mở cửa:</span>
+                  <span class="b-meta-val">{{ diemDen.thong_tin_lien_he?.gio_mo_cua || '07:30 - 20:30 Hàng ngày' }}</span>
+                </div>
+                <div class="b-meta-item">
+                  <span class="b-meta-label"><DollarSign :size="13" /> Mức giá tham khảo:</span>
+                  <strong class="b-meta-val text-yellow">{{ diemDen.thong_tin_lien_he?.khoang_gia || 'Giá niêm yết chính thức' }}</strong>
+                </div>
+              </div>
+
+              <div class="booking-action-buttons">
+                <a 
+                  :href="diemDen.thong_tin_lien_he?.website || diemDen.tripadvisor_url || 'https://www.tripadvisor.com.vn/'" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="btn-official-website"
                 >
-                  <Ticket :size="16" />
-                  <span>{{ dangXuLy ? 'Đang tạo mã bảo mật...' : 'Nhận Phiếu Ưu Đãi Ngay' }}</span>
+                  <span>Kiểm Tra Giá &amp; Đặt Chỗ Trực Tuyến</span>
+                  <ExternalLink :size="15" />
+                </a>
+
+                <button 
+                  @click="moModalGuiDanhGia = true" 
+                  class="btn-sidebar-write-review"
+                  type="button"
+                >
+                  <PenLine :size="15" />
+                  <span>Viết Đánh Giá Của Bạn</span>
                 </button>
               </div>
 
-              <!-- State 2: After Claiming (Countdown Active) -->
-              <div v-else class="claimed-box">
-                <div class="claimed-header">
-                  <span class="badge-success">✓ Đã cấp phiếu</span>
-                  <div class="countdown-clock">
-                    <Clock :size="13" class="inline" /> Còn lại: <strong>{{ phut }}:{{ giay }}</strong>
-                  </div>
-                </div>
-
-                <div class="ticket-code-display">
-                  <span class="code-lbl">MÃ THAM CHIẾU:</span>
-                  <span class="code-val">{{ phieu.ma_tham_chieu }}</span>
-                </div>
-
-                <button 
-                  @click="sangDoiTac" 
-                  class="btn-redirect-partner"
-                  :disabled="dangXuLy"
-                >
-                  <span>{{ dangXuLy ? 'Đang kết nối đối tác...' : 'Tiếp tục sang trang Đối tác' }}</span>
-                  <ExternalLink :size="14" />
-                </button>
-              </div>
-
-              <p class="partner-transparency-note">
-                <strong>Minh bạch:</strong> Hệ thống có thể nhận hoa hồng giới thiệu khi du khách đặt tour thành công qua liên kết đối tác. Đánh giá danh tiếng được tính hoàn toàn độc lập với quyền lợi kinh tế.
+              <p class="official-transparency-note">
+                ✓ <strong>Bảo chứng độc lập:</strong> Điểm danh tiếng và chỉ số Wilson Score được tính toán khách quan 100% từ đánh giá của du khách thực tế.
               </p>
-            </div>
-
-            <!-- Case B: Not Qualified ("Bình thường" or "Cảnh báo") -->
-            <div v-else class="voucher-locked-box">
-              <div class="locked-icon">
-                <ShieldCheck :size="32" class="text-muted" />
-              </div>
-              <h4>Chưa Mở Gói Ưu Đãi Đối Tác</h4>
-              <p>
-                Để bảo vệ quyền lợi du khách, hệ thống chỉ hỗ trợ kết nối ưu đãi với các điểm đến được thuật toán Wilson Score xác nhận danh hiệu <strong>"Điểm sáng du lịch"</strong> (cận dưới <strong>w ≥ 0.70</strong>).
-              </p>
-              <div class="locked-hint">
-                Chỉ số hiện tại: {{ diemDen.diem_danh_tieng_tb }}/5.0 (Cần đạt thêm đánh giá khen ngợi để kích hoạt).
-              </div>
             </div>
           </div>
 
@@ -487,6 +487,23 @@
             </div>
           </div>
 
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Bạn trải nghiệm chuyến đi cùng ai? *</label>
+              <select v-model="formDanhGia.loai_chuyen_di" class="form-input">
+                <option value="Cặp đôi">Cặp đôi</option>
+                <option value="Gia đình">Gia đình</option>
+                <option value="Bạn bè">Nhóm bạn bè</option>
+                <option value="Một mình">Đi một mình</option>
+                <option value="Công tác">Chuyến công tác</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Thời gian trải nghiệm</label>
+              <input v-model="formDanhGia.thoi_gian_trai_nghiem" type="text" placeholder="Ví dụ: Tháng 10/2026" class="form-input" />
+            </div>
+          </div>
+
           <div class="form-group">
             <label>Tiêu đề tóm tắt nhận xét *</label>
             <input v-model="formDanhGia.tieu_de" type="text" required placeholder="Ví dụ: Chuyến đi tuyệt vời, cảnh quan đẹp" class="form-input" />
@@ -531,7 +548,13 @@ import {
   PenLine,
   Zap,
   Check,
-  MessageSquareQuote
+  MessageSquareQuote,
+  ThumbsUp,
+  Users,
+  Globe,
+  PhoneCall,
+  Calendar,
+  Award
 } from 'lucide-vue-next'
 import { DataService, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
@@ -1718,3 +1741,161 @@ onUnmounted(() => {
   }
 }
 </style>
+
+/* TripAdvisor Official Booking Widget */
+.widget-booking-official {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.booking-award-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(253, 221, 98, 0.15);
+  border: 1px solid rgba(253, 221, 98, 0.4);
+  color: #92400e;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+[data-theme="dark"] .booking-award-pill {
+  color: #fddd62;
+  border-color: #fddd62;
+}
+
+.booking-meta-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--nevio-border);
+}
+
+.b-meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.b-meta-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mau-chu-phu);
+}
+
+.b-meta-val {
+  font-weight: 700;
+  color: var(--mau-chu);
+}
+
+.booking-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.btn-official-website {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fddd62;
+  color: #18181b;
+  border: 1px solid #e5be29;
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  font-size: 13.5px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.35);
+}
+
+.btn-official-website:hover {
+  background: #facc15;
+  transform: translateY(-2px);
+}
+
+.btn-sidebar-write-review {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--nevio-dark);
+  color: #ffffff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: var(--radius-full);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-sidebar-write-review:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn-sidebar-write-review {
+  background: #ffffff;
+  color: #18181b;
+}
+
+.official-transparency-note {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--mau-chu-mo);
+  margin-top: 10px;
+}
+
+/* Review Footer & Helpful Votes */
+.rev-footer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--nevio-border);
+  font-size: 12px;
+}
+
+.rev-travel-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--mau-chu-phu);
+}
+
+.btn-helpful-vote {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mau-chu);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-helpful-vote:hover {
+  background: #fddd62;
+  color: #18181b;
+  border-color: #facc15;
+  transform: translateY(-1px);
+}
