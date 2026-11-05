@@ -396,15 +396,10 @@
                   <ArrowRight :size="15" />
                 </router-link>
 
-                <button 
-                  v-if="dest.trang_thai_wilson === 'diem_sang'"
-                  @click="nhanUuDaiNhanh(dest)"
-                  class="stacked-btn-voucher"
-                  title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
-                >
-                  <Ticket :size="14" />
-                  <span>Nhận Voucher 15%</span>
-                </button>
+                <router-link :to="'/diem-den/' + dest.id" class="stacked-btn-tripadvisor">
+                  <span>Xem Chi Tiết &amp; Đặt Chỗ</span>
+                  <ExternalLink :size="13" />
+                </router-link>
               </div>
             </div>
           </article>
@@ -481,19 +476,11 @@
                   <ArrowRight :size="14" />
                 </router-link>
 
-                <button 
-                  v-if="dest.trang_thai_wilson === 'diem_sang'"
-                  @click="nhanUuDaiNhanh(dest)"
-                  class="btn-claim-pill"
-                  title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
-                >
-                  <Ticket :size="14" />
-                  <span>Nhận ưu đãi 15%</span>
-                </button>
-                <span v-else class="locked-voucher-text" title="Chỉ mở ưu đãi khi điểm đến đạt chỉ số Wilson >= 0.70">
-                  Chưa mở ưu đãi
-                </span>
-              </div>
+                <router-link :to="'/diem-den/' + dest.id" class="link-tripadvisor-explore">
+                  <span>Xem Đánh Giá &amp; Đặt Chỗ</span>
+                  <ExternalLink :size="13" />
+                </router-link>
+                </div>
             </div>
           </article>
         </div>
@@ -2598,3 +2585,24 @@ onMounted(async () => {
 }
 
 </style>
+
+.stacked-btn-tripadvisor {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fddd62;
+  color: #18181b;
+  border: 1px solid #e5be29;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.stacked-btn-tripadvisor:hover {
+  background: #facc15;
+  transform: translateY(-1px);
+}
