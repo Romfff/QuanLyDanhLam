@@ -61,7 +61,7 @@
           </button>
         </div>
         <router-link v-else to="/dang-nhap" class="btn-nevio-white">
-          Đăng Nhập
+          Đăng Nhập / Đăng Ký
         </router-link>
 
         <!-- Mobile Menu Toggle Button -->
@@ -104,8 +104,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { 
   Compass, 
   User, 
@@ -120,12 +120,24 @@ import {
 } from 'lucide-vue-next'
 
 const router = useRouter()
+const route = useRoute()
 const moMenuMobile = ref(false)
 const isDark = ref(false)
 
 const tenNguoiDung = ref(localStorage.getItem('ho_ten') || 'Khách')
 const vaiTroHienTai = ref(localStorage.getItem('vai_tro') || 'du_khach')
 const daDangNhap = ref(!!localStorage.getItem('token'))
+
+function capNhatAuth() {
+  daDangNhap.value = !!localStorage.getItem('token')
+  tenNguoiDung.value = localStorage.getItem('ho_ten') || 'Khách'
+  vaiTroHienTai.value = localStorage.getItem('vai_tro') || 'du_khach'
+}
+
+watch(() => route.fullPath, () => {
+  capNhatAuth()
+  moMenuMobile.value = false
+})
 
 const iconVaiTro = computed(() => {
   return vaiTroHienTai.value === 'admin' ? ShieldCheck : Compass
@@ -153,6 +165,9 @@ function dangXuat() {
 }
 
 onMounted(() => {
+  capNhatAuth()
+  window.addEventListener('storage', capNhatAuth)
+
   const savedTheme = localStorage.getItem('dt12_theme')
   if (savedTheme === 'dark') {
     isDark.value = true
