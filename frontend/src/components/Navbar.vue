@@ -1,16 +1,13 @@
 <template>
   <header class="nevio-navbar-wrap">
     <div class="nevio-navbar-inner">
-      <!-- 1. Brand Logo -->
+      <!-- 1. Brand Logo: TripAdvisor Intelligence -->
       <router-link to="/dashboard" class="nevio-brand">
-        <div class="nevio-logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="24" height="24" rx="7" fill="white"/>
-            <path d="M12 4.5L14.5 9.5L20 10.3L16 14.2L16.9 19.7L12 17.1L7.1 19.7L8 14.2L4 10.3L9.5 9.5L12 4.5Z" fill="#303030"/>
-          </svg>
+        <div class="nevio-logo-icon tripadvisor-owl-badge">
+          <span style="font-size: 20px;">🦉</span>
         </div>
         <div class="nevio-brand-text">
-          <span class="nevio-brand-title">Nevio <span class="tag-dt12">ĐT-12</span></span>
+          <span class="nevio-brand-title">TripAdvisor <span class="tag-dt12">AI Verified</span></span>
         </div>
       </router-link>
 
@@ -27,6 +24,10 @@
         </router-link>
         <router-link to="/danh-sach-danh-gia" class="nevio-link">
           <span>Cộng Đồng Đánh Giá</span>
+        </router-link>
+        <router-link to="/viet-danh-gia" class="nevio-link btn-nav-write-review">
+          <PenLine :size="14" />
+          <span>Viết Đánh Giá</span>
         </router-link>
         <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="nevio-link admin-nav-link">
           <ShieldCheck :size="15" />
@@ -83,6 +84,9 @@
       <router-link to="/danh-sach-danh-gia" class="mobile-nav-item" @click="moMenuMobile = false">
         Cộng Đồng Đánh Giá TripAdvisor
       </router-link>
+      <router-link to="/viet-danh-gia" class="mobile-nav-item" @click="moMenuMobile = false">
+        ✍️ Viết Bài Đánh Giá Trải Nghiệm
+      </router-link>
       <router-link v-if="vaiTroHienTai === 'admin'" to="/quan-tri" class="mobile-nav-item admin-mobile-item" @click="moMenuMobile = false">
         👑 Quản Trị Hệ Thống Admin
       </router-link>
@@ -110,6 +114,7 @@ import {
   Moon, 
   LogOut, 
   Menu, 
+  PenLine,
   X 
 } from 'lucide-vue-next'
 
