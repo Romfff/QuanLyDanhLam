@@ -1,9 +1,7 @@
 <template>
   <div id="app-root" class="nevio-app-layout">
-    <!-- 1. Sticky Navbar for non-hero pages -->
-    <div v-if="route.path !== '/dashboard' && route.path !== '/'" class="subpage-navbar-wrapper">
-      <Navbar />
-    </div>
+    <!-- 1. Header trắng cố định cho toàn bộ trang -->
+    <Navbar v-if="route.path !== '/dang-nhap'" />
 
     <!-- 2. Main Page View -->
     <main class="nevio-main-content">
@@ -29,7 +27,7 @@
                 <rect width="24" height="24" rx="7" fill="#303030"/>
                 <path d="M12 4.5L14.5 9.5L20 10.3L16 14.2L16.9 19.7L12 17.1L7.1 19.7L8 14.2L4 10.3L9.5 9.5L12 4.5Z" fill="#fddd62"/>
               </svg>
-              <span class="footer-brand-title">Nevio <span class="tag-accent">ĐT-12</span></span>
+              <span class="footer-brand-title">TripAdvisor <span class="tag-accent">AI Verified</span></span>
             </div>
             <p class="footer-brand-desc">
               Hệ thống trí tuệ nhân tạo giám sát danh tiếng điểm đến du lịch Việt Nam. Tự động trích xuất ý kiến từ 874 đánh giá TripAdvisor, phân loại 5 khía cạnh cốt lõi bằng PhoBERT kết hợp công thức khoảng tin cậy Wilson Score 95% công tâm, minh bạch.
@@ -49,8 +47,8 @@
               <li><router-link to="/diem-den">Danh mục 7 điểm đến kiểm chứng</router-link></li>
               <li><router-link to="/absa">Báo cáo phân tích 5 khía cạnh ABSA</router-link></li>
               <li><router-link to="/danh-sach-danh-gia">Trung tâm 874 đánh giá TripAdvisor</router-link></li>
-              <li><router-link to="/phieu-cua-toi">Ví phiếu ưu đãi &amp; voucher của tôi</router-link></li>
-              <li><router-link to="/dang-nhap">Cổng xác thực 5 vai trò hệ thống</router-link></li>
+              <li><router-link to="/viet-danh-gia">Viết đánh giá</router-link></li>
+              <li><router-link to="/dang-nhap">Đăng nhập / Đăng ký</router-link></li>
             </ul>
           </div>
 
@@ -85,7 +83,7 @@
 
         <div class="footer-bottom-bar">
           <div class="copyright-text">
-            © 2026 Nhóm 03 - ĐT12 TourSentiment. Phong cách thiết kế chuẩn hóa theo Nevio Webflow Template.
+            © 2026 Nhóm 03 - ĐT12 TourSentiment.
           </div>
           <div class="model-disclaimer">
             * Kết quả danh tiếng do mô hình PhoBERT AI tự động trích xuất. Du khách có thể đối soát nguyên văn đánh giá TripAdvisor để kiểm chứng.
@@ -112,11 +110,7 @@ const route = useRoute()
   color: var(--mau-chu);
 }
 
-.subpage-navbar-wrapper {
-  position: relative;
-  background: var(--nevio-dark);
-  padding-bottom: 75px;
-}
+
 
 .nevio-main-content {
   flex: 1 0 auto;

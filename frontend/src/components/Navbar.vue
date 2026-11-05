@@ -179,104 +179,103 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Header trắng cố định chuẩn TripAdvisor */
 .nevio-navbar-wrap {
   width: 100%;
-  position: absolute;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  padding: 24px 36px;
+  z-index: 100;
+  background: var(--nevio-card-bg, #fff);
+  border-bottom: 1px solid var(--nevio-border, #e0e0e0);
+  padding: 10px 24px;
 }
 
 .nevio-navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
+  min-height: 48px;
 }
 
-/* Brand */
 .nevio-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .nevio-logo-icon {
   width: 36px;
   height: 36px;
+  border-radius: 50%;
+  background: #fddd62;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .nevio-brand-title {
-  font-size: 24px;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.02em;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--mau-chu, #000);
+  letter-spacing: -0.03em;
 }
 
 .tag-dt12 {
-  font-size: 13px;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  background: #fddd62;
+  color: #18181b;
   padding: 2px 8px;
   border-radius: 9999px;
   margin-left: 4px;
   vertical-align: middle;
 }
 
-/* Nav Links */
 .nevio-nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 8px 24px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 4px;
 }
 
 .nevio-link {
-  font-size: 14.5px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--mau-chu, #000);
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: color 0.2s ease;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
 }
 
-.nevio-link:hover, .nevio-link.router-link-active {
-  color: #fddd62;
+.nevio-link:hover {
+  background: var(--nevio-light-grey, #f2f2f2);
+}
+
+.nevio-link.router-link-active {
+  background: var(--nevio-light-grey, #f2f2f2);
+}
+
+.btn-nav-write-review {
+  border: 1px solid var(--nevio-border, #e0e0e0);
 }
 
 .admin-nav-link {
-  color: #fddd62 !important;
-  font-weight: 700 !important;
-  background: rgba(253, 221, 98, 0.15);
-  padding: 4px 12px;
-  border-radius: 9999px;
-  border: 1px solid rgba(253, 221, 98, 0.3);
-}
-
-.admin-nav-link:hover {
-  background: rgba(253, 221, 98, 0.25);
-  box-shadow: 0 0 10px rgba(253, 221, 98, 0.4);
+  background: #fddd62 !important;
+  color: #18181b !important;
 }
 
 .admin-mobile-item {
-  color: #fddd62 !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
 }
 
 .link-dot {
@@ -285,23 +284,21 @@ onMounted(() => {
   line-height: 1;
 }
 
-/* Right Actions */
 .nevio-nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .user-authenticated-box {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 4px 10px;
+  border: 1px solid var(--nevio-border, #e0e0e0);
+  padding: 4px 6px 4px 10px;
   border-radius: 9999px;
-  color: #ffffff;
+  color: var(--mau-chu, #000);
 }
 
 .user-role-chip {
@@ -309,141 +306,111 @@ onMounted(() => {
   align-items: center;
   gap: 5px;
   background: #fddd62;
-  color: #303030;
+  color: #18181b;
   padding: 2px 8px;
   border-radius: 9999px;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .role-icon-svg {
-  color: #303030;
+  color: #18181b;
 }
 
 .user-display-name {
   font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
-  max-width: 110px;
+  font-weight: 700;
+  color: var(--mau-chu, #000);
+  max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .btn-logout-circle {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: var(--nevio-light-grey, #f2f2f2);
+  color: var(--mau-chu, #000);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .btn-logout-circle:hover {
   background: #ef4444;
+  color: #fff;
 }
 
 .btn-theme-pill {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  background: transparent;
+  border: 1px solid var(--nevio-border, #e0e0e0);
+  color: var(--mau-chu, #000);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .btn-theme-pill:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--nevio-light-grey, #f2f2f2);
 }
 
 .btn-nevio-white {
-  background: #ffffff;
-  color: #303030 !important;
+  background: #18181b;
+  color: #ffffff !important;
   font-size: 14px;
-  font-weight: 700;
-  padding: 8px 22px;
+  font-weight: 800;
+  padding: 10px 20px;
   border-radius: 9999px;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
 }
 
 .btn-nevio-white:hover {
-  background: #fddd62;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-}
-
-.user-pill-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 10px;
-  border-radius: 9999px;
-}
-
-.user-avatar-char {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #fddd62;
-  color: #303030;
-  font-weight: 800;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-logout-text {
-  background: transparent;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+  background: #000;
 }
 
 .btn-mobile-burger {
   display: none;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  padding: 6px;
-  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--nevio-border, #e0e0e0);
+  color: var(--mau-chu, #000);
+  padding: 7px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
 .nevio-mobile-dropdown {
-  background: #1e2434;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 16px;
+  max-width: 1200px;
+  margin: 10px auto 4px;
+  background: var(--nevio-card-bg, #fff);
+  border: 1px solid var(--nevio-border, #e0e0e0);
+  border-radius: 14px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .mobile-nav-item {
-  color: #ffffff;
-  font-size: 14.5px;
-  font-weight: 600;
-  padding: 6px 0;
+  color: var(--mau-chu, #000);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 14px;
+  border-radius: 10px;
   text-decoration: none;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.router-link-active {
+  background: var(--nevio-light-grey, #f2f2f2);
 }
 
 .mobile-logout-btn {
@@ -451,21 +418,36 @@ onMounted(() => {
   border: none;
   text-align: left;
   cursor: pointer;
-  color: #f87171 !important;
+  color: #dc2626 !important;
+  font-family: inherit;
 }
 
 .mobile-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--nevio-border, #e0e0e0);
   margin: 4px 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .nevio-nav-links {
     display: none;
   }
   .btn-mobile-burger {
     display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .nevio-navbar-wrap {
+    padding: 8px 14px;
+  }
+  .tag-dt12,
+  .user-display-name {
+    display: none;
+  }
+  .btn-nevio-white {
+    padding: 8px 14px;
+    font-size: 13px;
   }
 }
 </style>
