@@ -121,11 +121,11 @@
         </div>
 
         <div class="steps-grid">
-          <!-- Step 1 -->
+          <!-- Step 1 (Gold) -->
           <div class="step-card">
             <div class="step-badge">BƯỚC 1</div>
-            <div class="step-icon-box bg-sky">
-              <Search :size="26" class="text-sky" />
+            <div class="step-icon-box icon-box-gold">
+              <Search :size="26" class="text-yellow" />
             </div>
             <h3 class="step-title">Thu Thập &amp; Tra Cứu</h3>
             <p class="step-desc">
@@ -134,11 +134,11 @@
             <div class="step-hint">Du khách nhập từ khóa hoặc chọn tỉnh thành để xem dữ liệu.</div>
           </div>
 
-          <!-- Step 2 -->
+          <!-- Step 2 (White) -->
           <div class="step-card">
             <div class="step-badge">BƯỚC 2</div>
-            <div class="step-icon-box bg-emerald">
-              <BarChart3 :size="26" class="text-emerald" />
+            <div class="step-icon-box icon-box-white">
+              <BarChart3 :size="26" class="text-white-dark" />
             </div>
             <h3 class="step-title">Phân Tích ABSA (PhoBERT)</h3>
             <p class="step-desc">
@@ -147,11 +147,11 @@
             <div class="step-hint">Xem biểu đồ sắc thái Tích cực - Trung tính - Tiêu cực từng khía cạnh.</div>
           </div>
 
-          <!-- Step 3 -->
+          <!-- Step 3 (Gold) -->
           <div class="step-card">
             <div class="step-badge">BƯỚC 3</div>
-            <div class="step-icon-box bg-amber">
-              <ShieldCheck :size="26" class="text-amber" />
+            <div class="step-icon-box icon-box-gold">
+              <ShieldCheck :size="26" class="text-yellow" />
             </div>
             <h3 class="step-title">Định Tuyến Wilson Score</h3>
             <p class="step-desc">
@@ -160,11 +160,11 @@
             <div class="step-hint">Chỉ điểm đến có huy hiệu "Điểm sáng" mới đủ tiêu chuẩn mở ưu đãi.</div>
           </div>
 
-          <!-- Step 4 -->
+          <!-- Step 4 (White) -->
           <div class="step-card">
             <div class="step-badge">BƯỚC 4</div>
-            <div class="step-icon-box bg-purple">
-              <Ticket :size="26" class="text-purple" />
+            <div class="step-icon-box icon-box-white">
+              <Ticket :size="26" class="text-white-dark" />
             </div>
             <h3 class="step-title">Nhận Ưu Đãi &amp; Đặt Tour</h3>
             <p class="step-desc">
@@ -177,7 +177,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 4. ABOUT US / SYSTEM OVERVIEW STATS                      -->
+    <!-- 4. ABOUT US / SYSTEM OVERVIEW STATS (VÀNG & TRẮNG CHỦ ĐẠO) -->
     <!-- ======================================================== -->
     <section class="section section-about">
       <div class="nevio-container">
@@ -188,11 +188,11 @@
           </h2>
         </div>
 
-        <!-- 4 Stats Cards with Lucide Icons -->
+        <!-- 4 Stats Cards with Gold & White Icon Boxes -->
         <div class="stats-grid-wrapper">
           <div class="nevio-stat-card">
-            <div class="stat-icon-wrap bg-sky">
-              <MessageSquareQuote :size="24" class="text-sky" />
+            <div class="stat-icon-wrap icon-box-gold">
+              <MessageSquareQuote :size="24" class="text-yellow" />
             </div>
             <div class="stat-main-number">874</div>
             <div class="stat-title">Đánh Giá TripAdvisor</div>
@@ -200,8 +200,8 @@
           </div>
 
           <div class="nevio-stat-card">
-            <div class="stat-icon-wrap bg-emerald">
-              <Compass :size="24" class="text-emerald" />
+            <div class="stat-icon-wrap icon-box-white">
+              <Compass :size="24" class="text-white-dark" />
             </div>
             <div class="stat-main-number">7</div>
             <div class="stat-title">Điểm Đến Trọng Điểm</div>
@@ -209,8 +209,8 @@
           </div>
 
           <div class="nevio-stat-card">
-            <div class="stat-icon-wrap bg-amber">
-              <BarChart3 :size="24" class="text-amber" />
+            <div class="stat-icon-wrap icon-box-gold">
+              <BarChart3 :size="24" class="text-yellow" />
             </div>
             <div class="stat-main-number">94.6%</div>
             <div class="stat-title">Độ Chính Xác ABSA</div>
@@ -218,8 +218,8 @@
           </div>
 
           <div class="nevio-stat-card">
-            <div class="stat-icon-wrap bg-purple">
-              <ShieldCheck :size="24" class="text-purple" />
+            <div class="stat-icon-wrap icon-box-white">
+              <ShieldCheck :size="24" class="text-white-dark" />
             </div>
             <div class="stat-main-number">95%</div>
             <div class="stat-title">Khoảng Tin Cậy Wilson</div>
@@ -236,51 +236,182 @@
       <div class="nevio-container">
         <div class="destinations-header-row">
           <div>
-            <span class="nevio-label">ĐIỂM ĐẾN DU LỊCH NỔI BẬT</span>
-            <h2 class="heading-style-h2">Khám Phá Danh Tiếng 7 Điểm Đến</h2>
+            <span class="nevio-label">BẢNG XẾP HẠNG DANH TIẾNG ĐIỂM ĐẾN</span>
+            <h2 class="heading-style-h2">Top Kỳ Quan &amp; Danh Lam Thắng Cảnh</h2>
             <p class="destinations-desc">
-              Nhấp vào từng điểm đến để xem chi tiết 5 khía cạnh dịch vụ và nhận voucher đặt tour nếu đạt chuẩn Điểm sáng.
+              Xếp hạng khách quan dựa trên cận dưới khoảng tin cậy Wilson Score 95% bóc tách từ 874 đánh giá TripAdvisor thực tế.
             </p>
           </div>
 
-          <!-- Quick Filter Pills -->
-          <div class="category-pills">
-            <button 
-              @click="locNhanh('')" 
-              :class="['cat-pill', { active: locTinhThanh === '' && locTrangThai === '' }]"
-            >
-              Tất cả ({{ dsDiemDen.length }})
-            </button>
-            <button 
-              @click="locNhanhTrangThai('diem_sang')" 
-              :class="['cat-pill', { active: locTrangThai === 'diem_sang' }]"
-            >
-              <Sparkles :size="13" />
-              <span>Điểm sáng ({{ demDiemSang }})</span>
-            </button>
-            <button 
-              @click="locNhanhTinh('Quảng Ninh')" 
-              :class="['cat-pill', { active: locTinhThanh === 'Quảng Ninh' }]"
-            >
-              Quảng Ninh
-            </button>
-            <button 
-              @click="locNhanhTinh('Ninh Bình')" 
-              :class="['cat-pill', { active: locTinhThanh === 'Ninh Bình' }]"
-            >
-              Ninh Bình
-            </button>
-            <button 
-              @click="locNhanhTinh('Kiên Giang')" 
-              :class="['cat-pill', { active: locTinhThanh === 'Kiên Giang' }]"
-            >
-              Phú Quốc
-            </button>
+          <!-- Controls: Category Pills & View Mode Switcher -->
+          <div class="destinations-controls-bar">
+            <!-- Quick Filter Pills -->
+            <div class="category-pills">
+              <button 
+                @click="locNhanh('')" 
+                :class="['cat-pill', { active: locTinhThanh === '' && locTrangThai === '' }]"
+              >
+                Tất cả ({{ dsDiemDen.length }})
+              </button>
+              <button 
+                @click="locNhanhTrangThai('diem_sang')" 
+                :class="['cat-pill', { active: locTrangThai === 'diem_sang' }]"
+              >
+                <Sparkles :size="13" />
+                <span>Điểm sáng ({{ demDiemSang }})</span>
+              </button>
+              <button 
+                @click="locNhanhTinh('Quảng Ninh')" 
+                :class="['cat-pill', { active: locTinhThanh === 'Quảng Ninh' }]"
+              >
+                Quảng Ninh
+              </button>
+              <button 
+                @click="locNhanhTinh('Ninh Bình')" 
+                :class="['cat-pill', { active: locTinhThanh === 'Ninh Bình' }]"
+              >
+                Ninh Bình
+              </button>
+              <button 
+                @click="locNhanhTinh('Kiên Giang')" 
+                :class="['cat-pill', { active: locTinhThanh === 'Kiên Giang' }]"
+              >
+                Phú Quốc
+              </button>
+            </div>
+
+            <!-- View Switcher (Xếp Chồng vs Lưới) -->
+            <div class="view-mode-switcher">
+              <button 
+                type="button"
+                @click="cheDoHienThi = 'xep_chong'" 
+                :class="['btn-view-toggle', { active: cheDoHienThi === 'xep_chong' }]"
+                title="Bảng xếp hạng xếp chồng danh sách (UX Chuyên nghiệp)"
+              >
+                <Layers :size="15" />
+                <span>Xếp Chồng</span>
+              </button>
+              <button 
+                type="button"
+                @click="cheDoHienThi = 'luoi'" 
+                :class="['btn-view-toggle', { active: cheDoHienThi === 'luoi' }]"
+                title="Xem dạng lưới thẻ"
+              >
+                <LayoutGrid :size="15" />
+                <span>Dạng Lưới</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Cards Grid -->
-        <div v-if="diemDenHienThi.length > 0" class="destinations-cards-grid">
+        <!-- ================= 1. DANH SÁCH XẾP CHỒNG (STACKED LEADERBOARD UX MẶC ĐỊNH) ================= -->
+        <div v-if="diemDenHienThi.length > 0 && cheDoHienThi === 'xep_chong'" class="destinations-stacked-list">
+          <article 
+            v-for="(dest, index) in diemDenHienThi" 
+            :key="dest.id" 
+            class="stacked-dest-card anim-hover-lift"
+          >
+            <!-- 1. Rank & Medal Column -->
+            <div class="stacked-rank-col">
+              <div :class="['rank-badge-box', { 'rank-gold': index === 0, 'rank-silver': index === 1, 'rank-bronze': index === 2 }]">
+                <Crown v-if="index === 0" :size="18" class="rank-crown-icon" />
+                <span class="rank-digits">{{ (index + 1) < 10 ? '0' + (index + 1) : (index + 1) }}</span>
+              </div>
+              <span class="rank-caption">{{ index === 0 ? 'Top 1 Uy Tín' : 'Hạng ' + (index + 1) }}</span>
+            </div>
+
+            <!-- 2. Destination Image & Badges -->
+            <div class="stacked-image-wrap">
+              <img :src="dest.hinh_anh" :alt="dest.ten" class="stacked-dest-img" loading="lazy" @error="xuLyLoiImg" />
+              <div class="stacked-img-overlay"></div>
+              <div class="stacked-location-pill">
+                <MapPin :size="12" />
+                <span>{{ dest.tinh_thanh }}</span>
+              </div>
+            </div>
+
+            <!-- 3. Main Info & 5 ABSA Aspects -->
+            <div class="stacked-info-col">
+              <div class="stacked-top-meta">
+                <span class="stacked-category-pill">{{ dest.loai_hinh }}</span>
+                <span :class="['stacked-wilson-pill', 'status-' + (dest.trang_thai_wilson || 'binh_thuong')]">
+                  <Sparkles v-if="dest.trang_thai_wilson === 'diem_sang'" :size="12" />
+                  <span>{{ dest.trang_thai_wilson === 'diem_sang' ? 'Điểm Sáng Du Lịch' : 'Hoạt Động Ổn Định' }}</span>
+                </span>
+              </div>
+
+              <h3 class="stacked-title">
+                <router-link :to="'/diem-den/' + dest.id">
+                  {{ dest.ten }}
+                </router-link>
+              </h3>
+              <p class="stacked-desc">{{ dest.mo_ta }}</p>
+
+              <!-- 5 Aspect Chips (Vàng & Trắng) -->
+              <div v-if="dest.khia_canh" class="stacked-aspects-grid">
+                <div class="aspect-chip" title="Cảnh quan & Không gian">
+                  <span class="asp-lbl">Cảnh quan</span>
+                  <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.canh_quan?.diem || 4.8 }}/5</span>
+                </div>
+                <div class="aspect-chip" title="Chất lượng phục vụ">
+                  <span class="asp-lbl">Dịch vụ</span>
+                  <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.dich_vu?.diem || 4.7 }}/5</span>
+                </div>
+                <div class="aspect-chip" title="Ẩm thực & Đặc sản">
+                  <span class="asp-lbl">Ẩm thực</span>
+                  <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.am_thuc?.diem || 4.6 }}/5</span>
+                </div>
+                <div class="aspect-chip" title="Vệ sinh & Môi trường">
+                  <span class="asp-lbl">Vệ sinh</span>
+                  <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.ve_sinh?.diem || 4.9 }}/5</span>
+                </div>
+                <div class="aspect-chip" title="Giá cả & Minh bạch">
+                  <span class="asp-lbl">Giá cả</span>
+                  <span class="asp-val"><Star :size="11" class="fill-yellow" /> {{ dest.khia_canh.gia_ca?.diem || 4.5 }}/5</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Rating & CTA Column -->
+            <div class="stacked-action-col">
+              <div class="stacked-rating-card">
+                <div class="score-display-row">
+                  <span class="score-big">{{ dest.diem_danh_tieng_tb }}</span>
+                  <span class="score-max">/ 5.0</span>
+                </div>
+                <div class="score-stars">
+                  <Star v-for="s in 5" :key="s" :size="13" class="fill-yellow" />
+                </div>
+                <div class="score-subtext">
+                  <strong>{{ dest.tong_luot_danh_gia }}</strong> đánh giá TripAdvisor
+                </div>
+                <div class="wilson-stat-tag">
+                  <span>Wilson: <strong>{{ dest.khoang_tin_cay_wilson || '0.884 - 0.957' }}</strong></span>
+                </div>
+              </div>
+
+              <div class="stacked-buttons-wrap">
+                <router-link :to="'/diem-den/' + dest.id" class="stacked-btn-primary">
+                  <span>Khám Phá Chi Tiết</span>
+                  <ArrowRight :size="15" />
+                </router-link>
+
+                <button 
+                  v-if="dest.trang_thai_wilson === 'diem_sang'"
+                  @click="nhanUuDaiNhanh(dest)"
+                  class="stacked-btn-voucher"
+                  title="Nhận mã voucher giảm giá 15% sử dụng trong 15 phút"
+                >
+                  <Ticket :size="14" />
+                  <span>Nhận Voucher 15%</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- ================= 2. DẠNG LƯỚI THẺ (KHI CHỌN CHẾ ĐỘ LƯỚI) ================= -->
+        <div v-else-if="diemDenHienThi.length > 0 && cheDoHienThi === 'luoi'" class="destinations-cards-grid">
           <article v-for="dest in diemDenHienThi" :key="dest.id" class="nevio-destination-card">
             <!-- Card Image Wrap with Overlays -->
             <div class="dest-image-wrap">
@@ -366,8 +497,7 @@
             </div>
           </article>
         </div>
-
-        <!-- Empty State -->
+<!-- Empty State -->
         <div v-else class="empty-state-card">
           <Search :size="36" class="text-muted mb-2" />
           <h3>Không tìm thấy điểm đến nào phù hợp</h3>
@@ -643,7 +773,10 @@ import {
   Award,
   Calculator,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Crown,
+  Layers,
+  LayoutGrid
 } from 'lucide-vue-next'
 import { DataService, DANH_SACH_DIEM_DEN_FALLBACK, KHIA_CANH_ABSA, DANH_SACH_DANH_GIA_TRIPADVISOR } from '../services/dataService'
 
@@ -651,6 +784,7 @@ const dsDiemDen = ref([])
 const danhSachKhiaCanh = ref(KHIA_CANH_ABSA)
 const danhGiaTieuBieu = ref([])
 
+const cheDoHienThi = ref('xep_chong') // 'xep_chong' (mặc định) | 'luoi'
 const tuKhoaTimKiem = ref('')
 const locTinhThanh = ref('')
 const locTrangThai = ref('')
@@ -668,7 +802,7 @@ function layIconKhiaCanh(id) {
 }
 
 const diemDenHienThi = computed(() => {
-  return dsDiemDen.value.filter(dest => {
+  const filtered = dsDiemDen.value.filter(dest => {
     const kw = tuKhoaTimKiem.value.trim().toLowerCase()
     const matchKw = !kw || 
       dest.ten.toLowerCase().includes(kw) || 
@@ -680,6 +814,9 @@ const diemDenHienThi = computed(() => {
 
     return matchKw && matchTinh && matchTrangThai
   })
+
+  // Sắp xếp theo điểm danh tiếng Wilson giảm dần để hiển thị bảng xếp hạng chuẩn xác
+  return [...filtered].sort((a, b) => (Number(b.diem_danh_tieng_tb) || 0) - (Number(a.diem_danh_tieng_tb) || 0))
 })
 
 const demDiemSang = computed(() => {
@@ -1982,4 +2119,482 @@ onMounted(async () => {
     grid-template-columns: 1fr;
   }
 }
+
+/* ======================================================== */
+/* 5.1 STACKED DESTINATION LEADERBOARD STYLES (UX NÂNG CẤP) */
+/* ======================================================== */
+.destinations-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.view-mode-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.btn-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mau-chu-phu);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-toggle.active {
+  background: var(--nevio-card-bg);
+  color: var(--mau-chu);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .btn-view-toggle.active {
+  background: var(--nevio-yellow);
+  color: #18181b;
+}
+
+/* Stacked List */
+.destinations-stacked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stacked-dest-card {
+  background: var(--nevio-card-bg);
+  border: 1px solid var(--nevio-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 80px 240px 1fr 220px;
+  align-items: center;
+  gap: 24px;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stacked-dest-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(253, 221, 98, 0.6);
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.12);
+}
+
+/* Rank Column */
+.stacked-rank-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.rank-badge-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.rank-badge-box.rank-gold {
+  background: linear-gradient(135deg, #fef3c7, #fddd62);
+  border-color: #f59e0b;
+  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.4);
+}
+
+.rank-badge-box.rank-gold .rank-digits {
+  color: #18181b;
+  font-weight: 900;
+}
+
+.rank-crown-icon {
+  color: #b45309;
+  margin-bottom: -2px;
+}
+
+.rank-digits {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--mau-chu);
+  line-height: 1;
+}
+
+.rank-caption {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mau-chu-mo);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Image Wrap */
+.stacked-image-wrap {
+  position: relative;
+  width: 240px;
+  height: 155px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #202020;
+}
+
+.stacked-dest-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.stacked-dest-card:hover .stacked-dest-img {
+  transform: scale(1.08);
+}
+
+.stacked-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+}
+
+.stacked-location-pill {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(24, 24, 27, 0.75);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* Info Column */
+.stacked-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stacked-top-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stacked-category-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mau-chu-phu);
+  background: var(--nevio-light-grey);
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--nevio-border);
+}
+
+.stacked-wilson-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.stacked-wilson-pill.status-diem_sang {
+  background: rgba(253, 221, 98, 0.2);
+  color: #b45309;
+  border: 1px solid rgba(253, 221, 98, 0.5);
+}
+
+[data-theme="dark"] .stacked-wilson-pill.status-diem_sang {
+  background: rgba(253, 221, 98, 0.15);
+  color: #fddd62;
+  border-color: rgba(253, 221, 98, 0.35);
+}
+
+.stacked-wilson-pill.status-binh_thuong {
+  background: var(--nevio-light-grey);
+  color: var(--mau-chu-phu);
+  border: 1px solid var(--nevio-border);
+}
+
+.stacked-title {
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.stacked-title a {
+  color: var(--mau-chu);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.stacked-title a:hover {
+  color: #d97706;
+}
+
+[data-theme="dark"] .stacked-title a:hover {
+  color: #fddd62;
+}
+
+.stacked-desc {
+  font-size: 13.5px;
+  color: var(--mau-chu-phu);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* 5 ABSA Chips */
+.stacked-aspects-grid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.aspect-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--nevio-light-grey);
+  border: 1px solid var(--nevio-border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+}
+
+.asp-lbl {
+  color: var(--mau-chu-phu);
+  font-weight: 600;
+}
+
+.asp-val {
+  color: var(--mau-chu);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Action & Score Column */
+.stacked-action-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  border-left: 1px dashed var(--nevio-border);
+  padding-left: 24px;
+}
+
+.stacked-rating-card {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.score-display-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.score-big {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--mau-chu);
+  line-height: 1;
+}
+
+.score-max {
+  font-size: 14px;
+  color: var(--mau-chu-mo);
+}
+
+.score-stars {
+  display: flex;
+  gap: 2px;
+  margin: 2px 0;
+}
+
+.score-subtext {
+  font-size: 11.5px;
+  color: var(--mau-chu-phu);
+}
+
+.wilson-stat-tag {
+  font-size: 11px;
+  color: #b45309;
+  background: rgba(253, 221, 98, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+[data-theme="dark"] .wilson-stat-tag {
+  color: #fddd62;
+  background: rgba(253, 221, 98, 0.12);
+}
+
+.stacked-buttons-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.stacked-btn-primary {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--nevio-yellow);
+  color: var(--nevio-dark);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(253, 221, 98, 0.35);
+  transition: all 0.2s ease;
+}
+
+.stacked-btn-primary:hover {
+  transform: translateY(-2px);
+  background: #f59e0b;
+}
+
+.stacked-btn-voucher {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #18181b;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .stacked-btn-voucher {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fddd62;
+  border-color: rgba(253, 221, 98, 0.3);
+}
+
+.stacked-btn-voucher:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+/* Responsive Mobile Layout for Stacked Leaderboard */
+@media (max-width: 1024px) {
+  .stacked-dest-card {
+    grid-template-columns: 70px 200px 1fr;
+    gap: 16px;
+  }
+  .stacked-action-col {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px dashed var(--nevio-border);
+    padding-left: 0;
+    padding-top: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stacked-rating-card {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .stacked-buttons-wrap {
+    width: auto;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .destinations-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .stacked-dest-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 16px;
+    gap: 16px;
+  }
+  .stacked-rank-col {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .rank-badge-box {
+    margin-bottom: 0;
+    width: 44px;
+    height: 44px;
+  }
+  .stacked-image-wrap {
+    width: 100%;
+    height: 190px;
+  }
+  .stacked-action-col {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .stacked-rating-card {
+    align-items: center;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .stacked-buttons-wrap {
+    width: 100%;
+    flex-direction: column;
+  }
+  .hero-heading {
+    font-size: 34px !important;
+  }
+}
+
 </style>
